@@ -55,6 +55,7 @@ body{background:var(--bg);color:var(--fg);font:400 14px/1.4 'Manrope',system-ui,
 .r{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;padding:12px 18px;border-bottom:1px solid var(--line);width:100%;background:none;color:inherit;font:inherit;text-align:left;border-left:0;border-right:0;border-top:0}
 .group>.r:last-child,.group>div:last-child .r:last-child{border-bottom:0}
 .r .l{font-weight:500;flex:none}
+.r select{background:none;border:0;outline:0;color:var(--fg);font:inherit;text-align:right;text-align-last:right;flex:1;min-width:0;appearance:none;-webkit-appearance:none}.r select option{color:#000}
 .r input[type=text],.r input[type=password]{background:none;border:0;outline:0;color:var(--fg);font:inherit;text-align:right;flex:1;min-width:0}
 .r input::placeholder{color:var(--mut);opacity:.7}
 button.r{cursor:pointer;transition:background .25s}button.r:active{background:var(--fill)}
@@ -366,6 +367,32 @@ body.ed-on #app{max-width:none;padding:8px 8px 8px 0}
 @media(max-width:820px){.ex{bottom:0;background:var(--dd);backdrop-filter:none;-webkit-backdrop-filter:none}}
 @media(max-width:560px){#sb-br{display:none}}
 
+
+/* ===== IA (Claude) no editor ===== */
+.pop.ai{display:flex;flex-direction:column;gap:8px;padding:10px;max-height:min(80%,640px);overflow:hidden}.pop.ai[hidden]{display:none}
+.ai-h{display:flex;align-items:center;gap:8px;padding:2px 4px 0}.ai-h b{flex:1;min-width:0;font-size:12px;color:var(--el);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ai-h button{height:30px;padding:0 12px;border-radius:99px;background:var(--fill);color:var(--fg);font-size:12px;font-weight:700;flex:none;transition:transform .4s var(--spring)}.ai-h button:active{transform:scale(.9)}
+.ai-m{flex:1;min-height:60px;overflow:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:8px;padding:2px 2px 4px;scrollbar-width:none}.ai-m::-webkit-scrollbar{display:none}
+.ai-e{margin:auto;text-align:center;color:var(--el);font-size:13px;line-height:1.5;padding:18px 10px}.ai-e .btn{margin-top:12px}
+.ai-b{max-width:92%;padding:10px 13px;border-radius:18px;font-size:13.5px;line-height:1.5;word-break:break-word;animation:fin .4s var(--spring)}
+.ai-b.u{align-self:flex-end;background:var(--fg);color:var(--bg);border-bottom-right-radius:6px;white-space:pre-wrap}
+.ai-b.a{align-self:flex-start;background:var(--fill);border-bottom-left-radius:6px;max-width:100%;width:100%}
+.ai-b.a.err{color:var(--red)}
+.ai-b.a code{font:12px var(--mono);background:rgba(127,127,127,.2);padding:1px 5px;border-radius:6px}
+.ai-b.a .ai-t{white-space:pre-wrap}.ai-b.a .ai-t+.ai-c,.ai-b.a .ai-c+.ai-t{margin-top:8px}
+.ai-c{border-radius:14px;background:rgba(0,0,0,.35);border:1px solid var(--line);overflow:hidden}[data-theme=light] .ai-c{background:rgba(0,0,0,.05)}
+.ai-c>div{display:flex;align-items:center;gap:6px;padding:6px 8px 6px 12px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--el)}.ai-c>div span{flex:1}
+.ai-c>div button{height:26px;padding:0 11px;border-radius:99px;background:var(--fill);color:var(--fg);font-size:11.5px;font-weight:700;text-transform:none;letter-spacing:0;transition:transform .4s var(--spring)}.ai-c>div button:active{transform:scale(.88)}
+.ai-c>div button.ap{background:var(--fg);color:var(--bg)}
+.ai-c pre{margin:0;padding:4px 12px 12px;overflow:auto;font:12px/1.55 var(--mono);white-space:pre;max-height:240px;scrollbar-width:thin}
+.ai-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--el);margin-right:3px;animation:aid 1s infinite ease-in-out}.ai-dot:nth-child(2){animation-delay:.15s}.ai-dot:nth-child(3){animation-delay:.3s}
+@keyframes aid{0%,80%,100%{opacity:.25;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
+.ai-q{display:flex;gap:6px;overflow:auto;scrollbar-width:none;flex:none}.ai-q::-webkit-scrollbar{display:none}
+.ai-q button{flex:none;height:32px;padding:0 13px;border-radius:99px;background:var(--fill);color:var(--fg);font-size:12.5px;font-weight:700;transition:transform .4s var(--spring)}.ai-q button:active{transform:scale(.9)}
+.ai-i{display:flex;align-items:flex-end;gap:6px;flex:none;padding:4px 4px 4px 14px;border-radius:24px;background:var(--fill)}
+.ai-i textarea{flex:1;min-width:0;min-height:0!important;height:38px;max-height:110px;resize:none;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:9px 0!important;font:14px/1.4 'Manrope',system-ui,sans-serif!important;color:var(--fg);outline:0}
+.ai-i button{width:38px;height:38px;border-radius:99px;background:var(--fg);color:var(--bg);display:grid;place-items:center;flex:none;transition:transform .4s var(--spring),opacity .2s}.ai-i button:active{transform:scale(.85)}.ai-i button svg{width:18px;height:18px}
+
 /* ===== teclado: trava a pagina no editor ===== */
 html:has(body.ed-on){overflow:hidden;height:100%;overscroll-behavior:none}
 body.ed-on{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
@@ -466,8 +493,9 @@ body.ed-on{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscr
 <div class="wel" id="wel"><div><div class="wi"><svg viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4m8-8l4 4-4 4M14 5l-4 14"/></svg></div><h3>Estúdio</h3><div>Abra um arquivo ou crie um novo</div><div class="btns"><button class="btn sm" id="w-nf">Novo arquivo</button><button class="btn gray sm" id="w-op">Abrir arquivo</button></div></div></div></div>
 <div class="find" id="fb" hidden><div><input id="f-q" placeholder="Buscar" autocapitalize="off"><button id="f-cs" title="Diferenciar maiúsculas">Aa</button><span id="f-c"></span><button id="f-p">↑</button><button id="f-n">↓</button><button id="f-x">✕</button></div><div id="f-rw"><input id="f-r" placeholder="Substituir" autocapitalize="off"><button id="f-r1">Substituir</button><button id="f-ra">Todos</button></div></div>
 <div class="pop" id="pp-files" hidden><div id="ed-tabs"></div></div><div class="pop b" id="pp-hist" hidden></div><div class="pop b" id="pp-err" hidden></div>
+<div class="pop b ai" id="pp-ai" hidden><div class="ai-h"><b id="ai-ctx">Sem arquivo aberto</b><button id="ai-clr">Limpar</button></div><div class="ai-m" id="ai-m"></div><div class="ai-q" id="ai-q"><button data-q="Explique este código de forma clara e curta.">Explicar</button><button data-q="Encontre e corrija os erros. Devolva o código corrigido e diga o que mudou.">Corrigir erros</button><button data-q="Refatore para ficar mais limpo e legível, sem mudar o comportamento.">Refatorar</button><button data-q="Adicione comentários úteis em português, sem alterar a lógica.">Comentar</button></div><div class="ai-i"><textarea id="ai-in" rows="1" placeholder="Pergunte ou peça uma mudança" autocapitalize="off"></textarea><button id="ai-go" title="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m0 0l-6 6m6-6l6 6"/></svg></button></div></div>
 <div class="pop b lk" id="pp-look" hidden><div class="pph">Fundo do editor</div><div class="wps" id="wps"></div><input type="file" id="wp-f" accept="image/*" hidden><label>Desfoque <b id="v-b"></b></label><input class="rg" type="range" id="r-b" min="0" max="40"><label>Escurecer <b id="v-d"></b></label><input class="rg" type="range" id="r-d" min="0" max="90"><label>Tamanho da fonte</label><div class="btns" style="margin:0"><button class="btn gray sm" id="sb-zm">A−</button><button class="btn gray sm" id="sb-zp">A+</button></div></div>
-<div class="dk"><div><button id="u-un" title="Desfazer"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-4"/></svg></button><button id="u-re" title="Refazer"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 000 12h4"/></svg></button><button data-pop="pp-hist" title="Voltar no tempo"><svg viewBox="0 0 24 24"><path d="M12 7v5l3 2M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><i></i><button id="ed-find" title="Buscar (Ctrl+F)"><svg viewBox="0 0 24 24"><path d="M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5"/></svg></button><button data-pop="pp-look" title="Aparência"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M9 9h.01"/></svg></button><button id="ed-save" title="Salvar na fila (Ctrl+S)"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg></button></div></div>
+<div class="dk"><div><button id="u-un" title="Desfazer"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-4"/></svg></button><button id="u-re" title="Refazer"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 000 12h4"/></svg></button><button data-pop="pp-hist" title="Voltar no tempo"><svg viewBox="0 0 24 24"><path d="M12 7v5l3 2M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><i></i><button id="ed-find" title="Buscar (Ctrl+F)"><svg viewBox="0 0 24 24"><path d="M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5"/></svg></button><button data-pop="pp-ai" id="ed-ai" title="Claude (IA)"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg></button><button data-pop="pp-look" title="Aparência"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M9 9h.01"/></svg></button><button id="ed-save" title="Salvar na fila (Ctrl+S)"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg></button></div></div>
 </div>
 <div id="qp" hidden><div><input id="qp-i" placeholder="Abrir arquivo (digite :número para ir à linha)" autocapitalize="off" autocomplete="off"><div id="qp-l"></div></div></div>
 <div id="cm" hidden></div>
@@ -496,6 +524,13 @@ body.ed-on{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscr
     <div class="r"><span class="l">Ignorar</span><input type="text" id="o-ignore" autocapitalize="off"></div>
     <div class="r"><span class="l">Prefixo do commit</span><input type="text" id="o-prefix" placeholder="feat:" autocapitalize="off"></div>
   </div>
+  </div><div class="pane" data-n="IA"><div class="sec">IA (Claude)</div>
+  <div class="group">
+    <div class="r"><span class="l">Chave da API</span><input type="password" id="o-aikey" placeholder="sk-ant-..." autocapitalize="off" autocomplete="off" spellcheck="false"></div>
+    <div class="r"><span class="l">Modelo</span><select id="o-aimodel"><option value="claude-haiku-5-5">Haiku 5.5 (rápido)</option><option value="claude-sonnet-5-5">Sonnet 5.5 (equilibrado)</option><option value="claude-opus-5-5">Opus 5.5 (mais capaz)</option></select></div>
+  </div>
+  <div class="note">A chave fica só neste aparelho e vai direto para a Anthropic. Ela segue a opção "Lembrar token neste aparelho". Crie uma em console.anthropic.com.</div>
+  <div class="btns"><button class="btn red" id="o-aiclr">Remover chave</button></div>
   </div><div class="pane" data-n="Aparência"><div class="sec">Aparência e sessão</div>
   <div class="group">
     <label class="r"><span class="l">Tema claro</span><input class="sw" type="checkbox" data-cfg="light"></label>
@@ -774,10 +809,66 @@ $('#u-un').onclick=()=>{buzz(8);undo()};$('#u-re').onclick=()=>{buzz(8);redo()};
 ta.addEventListener('beforeinput',e=>{if(e.inputType==='historyUndo'){e.preventDefault();undo()}else if(e.inputType==='historyRedo'){e.preventDefault();redo()}});
 ta.addEventListener('keyup',e=>{if(/^(Arrow|Home|End)/.test(e.key))reveal()});
 /* popovers */
-const POPS=['pp-files','pp-hist','pp-look','pp-err'];
+const POPS=['pp-files','pp-hist','pp-look','pp-err','pp-ai'];
 function closePop(){POPS.forEach(i=>$('#'+i).hidden=true);$$('[data-pop]').forEach(b=>b.classList.remove('on'))}
-function pop(id){const el=$('#'+id),open=el.hidden;closePop();if(!open)return;if(id==='pp-hist')histUI();if(id==='pp-err')errUI();el.hidden=false;el.classList.remove('in');void el.offsetWidth;el.classList.add('in');const b=$(`[data-pop=${id}]`);if(b)b.classList.add('on')}
+function pop(id){const el=$('#'+id),open=el.hidden;closePop();if(!open)return;if(id==='pp-hist')histUI();if(id==='pp-err')errUI();if(id==='pp-ai')aiOpen();el.hidden=false;el.classList.remove('in');void el.offsetWidth;el.classList.add('in');const b=$(`[data-pop=${id}]`);if(b)b.classList.add('on')}
 $$('[data-pop]').forEach(b=>b.onclick=()=>{buzz(6);pop(b.dataset.pop)});
+
+/* ---------- IA (Claude) no editor ---------- */
+const AI={msgs:[],busy:false,ctl:null,sel:null,k:'pd_aikey'};
+const aiKey=()=>localStorage[AI.k]||sessionStorage[AI.k]||'';
+const aiModel=()=>cfg('aimodel','claude-sonnet-5-5');
+function aiSaveKey(v){v=v.trim();localStorage.removeItem(AI.k);sessionStorage.removeItem(AI.k);if(v)(cfg('remember')?localStorage:sessionStorage)[AI.k]=v}
+$('#o-aikey').value=aiKey();$('#o-aikey').onchange=e=>{aiSaveKey(e.target.value);toast(e.target.value.trim()?'Chave salva':'Chave removida')};
+$('#o-aimodel').value=aiModel();$('#o-aimodel').onchange=e=>setCfg('aimodel',e.target.value);
+$('#o-aiclr').onclick=()=>{aiSaveKey('');$('#o-aikey').value='';toast('Chave removida')};
+function aiMd(t){ /* markdown minimo: blocos de codigo e `inline` */
+ const parts=String(t).split(/```/);let h='';
+ parts.forEach((x,i)=>{
+  if(i%2===0){if(x.trim())h+='<div class="ai-t">'+esc(x.trim()).replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>')+'</div>';return}
+  const nl=x.indexOf('\n'),lg=nl>-1?x.slice(0,nl).trim():'',code=nl>-1?x.slice(nl+1):x;
+  h+='<div class="ai-c"><div><span>'+esc(lg||'código')+'</span><button data-a="cp">Copiar</button><button class="ap" data-a="ap">Aplicar</button></div><pre>'+esc(code.replace(/\n$/,''))+'</pre></div>'});
+ return h}
+function aiDraw(){const m=$('#ai-m');
+ if(!aiKey()){m.innerHTML='<div class="ai-e">Para usar o Claude no editor, cole sua chave da API nos Ajustes.<br><button class="btn sm" id="ai-set">Abrir Ajustes</button></div>';$('#ai-set').onclick=()=>{closePop();tab('ajustes')};return}
+ if(!AI.msgs.length){m.innerHTML='<div class="ai-e">Peça para explicar, corrigir ou mudar o arquivo aberto.<br>Se houver texto selecionado, só ele é enviado.</div>';return}
+ m.innerHTML=AI.msgs.map((x,i)=>x.r==='u'?'<div class="ai-b u">'+esc(x.t)+'</div>':'<div class="ai-b a'+(x.e?' err':'')+'" data-i="'+i+'">'+(x.t?aiMd(x.t):'<span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span>')+'</div>').join('');
+ m.scrollTop=1e9}
+function aiCtx(){const t=cur();if(!t)return null;stash();const a=ta.selectionStart,b=ta.selectionEnd,sel=b>a?{a,b,x:ta.value.slice(a,b)}:null;return{t,p:t.p,text:ta.value,sel}}
+function aiOpen(){const c=aiCtx();$('#ai-ctx').textContent=c?(nm(c.p)+(c.sel?' · seleção de '+c.sel.x.split('\n').length+' linha(s)':' · arquivo inteiro')):'Sem arquivo aberto';aiDraw();setTimeout(()=>{if(aiKey())$('#ai-in').focus()},60)}
+const AI_SYS='Você é o assistente de programação embutido no editor do PushDeck. Responda sempre em português do Brasil, de forma direta e curta. Quando o usuário pedir uma mudança no código, devolva o código novo em UM único bloco de código cercado por três crases (com a linguagem). Se ele enviou só um trecho selecionado, o bloco deve conter apenas o trecho substituto, e se enviou o arquivo inteiro, o arquivo inteiro já alterado. Antes ou depois do bloco, explique em poucas linhas o que mudou. Não use emojis.';
+async function aiSend(q){q=(q||'').trim();if(!q||AI.busy)return;
+ if(!aiKey()){toast('Cole sua chave da API nos Ajustes',1);aiDraw();return}
+ const c=aiCtx();let u=q;
+ if(c){const big=c.text.length>80000;AI.sel=c.sel?{p:c.p,a:c.sel.a,b:c.sel.b,x:c.sel.x}:{p:c.p,a:0,b:c.text.length,x:c.text,all:1};
+  u='Arquivo: '+c.p+'\n'+(c.sel?'Trecho selecionado (linhas '+(c.text.slice(0,c.sel.a).split('\n').length)+' a '+(c.text.slice(0,c.sel.b).split('\n').length)+'):\n```\n'+c.sel.x+'\n```':'Conteúdo'+(big?' (cortado em 80 mil caracteres)':'')+':\n```\n'+c.text.slice(0,80000)+'\n```')+'\n\nPedido: '+q}
+ AI.msgs.push({r:'u',t:q,c:u});AI.msgs.push({r:'a',t:''});AI.busy=true;$('#ai-in').value='';$('#ai-in').style.height='';aiDraw();aiBtn();
+ const hist=AI.msgs.slice(0,-1).filter(x=>!x.e).map((x,i,arr)=>({role:x.r==='u'?'user':'assistant',content:x.r==='u'?(i===arr.length-1?x.c:x.t):x.t})).filter(x=>x.content);
+ const bub=()=>$('#ai-m [data-i="'+(AI.msgs.length-1)+'"]'),me=AI.msgs[AI.msgs.length-1];AI.ctl=new AbortController();
+ try{
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:AI.ctl.signal,headers:{'content-type':'application/json','x-api-key':aiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:aiModel(),max_tokens:8192,stream:true,system:AI_SYS,messages:hist})});
+  if(!r.ok){let m='Erro '+r.status;try{const j=await r.json();m=j.error&&j.error.message||m}catch(e){}throw new Error(r.status===401?'Chave inválida. Confira nos Ajustes.':m)}
+  const rd=r.body.getReader(),dec=new TextDecoder();let buf='',last=0;
+  for(;;){const{done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});const ls=buf.split('\n');buf=ls.pop();
+   for(const l of ls){if(!l.startsWith('data:'))continue;let j;try{j=JSON.parse(l.slice(5))}catch(e){continue}
+    if(j.type==='content_block_delta'&&j.delta&&j.delta.text)me.t+=j.delta.text;
+    else if(j.type==='error')throw new Error(j.error&&j.error.message||'Erro da API')}
+   const n=Date.now();if(n-last>80){last=n;const b=bub();if(b)b.innerHTML=aiMd(me.t)||b.innerHTML;$('#ai-m').scrollTop=1e9}}
+ }catch(e){if(e.name==='AbortError'){if(!me.t)AI.msgs.pop(),AI.msgs.pop()}else{me.e=1;me.t=(me.t?me.t+'\n\n':'')+(e.message||'Falha ao falar com a IA')}}
+ AI.busy=false;AI.ctl=null;aiBtn();aiDraw()}
+function aiBtn(){const b=$('#ai-go');b.innerHTML=AI.busy?'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="3"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m0 0l-6 6m6-6l6 6"/></svg>';b.title=AI.busy?'Parar':'Enviar'}
+$('#ai-go').onclick=()=>{buzz(8);if(AI.busy){AI.ctl&&AI.ctl.abort();return}aiSend($('#ai-in').value)};
+$('#ai-in').addEventListener('keydown',e=>{if(e.key!=='Escape')e.stopPropagation();if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('#ai-go').click()}});
+$('#ai-in').addEventListener('input',e=>{const t=e.target;t.style.height='auto';t.style.height=Math.min(t.scrollHeight,110)+'px'});
+$('#ai-q').onclick=e=>{const b=e.target.closest('[data-q]');if(b){buzz(8);aiSend(b.dataset.q)}};
+$('#ai-clr').onclick=()=>{if(AI.busy&&AI.ctl)AI.ctl.abort();AI.msgs=[];AI.busy=false;aiBtn();aiDraw();buzz(8)};
+$('#ai-m').onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const bx=b.closest('.ai-c'),code=bx.querySelector('pre').textContent;buzz(8);
+ if(b.dataset.a==='cp'){try{await navigator.clipboard.writeText(code);toast('Código copiado')}catch(x){toast('Não consegui copiar',1)}return}
+ const t=cur();if(!t)return toast('Abra um arquivo para aplicar',1);const s=AI.sel;
+ if(!s||s.p!==t.p){if(!await dlg({title:'Aplicar no arquivo aberto?',text:'O código vai substituir o arquivo inteiro "'+nm(t.p)+'".',ok:'Aplicar'}))return;stash();t.text=ta.value;snap(t);ver(t,'antes da IA');put(code);snap(t);status();toast('Código aplicado');return}
+ stash();t.text=ta.value;const cur_=ta.value;let a=s.a,z=s.b;if(cur_.slice(a,z)!==s.x){const i=cur_.indexOf(s.x);if(i<0)return toast('O trecho mudou. Selecione de novo e peça outra vez.',1);a=i;z=i+s.x.length}
+ snap(t);ver(t,'antes da IA');put(cur_.slice(0,a)+code+cur_.slice(z),a,a+code.length);snap(t);status();AI.sel={p:t.p,a,b:a+code.length,x:code};toast('Código aplicado. Dá para desfazer.')};
+
 ide.addEventListener('pointerdown',e=>{if(!e.target.closest('.pop,[data-pop],.dd'))closePop()});
 /* wallpaper */
 const WPS={a:'linear-gradient(135deg,#1b1464,#7b2ff7 55%,#f107a3)',b:'linear-gradient(160deg,#0f2027,#2c5364 60%,#4ca1af)',c:'linear-gradient(135deg,#42275a,#734b6d 50%,#ee9ca7)',d:'linear-gradient(150deg,#141e30,#243b55 50%,#0f9b8e)'};
