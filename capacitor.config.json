@@ -3,7 +3,8 @@
   "appName": "Pushdeck",
   "webDir": "www",
   "backgroundColor": "#000000",
-  "android": {
-    "allowMixedContent": false
+  "server": {
+    "url": "https://limasantosozeias390-dot.github.io/pushdeck/",
+    "cleartext": false
   }
 }

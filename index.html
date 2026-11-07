@@ -812,10 +812,17 @@ async function newRepoFlow(){if(!GH.token)return toast('Conecte primeiro',1);
 $('#b-newrepo').onclick=newRepoFlow;
 /* ---------- baixar repo como zip ---------- */
 async function downloadZip(){const [o,r]=rv(),b=P['p-branch'].v;if(!GH.token||!r)return toast('Conecte e escolha um repositório',1);
- toast('Baixando .zip...');try{const resp=await fetch(`https://api.github.com/repos/${o}/${r}/zipball/${encodeURIComponent(b)}`,{headers:{Authorization:'Bearer '+GH.token}});
+ toast('Baixando .zip...');const name=`${r}-${b.replace(/[\/\\]/g,'-')}.zip`,url=`https://api.github.com/repos/${o}/${r}/zipball/${encodeURIComponent(b)}`;
+ try{const C=window.Capacitor,nat=C&&C.isNativePlatform&&C.isNativePlatform();
+  if(nat){ /* app Android: HTTP nativo (sem CORS) + grava em Documentos/Pushdeck */
+   const res=await C.Plugins.CapacitorHttp.request({url,method:'GET',headers:{Authorization:'Bearer '+GH.token,Accept:'application/vnd.github+json'},responseType:'blob'});
+   if(res.status<200||res.status>=300)throw new Error(res.status+' '+(res.data&&res.data.message||''));
+   await C.Plugins.Filesystem.writeFile({path:'Pushdeck/'+name,data:res.data,directory:'DOCUMENTS',recursive:true});
+   toast('Salvo em Documentos/Pushdeck/'+name);return}
+  const resp=await fetch(url,{headers:{Authorization:'Bearer '+GH.token}});
   if(!resp.ok)throw new Error(resp.status+' '+resp.statusText);
-  const blob=await resp.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${r}-${b}.zip`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);toast('Zip baixado')}
- catch(e){toast('Erro no zip: '+e.message,1)}}
+  const blob=await resp.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Zip baixado')}
+ catch(e){toast('Erro no zip: '+(e.message||e),1)}}
 $('#b-zip').onclick=downloadZip;$('#b-zip2').onclick=downloadZip;
 /* ---------- busca no código ---------- */
 async function codeSearch(){const [o,r]=rv(),q=$('#codesearch').value.trim();if(!GH.token||!r)return toast('Conecte e escolha um repositório',1);if(!q)return toast('Digite algo para buscar',1);
