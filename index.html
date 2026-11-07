@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PUSHDECK // repo uploader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+<script src="js/github.js" defer></script>
+<script src="js/app.js" defer></script>
+</head>
+<body>
+<canvas id="bg"></canvas><div id="glow"></div>
+<header class="top">
+  <div class="brand"><span class="logo"></span><b>PUSHDECK</b><small>repo uploader</small></div>
+  <nav id="tabs">
+    <button data-tab="enviar" class="on">Enviar</button>
+    <button data-tab="repo">Repositorio</button>
+    <button data-tab="historico">Historico</button>
+    <button data-tab="ajustes">Ajustes</button>
+  </nav>
+  <div class="status"><i id="dot"></i><span id="who">desconectado</span></div>
+</header>
+
+<div class="ticker"><div id="tick">SELECIONE // ARRASTE // CONFIRME // COMMIT UNICO // SELECIONE // ARRASTE // CONFIRME // COMMIT UNICO // SELECIONE // ARRASTE // CONFIRME // COMMIT UNICO //</div></div>
+
+<main>
+<section id="enviar" class="tab on">
+  <h1 class="hero">Suba codigo<br><span>sem abrir pasta.</span></h1>
+  <div class="stats">
+    <div class="stat"><b data-n id="s-files">0</b><span>arquivos na fila</span></div>
+    <div class="stat"><b id="s-size">0 B</b><span>tamanho total</span></div>
+    <div class="stat"><b data-n id="s-new">0</b><span>novos</span></div>
+    <div class="stat"><b data-n id="s-rep">0</b><span>substituicoes</span></div>
+    <div class="stat"><b data-n id="s-commits">0</b><span>commits feitos</span></div>
+  </div>
+
+  <div class="grid">
+    <div class="card reveal" id="c-conn">
+      <h2><i>00</i> Conexao</h2>
+      <label>Token do GitHub (fine-grained, Contents: read/write)</label>
+      <div class="row"><input id="token" type="password" placeholder="github_pat_..." autocomplete="off"><button class="btn" id="b-conn">Conectar</button></div>
+      <p class="hint">O token fica apenas neste navegador. Veja o README para criar um token restrito a um repo.</p>
+    </div>
+
+    <div class="card reveal">
+      <h2><i>01</i> Destino</h2>
+      <label>Repositorio</label><select id="repo"><option value="">conecte primeiro</option></select>
+      <div class="row2">
+        <div><label>Branch</label><select id="branch"></select></div>
+        <div><label>Pasta de destino</label><select id="dest"><option value="">/ (raiz)</option></select></div>
+      </div>
+      <label>Subpasta extra (opcional, criada se nao existir)</label><input id="sub" placeholder="ex: src/commands">
+      <label>Mensagem do commit</label><input id="msg" placeholder="update via pushdeck">
+      <div class="preview" id="pv">destino: /</div>
+    </div>
+
+    <div class="card wide reveal">
+      <h2><i>02</i> Arquivos</h2>
+      <div class="drop" id="drop">
+        <div class="ring"></div>
+        <p><b>Arraste arquivos, pastas ou .zip aqui</b></p>
+        <p class="hint">ou use os botoes abaixo</p>
+        <div class="row c">
+          <button class="btn ghost" id="b-files">Escolher arquivos</button>
+          <button class="btn ghost" id="b-folder">Escolher pasta</button>
+          <button class="btn ghost" id="b-paste">Colar codigo</button>
+        </div>
+        <input type="file" id="f-files" multiple hidden><input type="file" id="f-folder" webkitdirectory hidden>
+      </div>
+      <div class="toolbar">
+        <input id="filter" placeholder="filtrar fila ( / )">
+        <select id="sort"><option value="path">ordem: caminho</option><option value="size">ordem: tamanho</option><option value="status">ordem: status</option></select>
+        <button class="btn sm ghost" id="b-all">Marcar todos</button>
+        <button class="btn sm ghost" id="b-none">Desmarcar</button>
+        <button class="btn sm ghost" id="b-rm">Remover marcados</button>
+        <button class="btn sm ghost" id="b-clear">Limpar fila</button>
+      </div>
+      <div id="list" class="list"><div class="empty">Fila vazia.</div></div>
+    </div>
+
+    <div class="card wide reveal">
+      <h2><i>03</i> Enviar</h2>
+      <div class="bar"><div id="bar"></div></div>
+      <div class="row">
+        <button class="btn big" id="b-go">Enviar para o GitHub <kbd>Ctrl+Enter</kbd></button>
+        <button class="btn ghost" id="b-dry">Simular (dry run)</button>
+      </div>
+      <pre id="term" class="term">pronto.</pre>
+    </div>
+  </div>
+</section>
+
+<section id="repo" class="tab">
+  <h1 class="hero small">Repositorio</h1>
+  <div class="card"><div class="row"><input id="rfilter" placeholder="buscar arquivo ou pasta"><button class="btn ghost" id="b-reload">Recarregar arvore</button></div>
+  <p class="hint" id="rinfo">Nenhum repositorio carregado.</p><div id="rtree" class="list"></div></div>
+</section>
+
+<section id="historico" class="tab">
+  <h1 class="hero small">Historico</h1>
+  <div class="card"><div id="hlist" class="list"></div><button class="btn ghost sm" id="b-hclear">Apagar historico</button></div>
+</section>
+
+<section id="ajustes" class="tab">
+  <h1 class="hero small">Ajustes</h1>
+  <div class="grid">
+    <div class="card"><h2>Comportamento</h2>
+      <label class="chk"><input type="checkbox" id="o-strip" checked> Remover pasta raiz ao enviar pasta/zip</label>
+      <label class="chk"><input type="checkbox" id="o-zip" checked> Extrair .zip automaticamente</label>
+      <label class="chk"><input type="checkbox" id="o-keep"> Manter fila apos enviar</label>
+      <label class="chk"><input type="checkbox" id="o-sound"> Efeito sonoro ao concluir</label>
+      <label>Ignorar (separado por virgula)</label><input id="o-ignore">
+      <label>Prefixo do commit</label><input id="o-prefix" placeholder="ex: feat:">
+    </div>
+    <div class="card"><h2>Aparencia e sessao</h2>
+      <label class="chk"><input type="checkbox" id="o-light"> Tema invertido (branco)</label>
+      <label class="chk"><input type="checkbox" id="o-fx" checked> Particulas de fundo</label>
+      <label class="chk"><input type="checkbox" id="o-remember"> Lembrar token neste navegador</label>
+      <button class="btn ghost" id="b-wipe">Apagar todos os dados locais</button>
+      <h2 style="margin-top:22px">Atalhos</h2>
+      <p class="hint"><kbd>Ctrl+Enter</kbd> enviar &nbsp; <kbd>/</kbd> filtrar &nbsp; <kbd>1</kbd>-<kbd>4</kbd> trocar aba</p>
+    </div>
+  </div>
+</section>
+</main>
+<div id="toasts"></div>
+</body>
+</html>
