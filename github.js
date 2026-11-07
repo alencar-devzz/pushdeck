@@ -24,5 +24,16 @@ const GH = {
     const c = await this.req(`${p}/commits`, { method: 'POST', body: JSON.stringify({ message, tree: t.sha, parents: [ref.object.sha] }) });
     await this.req(`${p}/refs/heads/${encodeURIComponent(b)}`, { method: 'PATCH', body: JSON.stringify({ sha: c.sha }) });
     return c;
+  },
+  commits(o, r, b) { return this.req(`/repos/${o}/${r}/commits?sha=${encodeURIComponent(b)}&per_page=30`) },
+  file(o, r, p, b) { return this.req(`/repos/${o}/${r}/contents/${p.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(b)}`) },
+  async remove(o, r, b, paths, message) {
+    const p = `/repos/${o}/${r}/git`;
+    const ref = await this.req(`${p}/ref/heads/${encodeURIComponent(b)}`);
+    const parent = await this.req(`${p}/commits/${ref.object.sha}`);
+    const t = await this.req(`${p}/trees`, { method: 'POST', body: JSON.stringify({ base_tree: parent.tree.sha, tree: paths.map(x => ({ path: x, mode: '100644', type: 'blob', sha: null })) }) });
+    const c = await this.req(`${p}/commits`, { method: 'POST', body: JSON.stringify({ message, tree: t.sha, parents: [ref.object.sha] }) });
+    await this.req(`${p}/refs/heads/${encodeURIComponent(b)}`, { method: 'PATCH', body: JSON.stringify({ sha: c.sha }) });
+    return c;
   }
 };
