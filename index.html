@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#000000">
 <title>Pushdeck</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pushdeck"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -497,6 +502,8 @@ body.ed-on{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscr
     <label class="r"><span class="l">Lembrar token neste aparelho</span><input class="sw" type="checkbox" data-cfg="remember"></label>
     <label class="r"><span class="l">Vibração ao tocar</span><input class="sw" type="checkbox" data-cfg="haptic" data-def="1"></label>
   </div>
+  <div class="btns"><button class="btn gray" id="b-install" hidden>Instalar app</button></div>
+  <div class="note" id="inst-note" hidden></div>
   <div class="btns"><button class="btn red" id="b-wipe">Apagar todos os dados locais</button></div></div>
 </section>
 
@@ -1033,6 +1040,13 @@ $('#o-ignore').value=cfg('ignore','.DS_Store,node_modules,.git,Thumbs.db');$('#o
 $('#o-prefix').value=cfg('prefix','');$('#o-prefix').oninput=e=>setCfg('prefix',e.target.value);
 $('#b-wipe').onclick=async()=>{if(await dlg({title:'Apagar tudo?',text:'Remove token, histórico e ajustes deste aparelho.',ok:'Apagar',danger:true})){localStorage.clear();sessionStorage.clear();location.reload()}};
 addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'&&!document.body.classList.contains('ed-on'))send(false);if(e.key==='Escape'){closeDD();closePop()}});
+
+/* ---------- app instalavel (PWA) ---------- */
+let dip;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#b-install').hidden=false});
+$('#b-install').onclick=async()=>{if(!dip)return;dip.prompt();await dip.userChoice;dip=null;$('#b-install').hidden=true};
+addEventListener('appinstalled',()=>{$('#b-install').hidden=true;toast('App instalado')});
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!navigator.standalone){const n=$('#inst-note');n.hidden=false;n.textContent='No iPhone: toque em Compartilhar e depois em "Adicionar à Tela de Início".'}
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
 /* ---------- init ---------- */
 theme();setPick('p-sort','path');setPick('p-dest','');tab('enviar');render();renderHist();pv();
