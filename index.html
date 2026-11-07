@@ -2,7 +2,7 @@
 <html lang="pt-BR" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#000000">
 <title>Pushdeck</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -221,7 +221,7 @@ body.ed-on #app{max-width:none;padding:8px 8px 8px 0}
 .ra{display:none;gap:1px}.row:hover .ra,.row.sel .ra{display:flex}
 .ra button{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;color:var(--el);transition:background .2s,color .2s,transform .35s var(--spring)}.ra svg{width:14px;height:14px}.ra button:hover{color:var(--fg);background:var(--esel2)}.ra button:active{transform:scale(.8)}
 .bg{font-size:10.5px;font-weight:800;width:14px;text-align:center}.bg.U{color:#8fd1a6}.bg.M{color:#e6c88f}
-.fi{font:800 9px var(--mono);width:18px;text-align:center;flex:none;opacity:.78;filter:saturate(.5)}
+.ide svg.fi,svg.fi{width:17px;height:17px;flex:none;stroke:none;fill:none;stroke-width:0;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}.row .fi{margin-right:1px}.pop .fi,.qi .fi{width:18px;height:18px}
 .qe{padding:16px;color:var(--el);font-size:12.5px;text-align:center}
 .edm{grid-column:2;grid-row:1;position:relative;display:flex;flex-direction:column;min-width:0;min-height:0}
 .tbar{display:flex;align-items:center;gap:6px;padding:8px 8px 6px;height:52px;flex:none}
@@ -360,16 +360,55 @@ body.ed-on #app{max-width:none;padding:8px 8px 8px 0}
 .stu .find{top:104px;z-index:25}
 @media(max-width:820px){.ex{bottom:0;background:var(--dd);backdrop-filter:none;-webkit-backdrop-filter:none}}
 @media(max-width:560px){#sb-br{display:none}}
+
+/* ===== teclado: trava a pagina no editor ===== */
+html:has(body.ed-on){overflow:hidden;height:100%;overscroll-behavior:none}
+body.ed-on{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+.ide{will-change:transform}
+/* ===== menu hamburguer da aba principal ===== */
+.hbg{flex:none;width:40px;height:40px;border-radius:99px;display:none;place-items:center;background:var(--glass);border:1px solid var(--line);color:var(--fg);cursor:pointer;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:transform .4s var(--spring)}
+.hbg:active{transform:scale(.86)}
+.hbg svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.head{align-items:center}.head>div:first-of-type,.head .ttl{min-width:0;flex:1}
+#rail-scrim{display:none}
+@media(max-width:820px){
+ .hbg,.ide .hbg{display:grid}
+ #rail{width:min(220px,72vw);align-items:stretch;padding:14px 10px;transform:translateX(-125%);animation:none;transition:transform .55s var(--spring);z-index:350}
+ #nav button{flex-direction:row;gap:14px;padding:0 16px;height:46px;font-size:14px}#ind{height:46px}
+ .logo{margin-left:6px}
+ body.rail-on #rail{transform:none}
+ #rail-scrim{display:block;position:fixed;inset:0;z-index:340;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .35s}
+ body.rail-on #rail-scrim{opacity:1;pointer-events:auto}
+ #app{margin-left:0;padding-left:12px}
+ body.ed-on #app{padding:8px}
+}
+/* ===== subabas ===== */
+.mini{position:relative}
+.mini button .ct{margin-left:6px;font-size:10px;opacity:.7}
+
+/* ===== erros nas linhas ===== */
+#er,#ge{position:absolute;inset:0;pointer-events:none;overflow:hidden}#er{z-index:0}#ge{z-index:2}
+.eb{position:absolute;left:0;right:0;background:rgba(255,90,82,.11);box-shadow:inset 2px 0 0 #ff5a52}.eb.w{background:rgba(255,179,64,.09);box-shadow:inset 2px 0 0 #ffb340}
+.ew{position:absolute;min-width:8px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='3'%3E%3Cpath d='M0 2.6 1.5.4 3 2.6 4.5.4 6 2.6' fill='none' stroke='%23ff5a52' stroke-width='1'/%3E%3C/svg%3E") repeat-x left bottom;background-size:6px 3px;padding-bottom:3px}
+.ew.w{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='3'%3E%3Cpath d='M0 2.6 1.5.4 3 2.6 4.5.4 6 2.6' fill='none' stroke='%23ffb340' stroke-width='1'/%3E%3C/svg%3E")}
+.ge{position:absolute;left:0;top:0;width:100%;display:flex;align-items:center;padding-left:6px}
+.ge:before{content:"";width:8px;height:8px;border-radius:50%;background:#ff5a52;box-shadow:0 0 7px rgba(255,90,82,.8)}.ge.w:before{background:#ffb340;box-shadow:0 0 7px rgba(255,179,64,.7)}
+.stu .gut{pointer-events:auto}
+.ide button.sbe{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--fill);max-width:52vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbe.bad{color:#ff6b62;background:rgba(255,90,82,.16)!important}.sbe.wrn{color:#ffb340;background:rgba(255,179,64,.16)!important}.sbe.ok{color:var(--el)}
+.pop .er2{color:#ff6b62}.pop .ew2{color:#ffb340}
+@media(max-width:560px){.inf{padding:2px 12px 6px}#crumb{display:none}.ir{flex:1;justify-content:flex-end;min-width:0}}
 </style>
 </head>
 <body>
 <div id="err"></div>
 <div class="mesh"><i></i><i></i><i></i></div>
+<div id="rail-scrim"></div>
 <aside id="rail"><div class="logo"></div><nav id="nav"><div id="ind"></div></nav><div class="rdot" id="dot"></div></aside>
 
 <main id="app">
 <section class="tab on" id="t-enviar">
-  <div class="head"><div><div class="large">Enviar</div><div class="sub">Código direto para o seu repositório</div></div><div class="who"><span id="who">desconectado</span></div></div>
+  <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Enviar</div><div class="sub">Código direto para o seu repositório</div></div><div class="who"><span id="who">desconectado</span></div></div>
   <div class="stats">
     <div class="stat" style="--c:var(--blue)"><b id="s-files">0</b><span>na fila</span></div>
     <div class="stat" style="--c:var(--teal)"><b id="s-size">0 B</b><span>tamanho</span></div>
@@ -405,22 +444,23 @@ body.ed-on #app{max-width:none;padding:8px 8px 8px 0}
 </section>
 
 <section class="tab" id="t-repo">
-  <div class="head"><div><div class="large">Repositório</div><div class="sub" id="rinfo">Nenhum repositório carregado</div></div></div>
-  <div class="group"><div class="r"><span class="l">Buscar</span><input type="text" id="rfilter" placeholder="arquivo ou pasta"></div></div>
-  <div class="btns"><button class="btn gray sm" id="b-reload">Recarregar</button><button class="btn gray sm" id="b-edit">Abrir no editor</button><button class="btn red sm" id="b-del">Excluir marcados</button></div>
-  <div class="list" id="rtree"></div>
+  <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Repositório</div><div class="sub" id="rinfo">Nenhum repositório carregado</div></div></div>
+  <div class="pane" data-n="Navegar"><div class="group"><div class="r"><span class="l">Buscar</span><input type="text" id="rfilter" placeholder="arquivo ou pasta"></div></div>
+  <div class="list" id="rtree"></div></div>
+  <div class="pane" data-n="Ações"><div class="sec">Ações nos itens marcados</div><div class="btns"><button class="btn gray sm" id="b-reload">Recarregar</button><button class="btn gray sm" id="b-edit">Abrir no editor</button><button class="btn red sm" id="b-del">Excluir marcados</button></div>
+  <div class="note">Marque arquivos na subaba Navegar e use as ações aqui.</div></div>
 </section>
 
 <section class="tab" id="t-editor"><div class="ide stu" id="ide"><div class="scrim" id="x-scrim"></div>
 <aside class="ex"><div class="exh"><b>Explorador</b><span><button id="x-nf" title="Novo arquivo"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M12 11v6M9 14h6"/></svg></button><button id="x-nd" title="Nova pasta"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2zM12 11v6M9 14h6"/></svg></button><button id="x-rl" title="Recarregar do GitHub"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><button id="x-cl" title="Recolher tudo"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button></span></div>
 <input id="x-q" placeholder="Filtrar arquivos" autocapitalize="off"><div class="tree" id="x-tree" tabindex="0"></div></aside>
 <div class="edm"><div class="wp" id="wp"></div><div class="wpv"></div>
-<div class="hd"><button id="x-tg" title="Arquivos (Ctrl+B)"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><button class="chip" id="fchip" data-pop="pp-files"><b>Nenhum arquivo</b></button><button id="ed-commit" class="cbtn" title="Commit direto (Ctrl+Enter)"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM3 12h6m6 0h6"/></svg><span class="t">Commit</span><b id="cb"></b></button></div>
-<div class="inf"><span id="crumb"></span><span class="ir"><span id="sb-pos"></span><span id="sb-lang"></span><span id="sb-size"></span><span id="sb-dirty"></span><span id="sb-br"></span></span></div>
-<div class="surf"><div class="sc" id="sc"><div class="cv" id="cv"><div id="cl"></div><div id="fm"></div><div class="gut" id="gut"><i id="gm"></i><div id="gn"></div></div><div class="cod" id="cod"><pre id="hl"></pre><textarea id="ed-code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div></div></div>
+<div class="hd"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><button id="x-tg" title="Arquivos (Ctrl+B)"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button><button class="chip" id="fchip" data-pop="pp-files"><b>Nenhum arquivo</b></button><button id="ed-commit" class="cbtn" title="Commit direto (Ctrl+Enter)"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM3 12h6m6 0h6"/></svg><span class="t">Commit</span><b id="cb"></b></button></div>
+<div class="inf"><span id="crumb"></span><span class="ir"><button id="sb-err" class="sbe" hidden></button><span id="sb-pos"></span><span id="sb-lang"></span><span id="sb-size"></span><span id="sb-dirty"></span><span id="sb-br"></span></span></div>
+<div class="surf"><div class="sc" id="sc"><div class="cv" id="cv"><div id="cl"></div><div id="fm"></div><div class="gut" id="gut"><div id="ge"></div><i id="gm"></i><div id="gn"></div></div><div class="cod" id="cod"><div id="er"></div><pre id="hl"></pre><textarea id="ed-code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div></div></div>
 <div class="wel" id="wel"><div><div class="wi"><svg viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4m8-8l4 4-4 4M14 5l-4 14"/></svg></div><h3>Estúdio</h3><div>Abra um arquivo ou crie um novo</div><div class="btns"><button class="btn sm" id="w-nf">Novo arquivo</button><button class="btn gray sm" id="w-op">Abrir arquivo</button></div></div></div></div>
 <div class="find" id="fb" hidden><div><input id="f-q" placeholder="Buscar" autocapitalize="off"><button id="f-cs" title="Diferenciar maiúsculas">Aa</button><span id="f-c"></span><button id="f-p">↑</button><button id="f-n">↓</button><button id="f-x">✕</button></div><div id="f-rw"><input id="f-r" placeholder="Substituir" autocapitalize="off"><button id="f-r1">Substituir</button><button id="f-ra">Todos</button></div></div>
-<div class="pop" id="pp-files" hidden><div id="ed-tabs"></div></div><div class="pop b" id="pp-hist" hidden></div>
+<div class="pop" id="pp-files" hidden><div id="ed-tabs"></div></div><div class="pop b" id="pp-hist" hidden></div><div class="pop b" id="pp-err" hidden></div>
 <div class="pop b lk" id="pp-look" hidden><div class="pph">Fundo do editor</div><div class="wps" id="wps"></div><input type="file" id="wp-f" accept="image/*" hidden><label>Desfoque <b id="v-b"></b></label><input class="rg" type="range" id="r-b" min="0" max="40"><label>Escurecer <b id="v-d"></b></label><input class="rg" type="range" id="r-d" min="0" max="90"><label>Tamanho da fonte</label><div class="btns" style="margin:0"><button class="btn gray sm" id="sb-zm">A−</button><button class="btn gray sm" id="sb-zp">A+</button></div></div>
 <div class="dk"><div><button id="u-un" title="Desfazer"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-4"/></svg></button><button id="u-re" title="Refazer"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 000 12h4"/></svg></button><button data-pop="pp-hist" title="Voltar no tempo"><svg viewBox="0 0 24 24"><path d="M12 7v5l3 2M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><i></i><button id="ed-find" title="Buscar (Ctrl+F)"><svg viewBox="0 0 24 24"><path d="M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5"/></svg></button><button data-pop="pp-look" title="Aparência"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M9 9h.01"/></svg></button><button id="ed-save" title="Salvar na fila (Ctrl+S)"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg></button></div></div>
 </div>
@@ -429,19 +469,19 @@ body.ed-on #app{max-width:none;padding:8px 8px 8px 0}
 </div></section>
 
 <section class="tab" id="t-commits">
-  <div class="head"><div><div class="large">Commits</div><div class="sub">Últimos envios da branch</div></div></div>
-  <div class="btns" style="margin:0 0 12px"><button class="btn gray sm" id="b-creload">Atualizar</button></div>
-  <div class="list" id="clist"><div class="empty">Conecte para ver os commits</div></div>
+  <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Commits</div><div class="sub">Últimos envios da branch</div></div></div>
+  <div class="pane" data-n="Recentes"><div class="list" id="clist" style="margin-top:0"><div class="empty">Conecte para ver os commits</div></div></div>
+  <div class="pane" data-n="Atualizar"><div class="sec">Atualizar</div><div class="btns" style="margin-top:0"><button class="btn gray sm" id="b-creload">Recarregar commits</button></div></div>
 </section>
 
 <section class="tab" id="t-historico">
-  <div class="head"><div><div class="large">Histórico</div><div class="sub">Envios feitos por este aparelho</div></div></div>
-  <div class="list" id="hlist"></div>
-  <div class="btns"><button class="btn red sm" id="b-hclear">Apagar histórico</button></div>
+  <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Histórico</div><div class="sub">Envios feitos por este aparelho</div></div></div>
+  <div class="pane" data-n="Envios"><div class="list" id="hlist" style="margin-top:0"></div></div>
+  <div class="pane" data-n="Limpar"><div class="sec">Limpar</div><div class="btns" style="margin-top:0"><button class="btn red sm" id="b-hclear">Apagar histórico</button></div></div>
 </section>
 
 <section class="tab" id="t-ajustes">
-  <div class="head"><div><div class="large">Ajustes</div><div class="sub">Comportamento e aparência</div></div></div>
+  <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Ajustes</div><div class="sub">Comportamento e aparência</div></div></div>
   <div class="pane" data-n="Envio"><div class="sec">Envio</div>
   <div class="group">
     <label class="r"><span class="l">Remover pasta raiz (pasta/zip)</span><input class="sw" type="checkbox" data-cfg="strip" data-def="1"></label>
@@ -461,7 +501,7 @@ body.ed-on #app{max-width:none;padding:8px 8px 8px 0}
 </section>
 
 <section class="tab" id="t-ajuda">
-  <div class="head"><div><div class="large">Ajuda</div><div class="sub">Guia rápido</div></div></div>
+  <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Ajuda</div><div class="sub">Guia rápido</div></div></div>
   <div class="pane" data-n="Token"><div class="sec">Criar o token</div>
   <div class="group"><ol class="steps"><li>GitHub, Settings, Developer settings</li><li>Personal access tokens, Fine-grained tokens</li><li>Repository access: só os repositórios desejados</li><li>Permissions, Contents: Read and write</li><li>Gere e cole na aba Enviar</li></ol></div>
   </div><div class="pane" data-n="Fluxo"><div class="sec">Fluxo</div>
@@ -509,7 +549,12 @@ TABS.forEach(k=>{const b=document.createElement('button');b.dataset.tab=k;b.inne
 function tab(n){
  $$('.tab').forEach(t=>t.classList.toggle('on',t.id==='t-'+n));
  $$('#nav button').forEach(b=>{const on=b.dataset.tab===n;b.classList.toggle('on',on);if(on){$('#ind').style.setProperty('--y',b.offsetTop+'px');$('#ind').style.height=b.offsetHeight+'px'}});
- if(n==='commits')loadCommits();document.body.classList.toggle('ed-on',n==='editor');if(n==='editor'){exTree();status();requestAnimationFrame(moveInd)}window.scrollTo({top:0,behavior:'smooth'})}
+ if(n==='commits')loadCommits();document.body.classList.toggle('ed-on',n==='editor');if(n==='editor'){exTree();status();requestAnimationFrame(moveInd)}window.scrollTo({top:0,behavior:n==='editor'?'auto':'smooth'});fitVV();closeRail()}
+
+
+/* ---------- menu hamburguer (abre a barra principal) ---------- */
+function closeRail(){document.body.classList.remove('rail-on')}
+document.addEventListener('click',e=>{if(e.target.closest('[data-rail]')){buzz(8);document.body.classList.toggle('rail-on')}else if(e.target.id==='rail-scrim')closeRail()});
 
 /* ---------- caixas de diálogo (vidro) ---------- */
 let dId=0;
@@ -629,11 +674,39 @@ $('#b-del').onclick=async()=>{const [o,r]=rv(),b=P['p-branch'].v,ps=[...S.sel].f
 /* ---------- editor (estilo VS Code) ---------- */
 const ED={tabs:[],cur:null,open:new Set(),sel:new Set(),fs:+cfg('fs',13),ex:innerWidth>820,n:0,fm:null,cw:0};
 const ta=$('#ed-code'),hle=$('#hl'),gut=$('#gut'),ide=$('#ide'),sc=$('#sc'),cv=$('#cv');
-const LN={js:'JavaScript',json:'JSON',css:'CSS',html:'HTML',md:'Markdown',py:'Python','':'Texto'};
-const EXT={js:'js',mjs:'js',cjs:'js',jsx:'js',ts:'js',tsx:'js',json:'json',css:'css',scss:'css',html:'html',htm:'html',xml:'html',svg:'html',vue:'html',md:'md',py:'py',yml:'py',yaml:'py',sh:'py',env:'py'};
+const LN={js:'JavaScript',json:'JSON',css:'CSS',html:'HTML',md:'Markdown',py:'Python',c:'C / C++ / Java',sql:'SQL','':'Texto'};
+const EXT={js:'js',mjs:'js',cjs:'js',jsx:'js',ts:'js',tsx:'js',json:'json',jsonc:'json',css:'css',scss:'css',sass:'css',less:'css',html:'html',htm:'html',xml:'html',svg:'html',vue:'html',svelte:'html',md:'md',markdown:'md',py:'py',yml:'py',yaml:'py',toml:'py',ini:'py',sh:'py',bash:'py',zsh:'py',env:'py',rb:'py',ps1:'py',java:'c',c:'c',h:'c',cpp:'c',cc:'c',hpp:'c',cs:'c',go:'c',rs:'c',kt:'c',swift:'c',dart:'c',php:'c',sql:'sql'};
 const lang=p=>EXT[(p.split('.').pop()||'').toLowerCase()]||'';
-const FI={js:['JS','#e7c547'],json:['{}','#cbcb41'],css:['#','#42a5f5'],html:['<>','#e8734a'],md:['M','#519aba'],py:['PY','#5b9bd5'],'':['≡','#8a8a8a']};
-const fi=p=>{const [t,c]=FI[lang(p)];return `<b class="fi" style="color:${c}">${esc(t)}</b>`};
+/* ---- icones por linguagem (SVG, automatico pelo nome/extensao) ---- */
+const BG=(c,t,k='#fff',z=10.5)=>`<rect x="2" y="2" width="20" height="20" rx="6" fill="${c}"/><text x="12" y="${z>9?16.2:15.6}" text-anchor="middle" font-size="${z}" font-weight="800" font-family="JetBrains Mono,ui-monospace,monospace" fill="${k}">${t}</text>`;
+const ST=(c,d,x='')=>`<path d="${d}" stroke="${c}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none" ${x}/>`;
+const SHD=(c,i)=>`<path d="M4 3h16l-1.5 16.5L12 21.5l-6.5-2z" fill="${c}"/>${i}`;
+const FT={
+ js:{n:'JavaScript',i:BG('#f7df1e','JS','#1a1a1a')},ts:{n:'TypeScript',i:BG('#3178c6','TS')},
+ react:{n:'React',i:'<circle cx="12" cy="12" r="1.9" fill="#61dafb"/>'+[0,60,120].map(a=>`<ellipse cx="12" cy="12" rx="9.5" ry="3.8" stroke="#61dafb" stroke-width="1.4" fill="none" transform="rotate(${a} 12 12)"/>`).join('')},
+ html:{n:'HTML',i:SHD('#e44d26',ST('#fff','M9.5 9L7 12l2.5 3M14.5 9l2.5 3-2.5 3'))},
+ css:{n:'CSS',i:SHD('#1572b6',ST('#fff','M10.2 8l-1 8M14.8 8l-1 8M7.6 10.5h8.8M7.2 13.5h8.8'))},
+ json:{n:'JSON',i:ST('#f5c542','M9 4c-2 0-3 1-3 3v2c0 1.5-1 2.5-2 3 1 .5 2 1.5 2 3v2c0 2 1 3 3 3M15 4c2 0 3 1 3 3v2c0 1.5 1 2.5 2 3-1 .5-2 1.5-2 3v2c0 2-1 3-3 3')},
+ md:{n:'Markdown',i:'<rect x="2.5" y="5" width="19" height="14" rx="3" stroke="#519aba" stroke-width="1.6" fill="none"/>'+ST('#519aba','M6 15V9l2.5 3L11 9v6M16 9v5m-2-2l2 2 2-2')},
+ py:{n:'Python',i:BG('#3776ab','Py','#ffd43b')},java:{n:'Java',i:BG('#e76f00','Jv')},c:{n:'C',i:BG('#5c6bc0','C')},cpp:{n:'C++',i:BG('#00599c','C+')},cs:{n:'C#',i:BG('#68217a','C#')},
+ go:{n:'Go',i:BG('#00add8','Go')},rs:{n:'Rust',i:BG('#dea584','Rs','#1a1a1a')},php:{n:'PHP',i:BG('#777bb4','php','#fff',8)},rb:{n:'Ruby',i:BG('#cc342d','Rb')},
+ kt:{n:'Kotlin',i:BG('#7f52ff','Kt')},swift:{n:'Swift',i:BG('#f05138','Sw')},dart:{n:'Dart',i:BG('#0175c2','Da')},lua:{n:'Lua',i:BG('#000080','Lu')},
+ sh:{n:'Shell',i:'<rect x="2" y="2" width="20" height="20" rx="6" fill="#4eaa25"/>'+ST('#fff','M7 9l3 3-3 3M12.5 16H17')},
+ sql:{n:'SQL',i:'<ellipse cx="12" cy="6" rx="7" ry="3" stroke="#e38c00" stroke-width="1.7" fill="none"/>'+ST('#e38c00','M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3')},
+ yaml:{n:'YAML',i:BG('#cb171e','YML','#fff',7.6)},cfg:{n:'Config',i:ST('#8fa1b3','M4 7h9M18 7h2M4 17h2M11 17h9')+'<circle cx="15.5" cy="7" r="2.3" stroke="#8fa1b3" stroke-width="1.7" fill="none"/><circle cx="8.5" cy="17" r="2.3" stroke="#8fa1b3" stroke-width="1.7" fill="none"/>'},
+ vue:{n:'Vue',i:'<path d="M3 4h4.5L12 12l4.5-8H21L12 20z" fill="#41b883"/><path d="M7.5 4L12 12l4.5-8h-2.7L12 7.4 10.2 4z" fill="#35495e"/>'},
+ svg:{n:'SVG',i:BG('#ffb13b','SVG','#1a1a1a',7.4)},xml:{n:'XML',i:BG('#0f9d8a','XML','#fff',7.4)},
+ docker:{n:'Docker',i:BG('#2496ed','Dk')},npm:{n:'npm',i:BG('#cb3837','npm','#fff',7.8)},
+ git:{n:'Git',i:'<rect x="4.5" y="4.5" width="15" height="15" rx="3" fill="#f05033" transform="rotate(45 12 12)"/>'+ST('#fff','M12 8.2v7.6M12 12.2l3-2.4')+'<circle cx="12" cy="8.2" r="1.3" fill="#fff"/><circle cx="12" cy="15.8" r="1.3" fill="#fff"/><circle cx="15.2" cy="9.8" r="1.3" fill="#fff"/>'},
+ lock:{n:'Segredo / lock',i:'<rect x="5.5" y="11" width="13" height="9.5" rx="2.4" fill="#d4a72c"/>'+ST('#d4a72c','M8.5 11V8.5a3.5 3.5 0 017 0V11')},
+ img:{n:'Imagem',i:'<rect x="3" y="4" width="18" height="16" rx="3" stroke="#a074c4" stroke-width="1.7" fill="none"/><circle cx="9" cy="10" r="1.7" fill="#a074c4"/>'+ST('#a074c4','M4 17l5-4.5 4 3.5 3-2.5 4 3')},
+ pdf:{n:'PDF',i:BG('#e5252a','PDF','#fff',7.4)},zip:{n:'Arquivo compactado',i:BG('#a97c50','ZIP','#fff',7.4)},
+ bat:{n:'Batch',i:BG('#4d5a66','BAT','#fff',7.4)},
+ txt:{n:'Texto',i:ST('#8a8a8f','M7 3h7l4 4v14H7zM14 3v4h4M9.5 12h6M9.5 16h6')}};
+const EI={js:'js',mjs:'js',cjs:'js',ts:'ts',mts:'ts',jsx:'react',tsx:'react',json:'json',jsonc:'json',css:'css',scss:'css',sass:'css',less:'css',html:'html',htm:'html',xml:'xml',svg:'svg',vue:'vue',svelte:'html',md:'md',markdown:'md',mdx:'md',py:'py',pyw:'py',ipynb:'py',java:'java',c:'c',h:'c',cpp:'cpp',cc:'cpp',cxx:'cpp',hpp:'cpp',cs:'cs',go:'go',rs:'rs',php:'php',rb:'rb',kt:'kt',kts:'kt',swift:'swift',dart:'dart',lua:'lua',sh:'sh',bash:'sh',zsh:'sh',ps1:'sh',bat:'bat',cmd:'bat',sql:'sql',yml:'yaml',yaml:'yaml',toml:'cfg',ini:'cfg',conf:'cfg',cfg:'cfg',env:'lock',lock:'lock',key:'lock',pem:'lock',gitignore:'git',gitattributes:'git',png:'img',jpg:'img',jpeg:'img',gif:'img',webp:'img',ico:'img',bmp:'img',avif:'img',pdf:'pdf',zip:'zip',gz:'zip',tar:'zip',rar:'zip','7z':'zip',txt:'txt',log:'txt'};
+const EN={'package.json':'npm','package-lock.json':'npm','dockerfile':'docker','docker-compose.yml':'docker','docker-compose.yaml':'docker','.gitignore':'git','.gitattributes':'git','.gitkeep':'git','tsconfig.json':'ts','makefile':'cfg','license':'txt','readme':'md','.env':'lock','yarn.lock':'lock','pnpm-lock.yaml':'lock','.editorconfig':'cfg','.prettierrc':'cfg','.eslintrc':'cfg'};
+function ftype(p){const b=p.split('/').pop().toLowerCase();if(EN[b])return EN[b];if(b.startsWith('.env'))return'lock';if(b.startsWith('dockerfile'))return'docker';return EI[b.includes('.')?b.split('.').pop():'']||'txt'}
+const fi=p=>`<svg class="fi" viewBox="0 0 24 24" aria-hidden="true">${FT[ftype(p)].i}</svg>`;
 const I={c:'<svg class="ch" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',d:'<svg class="fd" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>',e:'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></svg>',x:'<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>'};
 const cur=()=>ED.tabs.find(t=>t.p===ED.cur),dirty=t=>t.text!==t.orig,nm=p=>p.split('/').pop(),LH=()=>Math.round(ED.fs*1.6),par=p=>p.includes('/')?p.slice(0,p.lastIndexOf('/')):'';
 
@@ -642,7 +715,11 @@ const mk=a=>({r:new RegExp(a.map(x=>'('+x[0].source+')').join('|'),'gm'),c:a.map
 const sS=/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`/,sN=/\b\d[\d._]*\b/,sF=/\b[A-Za-z_$][\w$]*(?=\()/;
 const KJ='as|async|await|break|case|catch|class|const|continue|default|delete|do|else|export|extends|finally|for|from|function|if|import|in|instanceof|let|new|of|return|static|super|switch|this|throw|try|typeof|var|void|while|yield|true|false|null|undefined|interface|type|enum';
 const KP='and|as|assert|async|await|break|class|continue|def|del|elif|else|except|False|finally|for|from|global|if|import|in|is|lambda|None|not|or|pass|raise|return|self|True|try|while|with|yield';
+const KC='abstract|auto|bool|boolean|break|byte|case|catch|char|class|const|continue|default|defer|do|double|else|enum|extends|extern|false|final|finally|float|fn|for|func|go|goto|if|impl|implements|import|in|int|interface|let|long|match|mod|mut|namespace|new|null|nil|package|private|protected|pub|public|return|short|signed|sizeof|static|string|struct|super|switch|this|throw|throws|trait|true|try|type|typedef|union|unsigned|use|using|var|virtual|void|volatile|while|fun|val|when|object|echo|function|foreach|as|abstract|lateinit|override';
+const KQ='select|from|where|insert|into|values|update|set|delete|create|table|alter|drop|index|join|left|right|inner|outer|on|group|by|order|having|limit|offset|and|or|not|null|is|in|as|distinct|union|primary|key|foreign|references|default|count|sum|avg|min|max|like|between|case|when|then|else|end';
 const LX={
+c:mk([[/\/\/.*|\/\*[\s\S]*?\*\/|^\s*#.*/,'c'],[sS,'s'],[new RegExp('\\b(?:'+KC+')\\b'),'k'],[sN,'n'],[sF,'f']]),
+sql:mk([[/--.*|\/\*[\s\S]*?\*\//,'c'],[sS,'s'],[new RegExp('\\b(?:'+KQ+')\\b','i'),'k'],[sN,'n'],[sF,'f']]),
 js:mk([[/\/\/.*|\/\*[\s\S]*?\*\//,'c'],[sS,'s'],[new RegExp('\\b(?:'+KJ+')\\b'),'k'],[sN,'n'],[sF,'f']]),
 py:mk([[/#.*/,'c'],[sS,'s'],[new RegExp('\\b(?:'+KP+')\\b'),'k'],[sN,'n'],[sF,'f']]),
 json:mk([[/"(?:\\.|[^"\\\n])*"(?=\s*:)/,'f'],[sS,'s'],[/\b(?:true|false|null)\b/,'k'],[/-?\b\d[\d.eE+-]*\b/,'n']]),
@@ -659,7 +736,7 @@ function stash(){const t=cur();if(t){t.text=ta.value;t.st=sc.scrollTop;t.sl=sc.s
 function paint(){const v=ta.value,L=v.split('\n'),n=L.length,w=cw();let m=0;for(let i=0;i<n;i++)if(L[i].length>m)m=L[i].length;
  cv.style.setProperty('--w',(G+PL+12+(m+4)*w)+'px');cv.style.setProperty('--h',(PT+n*LH()+140)+'px');
  if(ED.n!==n){ED.n=n;$('#gn').textContent=Array.from({length:n},(_,i)=>i+1).join('\n')}
- clearTimeout(ED.hp);const go=()=>{hle.innerHTML=hl(v,lang(ED.cur||''))};v.length>6e4?ED.hp=setTimeout(go,120):go();marks();status()}
+ clearTimeout(ED.hp);const go=()=>{hle.innerHTML=hl(v,lang(ED.cur||''))};v.length>6e4?ED.hp=setTimeout(go,120):go();ED.L=L;marks();status();lintHook()}
 function scr(){marks()}
 function pos(){const a=ta.value.slice(0,ta.selectionStart).split('\n');return{ln:a.length,col:a[a.length-1].length+1}}
 function cw(){if(!ED.cw){const s=document.createElement('span');s.style.cssText='position:absolute;visibility:hidden;white-space:pre';s.textContent='0'.repeat(50);$('#cod').append(s);ED.cw=s.getBoundingClientRect().width/50;s.remove()}return ED.cw}
@@ -669,7 +746,7 @@ function marks(){const lh=LH(),p=pos(),c=$('#cl'),f=$('#fm'),m=ED.fm,y=PT+(p.ln-
 function reveal(){const p=pos(),lh=LH(),y=PT+(p.ln-1)*lh,x=PL+p.col*cw(),H=sc.clientHeight,W=sc.clientWidth;
  if(y<sc.scrollTop+lh)sc.scrollTop=y-lh;else if(y+lh*2>sc.scrollTop+H)sc.scrollTop=y+lh*2-H;
  if(x<sc.scrollLeft+8)sc.scrollLeft=Math.max(0,x-40);else if(x+G+24>sc.scrollLeft+W)sc.scrollLeft=x+G+48-W}
-function status(){const t=cur(),p=pos(),d=ED.tabs.filter(dirty).length;$('#sb-pos').textContent=t?`${p.ln}:${p.col}`:'';$('#sb-lang').textContent=t?LN[lang(t.p)]:'';$('#sb-size').textContent=t?fmt(ta.value.length):'';$('#sb-br').textContent='⎇ '+(P['p-branch'].v||'—');$('#sb-dirty').textContent=d?d+' não salvo(s)':'';badge()}
+function status(){const t=cur(),p=pos(),d=ED.tabs.filter(dirty).length;$('#sb-pos').textContent=t?`${p.ln}:${p.col}`:'';$('#sb-lang').textContent=t?FT[ftype(t.p)].n:'';$('#sb-size').textContent=t?fmt(ta.value.length):'';$('#sb-br').textContent='⎇ '+(P['p-branch'].v||'—');$('#sb-dirty').textContent=d?d+' não salvo(s)':'';badge()}
 function layout(){ide.classList.toggle('nex',!ED.ex)}
 function zoom(d){ED.fs=Math.max(10,Math.min(24,ED.fs+d));setCfg('fs',ED.fs);ide.style.setProperty('--fs',ED.fs+'px');ide.style.setProperty('--lh',LH()+'px');ED.cw=0;ED.n=0;paint()}
 /* desfazer / refazer, pontos de restauração */
@@ -690,9 +767,9 @@ $('#u-un').onclick=()=>{buzz(8);undo()};$('#u-re').onclick=()=>{buzz(8);redo()};
 ta.addEventListener('beforeinput',e=>{if(e.inputType==='historyUndo'){e.preventDefault();undo()}else if(e.inputType==='historyRedo'){e.preventDefault();redo()}});
 ta.addEventListener('keyup',e=>{if(/^(Arrow|Home|End)/.test(e.key))reveal()});
 /* popovers */
-const POPS=['pp-files','pp-hist','pp-look'];
+const POPS=['pp-files','pp-hist','pp-look','pp-err'];
 function closePop(){POPS.forEach(i=>$('#'+i).hidden=true);$$('[data-pop]').forEach(b=>b.classList.remove('on'))}
-function pop(id){const el=$('#'+id),open=el.hidden;closePop();if(!open)return;if(id==='pp-hist')histUI();el.hidden=false;el.classList.remove('in');void el.offsetWidth;el.classList.add('in');const b=$(`[data-pop=${id}]`);if(b)b.classList.add('on')}
+function pop(id){const el=$('#'+id),open=el.hidden;closePop();if(!open)return;if(id==='pp-hist')histUI();if(id==='pp-err')errUI();el.hidden=false;el.classList.remove('in');void el.offsetWidth;el.classList.add('in');const b=$(`[data-pop=${id}]`);if(b)b.classList.add('on')}
 $$('[data-pop]').forEach(b=>b.onclick=()=>{buzz(6);pop(b.dataset.pop)});
 ide.addEventListener('pointerdown',e=>{if(!e.target.closest('.pop,[data-pop],.dd'))closePop()});
 /* wallpaper */
@@ -705,8 +782,83 @@ $('#wps').onclick=e=>{const b=e.target.closest('button');if(!b)return;buzz(8);co
 $('#wp-f').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const im=new Image();im.onload=()=>{const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ED.img=c.toDataURL('image/jpeg',.82);idb('put',ED.img);setCfg('wp','img');applyWp();URL.revokeObjectURL(im.src)};im.onerror=()=>toast('Imagem inválida',1);im.src=URL.createObjectURL(f)};
 let wq;const wr=(k,el)=>$(el).oninput=e=>{setCfg(k,+e.target.value);cancelAnimationFrame(wq);wq=requestAnimationFrame(applyWp)};wr('wpb','#r-b');wr('wpd','#r-d');
 idb('get').then(x=>{if(x)ED.img=x;applyWp()});applyWp();
-if(window.visualViewport){const f=()=>{ide.style.height=document.body.classList.contains('ed-on')?Math.max(300,visualViewport.height-16)+'px':''};visualViewport.addEventListener('resize',f);visualViewport.addEventListener('scroll',f)}
+/* teclado do celular: trava a página e acompanha a area visivel, assim o cabeçalho (hamburguer) nunca sobe */
+function fitVV(){const on=document.body.classList.contains('ed-on'),v=window.visualViewport;
+ if(!on){ide.style.height='';ide.style.transform='';return}
+ const h=v?v.height:innerHeight,t=v?v.offsetTop:0;
+ ide.style.height=Math.max(300,h-16)+'px';ide.style.transform=t?`translateY(${t}px)`:'';
+ if(window.scrollY||document.documentElement.scrollTop){window.scrollTo(0,0)}}
+if(window.visualViewport){visualViewport.addEventListener('resize',fitVV);visualViewport.addEventListener('scroll',fitVV)}
+addEventListener('scroll',()=>{if(document.body.classList.contains('ed-on'))fitVV()},{passive:true});
+ta.addEventListener('focus',()=>{setTimeout(fitVV,50);setTimeout(fitVV,300)});ta.addEventListener('blur',()=>setTimeout(fitVV,100));
 document.fonts&&document.fonts.ready.then(()=>{ED.cw=0;ED.n=0;paint()});
+
+/* ---------- identificação de erros nas linhas ---------- */
+const OPT=new Set('p li td th tr dt dd option thead tbody tfoot head body html colgroup'.split(' ')),VOID=new Set('area base br col embed hr img input link meta param source track wbr command keygen'.split(' '));
+const mkLC=t=>{const ls=[0];for(let k=0;k<t.length;k++)if(t.charCodeAt(k)===10)ls.push(k+1);return p=>{let a=0,b=ls.length-1;while(a<b){const m=(a+b+1)>>1;ls[m]<=p?a=m:b=m-1}return{ln:a+1,col:p-ls[a]+1}}};
+function lintJSON(t){try{JSON.parse(t)}catch(e){const m=String(e.message);let ln,col,ps=(m.match(/position (\d+)/)||[])[1];
+ if(ps!=null){const b=t.slice(0,+ps).split('\n');ln=b.length;col=b[ln-1].length+1}else{const lc=m.match(/line (\d+) column (\d+)/);if(lc){ln=+lc[1];col=+lc[2]}else{ln=t.split('\n').length;col=1}}
+ return[{ln,col,len:1,msg:'JSON inválido: '+m.replace(/\s*\(line.*\)/,'').replace(/ in JSON at position \d+/,'').trim()}]}return[]}
+const KRE=/^(return|typeof|case|in|of|delete|void|throw|new|else|do|yield|await)$/,CHR=/'(?:\\(?:u\{[0-9a-fA-F]+\}|u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|.)|[^'\\\n])'/y;
+function scan(t,o){const E=[],st=[],n=t.length,lc=mkLC(t),CL={'(':')','[':']','{':'}'},PA={')':'(',']':'[','}':'{'},er=(p,msg,len)=>E.push(Object.assign(lc(p),{len:len||1,msg}));
+ let i=0,prev='',lw='';
+ while(i<n){const c=t[i],d=t[i+1];
+  if(o.lc&&t.startsWith(o.lc,i)){while(i<n&&t[i]!=='\n')i++;continue}
+  if(o.bc&&c==='/'&&d==='*'){const e=t.indexOf('*/',i+2);if(e<0){er(i,'Comentário /* não foi fechado',2);break}i=e+2;continue}
+  if(o.tri&&(t.startsWith('"""',i)||t.startsWith("'''",i))){const q=t.substr(i,3),e=t.indexOf(q,i+3);if(e<0){er(i,'String '+q+' não foi fechada',3);break}i=e+3;prev='"';continue}
+  if(o.ch&&c==="'"){CHR.lastIndex=i;const m=CHR.exec(t);if(m){i+=m[0].length;prev='"';continue}prev="'";i++;continue}
+  if(c==='"'||(c==="'"&&o.sq)||(c==='`'&&o.tpl)){const ml=c==='`';let j=i+1;while(j<n&&t[j]!==c){if(t[j]==='\\')j++;else if(t[j]==='\n'&&!ml)break;j++}
+   if(j>=n||(t[j]==='\n'&&!ml)){if(!(c==="'"&&o.lax))er(i,'String sem aspas de fechamento ('+c+')',Math.max(1,Math.min(j,n)-i));i=Math.max(j,i+1);continue}i=j+1;prev='"';continue}
+  if(/[A-Za-z_$]/.test(c)){let j=i+1;while(j<n&&/[\w$]/.test(t[j]))j++;lw=t.slice(i,j);prev='a';i=j;continue}
+  if(o.re&&c==='/'&&d!=='/'&&d!=='*'&&(prev===''||'(,=:[!&|?{};+-*%~^'.includes(prev)||(prev==='a'&&KRE.test(lw)))){let j=i+1,cl=false;
+   while(j<n&&t[j]!=='\n'){if(t[j]==='\\')j++;else if(t[j]==='[')cl=true;else if(t[j]===']')cl=false;else if(t[j]==='/'&&!cl)break;j++}
+   if(j<n&&t[j]==='/'){i=j+1;prev='"';continue}}
+  if(CL[c])st.push([c,i]);
+  else if(PA[c]){const tp=st[st.length-1];if(!tp)er(i,`'${c}' sem abertura correspondente`);else{if(tp[0]!==PA[c])er(i,`Esperava '${CL[tp[0]]}' (para o '${tp[0]}' da linha ${lc(tp[1]).ln}), mas achou '${c}'`);st.pop()}}
+  if(!/\s/.test(c))prev=c;i++}
+ st.forEach(([c,p])=>er(p,`'${c}' não foi fechado, falta '${CL[c]}'`));return E}
+function lintHTML(t){const lc=mkLC(t),E=[],er=(p,msg,len)=>E.push(Object.assign(lc(p),{len:len||1,msg})),u=t.replace(/<!--[\s\S]*?-->/g,m=>m.replace(/[^\n]/g,' ')),ci=u.indexOf('<!--');if(ci>=0)er(ci,'Comentário <!-- não foi fechado',4);
+ const re=/<(\/?)([a-zA-Z][\w:.-]*)((?:"[^"]*"|'[^']*'|[^'">])*)>/g,st=[],lo=u.toLowerCase();let m;
+ while((m=re.exec(u))){const cl=m[1]==='/',tg=m[2].toLowerCase();
+  if(!cl){if(VOID.has(tg)||/\/\s*$/.test(m[3]))continue;st.push([tg,m.index]);
+   if(tg==='script'||tg==='style'){const e=lo.indexOf('</'+tg,re.lastIndex);if(e<0){er(m.index,`<${tg}> não foi fechado`,tg.length+1);break}re.lastIndex=e}continue}
+  if(VOID.has(tg))continue;let k=st.length-1;while(k>=0&&st[k][0]!==tg)k--;
+  if(k<0){er(m.index,`</${tg}> sem a tag de abertura`,m[0].length);continue}
+  for(let j=st.length-1;j>k;j--)if(!OPT.has(st[j][0]))er(st[j][1],`<${st[j][0]}> não foi fechado antes de </${tg}>`,st[j][0].length+1);st.length=k}
+ st.forEach(([tg,p])=>{if(!OPT.has(tg))er(p,`<${tg}> não foi fechado`,tg.length+1)});return E}
+function pyChecks(t){const E=[];let dp=0,ins=false;
+ t.split('\n').forEach((l,i)=>{const q=(l.match(/"""|'''/g)||[]).length;if(ins){if(q%2)ins=false;return}if(q%2){ins=true;return}
+  const ind=l.match(/^[ \t]*/)[0];if(l.trim()&&ind.includes('\t')&&ind.includes(' '))E.push({ln:i+1,col:1,len:ind.length,w:1,msg:'Indentação mistura tabs e espaços'});
+  const code=l.replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g,'""').replace(/#.*$/,'').trimEnd(),o=(code.match(/[(\[{]/g)||[]).length,c=(code.match(/[)\]}]/g)||[]).length;
+  if(dp===0&&o===c&&/^\s*(?:async\s+)?(if|elif|while|for|def|class|with|try|except|finally|else)\b/.test(code)&&!code.includes(':')&&!/[\\,]$/.test(code))E.push({ln:i+1,col:code.length+1,len:1,msg:"Falta ':' no fim da instrução"});
+  dp=Math.max(0,dp+o-c)});return E}
+function lintFor(t,p){const e=(p.split('.').pop()||'').toLowerCase();let E=null;if(!t.trim()||t.length>3e5)return t.trim()?null:[];
+ if(e==='json')E=lintJSON(t);
+ else if(/^(js|mjs|cjs|jsx|ts|tsx|mts)$/.test(e))E=scan(t,{lc:'//',bc:1,sq:1,tpl:1,re:1,lax:/x$/.test(e)});
+ else if(/^(css|scss|less)$/.test(e))E=scan(t,{bc:1,sq:1,lc:e==='css'?0:'//'});
+ else if(/^(html?|xml|svg)$/.test(e))E=lintHTML(t);
+ else if(e==='py')E=scan(t,{lc:'#',tri:1,sq:1}).concat(pyChecks(t));
+ else if(e==='sql')E=scan(t,{lc:'--',bc:1,sq:1});
+ else if(/^(java|c|h|cpp|cc|cxx|hpp|cs|go|rs)$/.test(e))E=scan(t,{lc:'//',bc:1,ch:1,tri:/^(java|cs)$/.test(e),tpl:e==='go'});
+ return E&&E.sort((a,b)=>a.ln-b.ln||a.col-b.col).slice(0,60)}
+let lintT;
+function lintHook(){const t=cur();if(!t){ED.er=null;renderErr();return}
+ if(ED.lc!==ED.cur){ED.lc=ED.cur;ED.er=null;runLint()}else{clearTimeout(lintT);lintT=setTimeout(runLint,260)}renderErr()}
+function runLint(){const t=cur();if(!t){ED.er=null;return}try{ED.er=lintFor(ta.value,t.p)}catch(e){ED.er=null}renderErr();status()}
+function renderErr(){const lh=LH(),E=ED.er||[],g=$('#ge'),w=$('#er'),L=ED.L||[],c=cw(),seen=new Set();let a='',b='';
+ E.forEach(e=>{const y=PT+(e.ln-1)*lh,len=(L[e.ln-1]||'').length,col=Math.min(e.col,Math.max(1,len)),wd=Math.max(1,Math.min(e.len||1,Math.max(1,len-col+1)));
+  if(!seen.has(e.ln)){seen.add(e.ln);b+=`<i class="eb${e.w?' w':''}" style="top:${y}px;height:${lh}px"></i>`;a+=`<i class="ge${e.w?' w':''}" style="transform:translateY(${y}px);height:${lh}px"></i>`}
+  b+=`<i class="ew${e.w?' w':''}" style="top:${y}px;height:${lh}px;left:${PL+(col-1)*c}px;width:${wd*c}px"></i>`});
+ g.innerHTML=a;w.innerHTML=b;errBadge()}
+function errBadge(){const el=$('#sb-err'),E=ED.er;if(!cur()||E==null){el.hidden=true;return}el.hidden=false;
+ const n=E.filter(x=>!x.w).length,w=E.length-n,ln=pos().ln,h=E.find(x=>x.ln===ln);
+ el.className='sbe'+(n?' bad':w?' wrn':' ok');
+ el.textContent=h?`Linha ${h.ln}: ${h.msg}`:n||w?`${n?'✕ '+n:''}${n&&w?'  ':''}${w?'▲ '+w:''}`:'✓ sem erros';
+ el.title=E.length?E.map(x=>`${x.ln}:${x.col} ${x.msg}`).join('\n'):'Nenhum erro encontrado'}
+function errUI(){const b=$('#pp-err'),E=ED.er||[];b.innerHTML='<div class="pph">Problemas no código ('+E.length+')</div>'+(E.length?E.map((e,i)=>`<div class="opt" data-i="${i}"><span><b class="${e.w?'ew2':'er2'}">${e.w?'Aviso':'Erro'}</b> · linha ${e.ln}, col ${e.col}<small>${esc(e.msg)}</small></span></div>`).join(''):'<div class="qe">Nenhum erro encontrado neste arquivo</div>')}
+$('#pp-err').onclick=e=>{const o=e.target.closest('.opt');if(!o)return;const x=ED.er[+o.dataset.i];buzz(8);closePop();goLine(x.ln);const L=ta.value.split('\n'),p=L.slice(0,x.ln-1).join('\n').length+(x.ln>1?1:0)+x.col-1;ta.setSelectionRange(p,p);reveal()};
+$('#sb-err').onclick=()=>{buzz(6);pop('pp-err')};
+$('#gut').addEventListener('click',e=>{const r=$('#gut').getBoundingClientRect(),ln=Math.floor((e.clientY-r.top-PT)/LH())+1,h=(ED.er||[]).find(x=>x.ln===ln);if(h){buzz(10);toast(`Linha ${h.ln}: ${h.msg}`,1)}});
 
 /* abas */
 const BIN=/\.(png|jpe?g|gif|webp|ico|bmp|zip|gz|pdf|mp[34]|mov|woff2?|ttf|otf|exe)$/i;
@@ -835,7 +987,7 @@ $('#f-ra').onclick=()=>{const q=$('#f-q').value;if(!q)return;ver(cur(),'antes de
 /* edição: indentação, pares, comentar, mover linhas */
 function ins(t){if(t.length>1){clearTimeout(ED.sn);snap(cur())}ta.focus();if(!document.execCommand('insertText',false,t)){ta.setRangeText(t,ta.selectionStart,ta.selectionEnd,'end');ta.dispatchEvent(new Event('input'))}}
 function rep(a,b,t){ta.setSelectionRange(a,b);ins(t)}
-const PR={'(':')','[':']','{':'}','"':'"',"'":"'",'`':'`'},CM={js:['// ',''],json:['// ',''],py:['# ',''],md:['<!-- ',' -->'],css:['/* ',' */'],html:['<!-- ',' -->'],'':['// ','']};
+const PR={'(':')','[':']','{':'}','"':'"',"'":"'",'`':'`'},CM={c:['// ',''],sql:['-- ',''],js:['// ',''],json:['// ',''],py:['# ',''],md:['<!-- ',' -->'],css:['/* ',' */'],html:['<!-- ',' -->'],'':['// ','']};
 ta.addEventListener('keydown',e=>{const v=ta.value,s=ta.selectionStart,en=ta.selectionEnd,k=e.key,C=e.ctrlKey||e.metaKey,ls=v.lastIndexOf('\n',s-1)+1;
  let le=v.indexOf('\n',en>s&&v[en-1]==='\n'?en-1:en);if(le<0)le=v.length;const blk=v.slice(ls,le),L=lang(ED.cur||'');
  if(k==='Tab'&&!C){e.preventDefault();if(s===en&&!e.shiftKey)return ins('  ');const nb=e.shiftKey?blk.replace(/^( {1,2}|\t)/gm,''):blk.replace(/^/gm,'  ');rep(ls,le,nb);const c=Math.max(ls,s+nb.length-blk.length);return s===en?ta.setSelectionRange(c,c):ta.setSelectionRange(ls,ls+nb.length)}
