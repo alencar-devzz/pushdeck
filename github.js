@@ -1,7 +1,7 @@
 const GH = {
   token: '', base: 'https://api.github.com',
   async req(path, opts = {}) {
-    const r = await fetch(this.base + path, { ...opts, headers: { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + this.token, 'Content-Type': 'application/json' } });
+    const r = await fetch(this.base + path, { cache: 'no-store', ...opts, headers: { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + this.token, 'Content-Type': 'application/json' } });
     if (!r.ok) { let m = r.statusText; try { m = (await r.json()).message } catch {} throw new Error(r.status + ' ' + m) }
     return r.status === 204 ? null : r.json();
   },
