@@ -449,6 +449,14 @@ html,body{touch-action:pan-x pan-y}
 .colx{display:flex;justify-content:space-between;color:var(--mut);font-size:11px;margin-top:8px}
 .stack{display:flex;height:12px;border-radius:99px;overflow:hidden;margin:0 0 12px;background:var(--fill)}.stack i{height:100%}
 #t-metricas .stats{margin-bottom:4px}
+
+/* ===== sliders do fundo + blur de vidro opcional ===== */
+.rg{touch-action:none;height:30px;margin:0;display:block}
+.wp{will-change:filter,transform}
+.wpdrag .pop{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.noglass *,html.noglass *:before,html.noglass *:after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.noglass{--glass:var(--card2);--glass-sh:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.35)}
+html.noglass[data-theme=light]{--glass:#fff;--glass-sh:0 8px 24px rgba(0,0,0,.12)}
 </style>
 </head>
 <body>
@@ -599,6 +607,7 @@ html,body{touch-action:pan-x pan-y}
   <div class="group">
     <label class="r"><span class="l">Tema claro</span><input class="sw" type="checkbox" data-cfg="light"></label>
     <label class="r"><span class="l">Lembrar token neste aparelho</span><input class="sw" type="checkbox" data-cfg="remember"></label>
+    <label class="r"><span class="l">Blur de vidro<small style="display:block;color:var(--mut);font-weight:500;font-size:12px">Desligue se o app estiver pesado</small></span><input class="sw" type="checkbox" data-cfg="glass" data-def="1"></label>
     <label class="r"><span class="l">Vibração ao tocar</span><input class="sw" type="checkbox" data-cfg="haptic" data-def="1"></label>
   </div>
   <div class="btns"><button class="btn gray" id="b-install" hidden>Instalar app</button></div>
@@ -1068,12 +1077,19 @@ ide.addEventListener('pointerdown',e=>{if(!e.target.closest('.pop,[data-pop],.dd
 /* wallpaper */
 const WPS={a:'linear-gradient(135deg,#1b1464,#7b2ff7 55%,#f107a3)',b:'linear-gradient(160deg,#0f2027,#2c5364 60%,#4ca1af)',c:'linear-gradient(135deg,#42275a,#734b6d 50%,#ee9ca7)',d:'linear-gradient(150deg,#141e30,#243b55 50%,#0f9b8e)'};
 const idb=(m,v)=>new Promise(r=>{try{const q=indexedDB.open('pd',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onerror=()=>r();q.onsuccess=()=>{const s=q.result.transaction('k',m==='get'?'readonly':'readwrite').objectStore('k'),x=m==='get'?s.get('wp'):s.put(v,'wp');x.onsuccess=()=>r(x.result);x.onerror=()=>r()}}catch(e){r()}});
-function applyWp(){const w=cfg('wp',''),on=w==='img'?!!ED.img:!!WPS[w];$('#wp').style.backgroundImage=on?(w==='img'?`url(${ED.img})`:WPS[w]):'none';ide.classList.toggle('hasw',on);
- ide.style.setProperty('--wpb',cfg('wpb',14)+'px');ide.style.setProperty('--wpd',cfg('wpd',45)/100);$('#r-b').value=cfg('wpb',14);$('#r-d').value=cfg('wpd',45);$('#v-b').textContent=cfg('wpb',14)+'px';$('#v-d').textContent=cfg('wpd',45)+'%';
+let wpKey='';
+function wpLook(){const b=cfg('wpb',14),d=cfg('wpd',45);ide.style.setProperty('--wpb',b+'px');ide.style.setProperty('--wpd',d/100);$('#v-b').textContent=b+'px';$('#v-d').textContent=d+'%'}
+function applyWp(){const w=cfg('wp',''),on=w==='img'?!!ED.img:!!WPS[w],key=on?(w==='img'?'img:'+ED.img.length:w):'';
+ if(key!==wpKey){wpKey=key;$('#wp').style.backgroundImage=on?(w==='img'?`url(${ED.img})`:WPS[w]):'none'}
+ ide.classList.toggle('hasw',on);
+ wpLook();$('#r-b').value=cfg('wpb',14);$('#r-d').value=cfg('wpd',45);
  $('#wps').innerHTML=`<button data-w="" class="${on?'':'on'}">Nenhum</button>`+Object.keys(WPS).map(k=>`<button data-w="${k}" class="${w===k?'on':''}" style="background-image:${WPS[k]}"></button>`).join('')+`<button data-w="img" class="${w==='img'&&on?'on':''}" style="${ED.img?`background-image:url(${ED.img})`:''}">${ED.img?'':'Minha foto'}</button>`}
 $('#wps').onclick=e=>{const b=e.target.closest('button');if(!b)return;buzz(8);const w=b.dataset.w;if(w==='img'&&!ED.img)return $('#wp-f').click();if(w==='img'&&b.classList.contains('on'))return $('#wp-f').click();setCfg('wp',w);applyWp()};
 $('#wp-f').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const im=new Image();im.onload=()=>{const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ED.img=c.toDataURL('image/jpeg',.82);idb('put',ED.img);setCfg('wp','img');applyWp();URL.revokeObjectURL(im.src)};im.onerror=()=>toast('Imagem inválida',1);im.src=URL.createObjectURL(f)};
-let wq;const wr=(k,el)=>$(el).oninput=e=>{setCfg(k,+e.target.value);cancelAnimationFrame(wq);wq=requestAnimationFrame(applyWp)};wr('wpb','#r-b');wr('wpd','#r-d');
+/* sliders: durante o arrasto so muda as variaveis CSS (leve); salva ao soltar */
+const wr=(k,el)=>{const x=$(el);x.oninput=e=>{S.cfg[k]=+e.target.value;wpLook()};x.onchange=e=>{setCfg(k,+e.target.value);ide.classList.remove('wpdrag')};x.addEventListener('pointerdown',()=>ide.classList.add('wpdrag'))};
+['pointerup','pointercancel','touchend','touchcancel'].forEach(ev=>addEventListener(ev,()=>ide.classList.remove('wpdrag')));
+wr('wpb','#r-b');wr('wpd','#r-d');
 idb('get').then(x=>{if(x)ED.img=x;applyWp()});applyWp();
 /* teclado do celular: trava a página e acompanha a area visivel, assim o cabeçalho (hamburguer) nunca sobe */
 function fitVV(){const on=document.body.classList.contains('ed-on'),v=window.visualViewport;
@@ -1383,7 +1399,8 @@ $('#b-hclear').onclick=()=>{S.hist=[];localStorage.pd_hist='[]';renderHist()};
 
 /* ---------- ajustes ---------- */
 const theme=()=>document.documentElement.dataset.theme=cfg('light',false)?'light':'dark';
-$$('[data-cfg]').forEach(el=>{const k=el.dataset.cfg;el.checked=cfg(k,el.dataset.def==='1');el.onchange=()=>{setCfg(k,el.checked);buzz(8);if(k==='light')theme();render()}});
+const glass=()=>document.documentElement.classList.toggle('noglass',!cfg('glass',true));
+$$('[data-cfg]').forEach(el=>{const k=el.dataset.cfg;el.checked=cfg(k,el.dataset.def==='1');el.onchange=()=>{setCfg(k,el.checked);buzz(8);if(k==='light')theme();if(k==='glass')glass();render()}});
 $('#o-ignore').value=cfg('ignore','.DS_Store,node_modules,.git,Thumbs.db');$('#o-ignore').oninput=e=>setCfg('ignore',e.target.value);
 $('#o-prefix').value=cfg('prefix','');$('#o-prefix').oninput=e=>setCfg('prefix',e.target.value);
 $('#b-wipe').onclick=async()=>{if(await dlg({title:'Apagar tudo?',text:'Remove token, histórico e ajustes deste aparelho.',ok:'Apagar',danger:true})){localStorage.clear();sessionStorage.clear();location.reload()}};
@@ -1397,7 +1414,7 @@ if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!navigator.standalone){const n
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
 /* ---------- init ---------- */
-theme();setPick('p-sort','path');setPick('p-dest','');tab('enviar');render();renderHist();pv();renderOffBox();
+theme();glass();setPick('p-sort','path');setPick('p-dest','');tab('enviar');render();renderHist();pv();renderOffBox();
 const saved=localStorage.pd_token||sessionStorage.pd_token;if(saved){$('#token').value=saved;connect()}
 })();
 </script>
