@@ -457,6 +457,10 @@ html,body{touch-action:pan-x pan-y}
 html.noglass *,html.noglass *:before,html.noglass *:after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 html.noglass{--glass:var(--card2);--glass-sh:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.35)}
 html.noglass[data-theme=light]{--glass:#fff;--glass-sh:0 8px 24px rgba(0,0,0,.12)}
+
+/* ===== sem selecao de texto ao segurar (comportamento de app) ===== */
+html,body,body *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
 </style>
 </head>
 <body>
@@ -729,6 +733,7 @@ function tab(n,i){
  syncRail(n);
  if(n==='commits')loadCommits();if(n==='branches'){loadBranchList();loadPRs()}if(n==='issues')loadIssues();if(n==='deploy'){loadPages();loadRuns()}if(n==='metricas')loadMetrics();
  document.body.classList.toggle('ed-on',n==='editor');if(n==='editor'){exTree();status();requestAnimationFrame(moveInd)}window.scrollTo({top:0,behavior:n==='editor'?'auto':'smooth'});fitVV();closeRail()}
+document.addEventListener('contextmenu',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()});
 ['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
 document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault()},{passive:false});
 
