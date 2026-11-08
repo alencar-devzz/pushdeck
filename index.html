@@ -613,7 +613,8 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
     <label class="r"><span class="l">Blur de vidro<small style="display:block;color:var(--mut);font-weight:500;font-size:12px">Desligue se o app estiver pesado</small></span><input class="sw" type="checkbox" data-cfg="glass" data-def="1"></label>
     <label class="r"><span class="l">Vibração ao tocar</span><input class="sw" type="checkbox" data-cfg="haptic" data-def="1"></label>
   </div>
-  <div class="btns"><button class="btn gray" id="b-install" hidden>Instalar app</button></div>
+  <div class="btns"><button class="btn gray" id="b-refresh">Atualizar app agora</button><button class="btn gray" id="b-install" hidden>Instalar app</button></div>
+  <div class="note" id="ver"></div>
   <div class="note" id="inst-note" hidden></div>
   <div class="btns"><button class="btn red" id="b-wipe">Apagar todos os dados locais</button></div></div>
 </section>
@@ -1404,6 +1405,8 @@ $('#b-hclear').onclick=()=>{S.hist=[];localStorage.pd_hist='[]';renderHist()};
 /* ---------- ajustes ---------- */
 const theme=()=>document.documentElement.dataset.theme=cfg('light',false)?'light':'dark';
 const glass=()=>document.documentElement.classList.toggle('noglass',!cfg('glass',true));
+const APPV='2026-11-07 · subabas v4';$('#ver').textContent='Versão do app: '+APPV;
+$('#b-refresh').onclick=async()=>{toast('Atualizando...');try{const rs=navigator.serviceWorker?await navigator.serviceWorker.getRegistrations():[];for(const r of rs)await r.unregister();for(const k of await caches.keys())await caches.delete(k)}catch(e){}location.replace(location.pathname+'?v='+Date.now())};
 $$('[data-cfg]').forEach(el=>{const k=el.dataset.cfg;el.checked=cfg(k,el.dataset.def==='1');el.onchange=()=>{setCfg(k,el.checked);buzz(8);if(k==='light')theme();if(k==='glass')glass();render()}});
 $('#o-ignore').value=cfg('ignore','.DS_Store,node_modules,.git,Thumbs.db');$('#o-ignore').oninput=e=>setCfg('ignore',e.target.value);
 $('#o-prefix').value=cfg('prefix','');$('#o-prefix').oninput=e=>setCfg('prefix',e.target.value);
