@@ -494,12 +494,6 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
     </div>
     <div class="pv-box" id="pv">destino: /</div>
     <div class="btns"><button class="btn gray sm" id="b-newrepo">Criar repositório</button><button class="btn gray sm" id="b-zip">Baixar .zip do repo</button></div>
-  </div><div class="pane" data-n="Arquivos">
-    <div class="sec">Arquivos</div>
-    <div class="drop" id="drop"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V5m0 0l-4 4m4-4l4 4M5 15v3a2 2 0 002 2h10a2 2 0 002-2v-3"/></svg></div><p>Arraste arquivos, pastas ou .zip</p><div class="btns"><button class="btn gray sm" id="b-files">Arquivos</button><button class="btn gray sm" id="b-folder">Pasta</button><button class="btn gray sm" id="b-paste">Colar código</button></div><input type="file" id="f-files" multiple hidden><input type="file" id="f-folder" webkitdirectory hidden></div>
-    <div class="group" style="margin-top:12px"><div class="r"><span class="l">Filtrar</span><input type="text" id="filter" placeholder="digite para filtrar"></div></div><div class="ddg" style="margin-top:12px"><div class="dd" id="p-sort"><span class="dl">Ordenar por</span><button class="dt" type="button"><span class="pv">Caminho</span></button><div class="dp"><div class="dpi"></div></div></div></div>
-    <div class="btns"><button class="btn gray sm" id="b-all">Marcar todos</button><button class="btn gray sm" id="b-none">Desmarcar</button><button class="btn red sm" id="b-rm">Remover marcados</button><button class="btn red sm" id="b-clear">Limpar</button></div>
-    <div class="list" id="list"><div class="empty">Fila vazia</div></div>
   </div>
   <div class="pane" data-n="Diff">
     <div class="sec">Diff antes do commit</div>
@@ -507,6 +501,11 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
     <div class="list" id="difflist"><div class="empty">Fila vazia</div></div>
   </div>
   <div class="pane" data-n="Publicar">
+    <div class="sec">Arquivos</div>
+    <div class="drop" id="drop"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V5m0 0l-4 4m4-4l4 4M5 15v3a2 2 0 002 2h10a2 2 0 002-2v-3"/></svg></div><p>Arraste arquivos, pastas ou .zip</p><div class="btns"><button class="btn gray sm" id="b-files">Arquivos</button><button class="btn gray sm" id="b-folder">Pasta</button><button class="btn gray sm" id="b-paste">Colar código</button></div><input type="file" id="f-files" multiple hidden><input type="file" id="f-folder" webkitdirectory hidden></div>
+    <div class="group" style="margin-top:12px"><div class="r"><span class="l">Filtrar</span><input type="text" id="filter" placeholder="digite para filtrar"></div></div><div class="ddg" style="margin-top:12px"><div class="dd" id="p-sort"><span class="dl">Ordenar por</span><button class="dt" type="button"><span class="pv">Caminho</span></button><div class="dp"><div class="dpi"></div></div></div></div>
+    <div class="btns"><button class="btn gray sm" id="b-all">Marcar todos</button><button class="btn gray sm" id="b-none">Desmarcar</button><button class="btn red sm" id="b-rm">Remover marcados</button><button class="btn red sm" id="b-clear">Limpar</button></div>
+    <div class="list" id="list"><div class="empty">Fila vazia</div></div>
     <div class="sec">Publicar</div>
     <div id="secwarn"></div>
     <div class="bar"><div id="bar"></div></div>
