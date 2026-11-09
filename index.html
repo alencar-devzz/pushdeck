@@ -461,6 +461,68 @@ html.noglass[data-theme=light]{--glass:#fff;--glass-sh:0 8px 24px rgba(0,0,0,.12
 /* ===== sem selecao de texto ao segurar (comportamento de app) ===== */
 html,body,body *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
+
+/* ===== v5: parar envio, token, contas, operações, exclusão, editor liso ===== */
+.gorow{display:flex;gap:8px}.gorow .btn.xl{flex:1;width:auto}
+.gorow #b-stop{flex:none;padding-left:22px;padding-right:22px;background:var(--fill);color:var(--fg);box-shadow:none}
+.gorow #b-stop[hidden]{display:none}
+.tkw{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.tkw input{flex:1;min-width:0;font-family:'JetBrains Mono',ui-monospace,Menlo,monospace!important;font-size:12.5px!important}
+.ib{flex:none;width:34px;height:34px;border-radius:99px;display:grid;place-items:center;border:0;padding:0;background:var(--fill);color:var(--fg);cursor:pointer;transition:transform .4s var(--spring),background .2s,color .2s}
+.ib:active{transform:scale(.84)}.ib:hover{background:var(--line)}
+.ib svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ib[aria-pressed=true],.ide .ib.on{background:var(--fg);color:var(--bg)}
+.ib.dg:hover{color:#ff7a70}
+.acc-wrap{display:grid;gap:8px}
+.acct{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line)!important;border-radius:20px;background:var(--card);transition:border-color .3s,transform .4s var(--spring);animation:rise .5s var(--spring) backwards}
+.acct.on{border-color:var(--fg)!important}
+.acct .av{position:relative;flex:none;width:42px;height:42px;border-radius:50%;background:var(--fill);display:grid;place-items:center;font-weight:800;font-size:16px;overflow:hidden;text-transform:uppercase}
+.acct .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.acct .am{flex:1;min-width:0;display:grid;gap:2px}
+.acct .am b{flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.acct .am small{color:var(--mut);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acct .aa{display:flex;align-items:center;gap:6px;flex:none}
+.acct .btn{padding:7px 14px;font-size:12.5px}
+@media(max-width:520px){.acct{flex-wrap:wrap}.acct .am{flex-basis:calc(100% - 56px)}.acct .aa{width:100%;justify-content:flex-end}}
+.acc-empty{padding:22px 16px;text-align:center;color:var(--mut);font-size:13px;border:1px dashed var(--line);border-radius:20px}.acc-empty small{display:block;margin-top:4px;opacity:.8}
+.acc-db{margin:10px 4px 0;font-size:11.5px;color:var(--mut);display:flex;align-items:center;gap:7px}
+.acc-db:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--fg);opacity:.8;flex:none}.acc-db.ls:before{background:var(--mut);opacity:.6}.acc-db:empty{display:none}
+.toast{display:flex;align-items:center;gap:10px}.toast span{flex:1;min-width:0}
+.toast.act{animation-delay:0s,9.6s}
+.tact{flex:none;pointer-events:auto;border:0;border-radius:99px;padding:7px 14px;font:700 12.5px inherit;font-family:inherit;background:#fff;color:#000;cursor:pointer}
+#op{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 14px);z-index:380;display:flex;justify-content:center;padding:0 12px;pointer-events:none;transform:translateY(30px);opacity:0;transition:transform .5s var(--spring),opacity .25s}
+#op[hidden]{display:none}#op.on{transform:none;opacity:1}
+.opc{pointer-events:auto;width:min(440px,100%);padding:14px 16px 16px;border-radius:24px;background:var(--dd);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.55)}
+.opt{display:flex;align-items:center;gap:10px;justify-content:space-between}.opt b{font-size:14px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#op-s{display:block;margin:6px 0 10px;color:var(--mut);font-size:12px;min-height:16px;word-break:break-word}
+.opbar{height:6px;border-radius:99px;background:var(--fill);overflow:hidden}
+#op-b{height:100%;width:0;border-radius:99px;background:var(--fg);transition:width .3s var(--ease)}
+#op-b.ind{width:38%;animation:opind 1.1s ease-in-out infinite}
+@keyframes opind{0%{transform:translateX(-110%)}100%{transform:translateX(280%)}}
+.dxl{margin:10px 0 2px;border-radius:18px;background:var(--fill);max-height:30dvh;overflow:auto;scrollbar-width:none}
+.dx{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--line);font:500 12px 'JetBrains Mono',ui-monospace,monospace;word-break:break-all}
+.dx:last-child{border:0}.dx em{flex:none;font-style:normal;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--bg);color:var(--mut)}.dx.more{color:var(--mut);justify-content:center}
+.xbar{display:flex;align-items:center;gap:6px;margin:0 10px 8px;padding:5px 5px 5px 14px;border-radius:99px;background:var(--fill);font-size:12px;font-weight:700}
+.xbar[hidden]{display:none}.xbar span{flex:1;color:var(--ef)}
+.xbar button{border:0;border-radius:99px;padding:7px 13px;font:700 12px inherit;font-family:inherit;cursor:pointer;background:none;color:var(--ef)}
+.xbar #x-del{background:#ff5a52;color:#fff}.xbar #x-del:disabled{opacity:.4}
+.ide .exh button.on{background:var(--fg);color:var(--bg)}
+.ldg{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;gap:10px;background:color-mix(in srgb,var(--eb) 78%,transparent);color:var(--el);font-size:13px;font-weight:600}
+.ldg[hidden]{display:none}
+.ldg i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--fg);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* editor liso: animação só de opacidade (nada de camadas gigantes), sem blur sobre o texto, transições curtas */
+.ide{will-change:auto}
+.surf.swp .cod,.surf.swp .gut{animation:none}
+.surf.swp .sc{animation:swo .2s ease-out}
+@keyframes swo{from{opacity:0}}
+.sc{contain:layout paint style;scroll-behavior:auto}
+#cl,#gm{transition:transform .09s ease-out}
+#hl,.cod #ed-code{text-rendering:optimizeSpeed}
+body.ed-on .dk>div,body.ed-on .hbg{backdrop-filter:none;-webkit-backdrop-filter:none}
+body.ed-on .dk>div{background:color-mix(in srgb,var(--eb) 90%,var(--fg) 7%)}
+.tb,.row{-webkit-user-select:none;user-select:none}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
@@ -482,10 +544,11 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
   <div class="pane" data-n="Conta">
     <div class="sec">Conta</div>
     <div id="offbox"></div>
-    <div class="group"><div class="r"><span class="l">Token</span><input id="token" type="password" placeholder="github_pat_..." autocomplete="off"></div><div class="r"><span class="l">Apelido</span><input id="acc-label" type="text" placeholder="opcional, ex: pessoal" autocapitalize="off"></div></div>
+    <div class="group"><div class="r"><span class="l">Token</span><div class="tkw"><input id="token" type="password" placeholder="github_pat_..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><button type="button" class="ib" id="tk-eye" title="Mostrar token" aria-label="Mostrar token" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="ib" id="tk-cp" title="Copiar token" aria-label="Copiar token"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button></div></div><div class="r"><span class="l">Apelido</span><input id="acc-label" type="text" placeholder="opcional, ex: pessoal" autocapitalize="off"></div></div>
     <div class="btns"><button class="btn" id="b-conn">Conectar</button><button class="btn gray" id="b-acc-save">Salvar conta</button></div>
     <div class="sec">Contas salvas neste aparelho</div>
-    <div class="group" id="acc-list"><div class="note" style="margin:14px 18px">Nenhuma conta salva ainda</div></div>
+    <div class="acc-wrap" id="acc-list"><div class="acc-empty">Abrindo o banco de dados...</div></div>
+    <div class="acc-db" id="acc-db"></div>
   </div><div class="pane" data-n="Destino">
     <div class="sec">Destino</div>
     <div class="ddg"><div class="dd" id="p-repo"><span class="dl">Repositório</span><button class="dt" type="button"><span class="pv">Conecte primeiro</span></button><div class="dp"><div class="dpi"></div></div></div><div class="dd" id="p-branch"><span class="dl">Branch</span><button class="dt" type="button"><span class="pv">-</span></button><div class="dp"><div class="dpi"></div></div></div><div class="dd" id="p-dest"><span class="dl">Pasta</span><button class="dt" type="button"><span class="pv">/ (raiz)</span></button><div class="dp"><div class="dpi"></div></div></div></div><div class="group">
@@ -509,7 +572,7 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
     <div class="sec">Publicar</div>
     <div id="secwarn"></div>
     <div class="bar"><div id="bar"></div></div>
-    <button class="btn xl" id="b-go">Enviar para o GitHub</button>
+    <div class="gorow"><button class="btn xl" id="b-go">Enviar para o GitHub</button><button class="btn gray xl" id="b-stop" hidden>Parar</button></div>
     <div class="btns"><button class="btn gray" id="b-dry">Simular</button></div>
     <pre class="term" id="term"></pre>
   </div>
@@ -529,13 +592,13 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
 </section>
 
 <section class="tab" id="t-editor"><div class="ide stu" id="ide"><div class="scrim" id="x-scrim"></div>
-<aside class="ex"><div class="exh"><b>Explorador</b><span><button id="x-nf" title="Novo arquivo"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M12 11v6M9 14h6"/></svg></button><button id="x-nd" title="Nova pasta"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2zM12 11v6M9 14h6"/></svg></button><button id="x-rl" title="Recarregar do GitHub"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><button id="x-cl" title="Recolher tudo"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button></span></div>
-<input id="x-q" placeholder="Filtrar arquivos" autocapitalize="off"><div class="tree" id="x-tree" tabindex="0"></div></aside>
+<aside class="ex"><div class="exh"><b>Explorador</b><span><button id="x-nf" title="Novo arquivo"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M12 11v6M9 14h6"/></svg></button><button id="x-nd" title="Nova pasta"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2zM12 11v6M9 14h6"/></svg></button><button id="x-rl" title="Recarregar do GitHub"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><button id="x-cl" title="Recolher tudo"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button><button id="x-ms" title="Selecionar vários"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg></button></span></div>
+<input id="x-q" placeholder="Filtrar arquivos" autocapitalize="off"><div class="xbar" id="x-bar" hidden><span id="x-cnt"></span><button type="button" id="x-del">Excluir</button><button type="button" id="x-cx">Cancelar</button></div><div class="tree" id="x-tree" tabindex="0"></div></aside>
 <div class="edm"><div class="wp" id="wp"></div><div class="wpv"></div>
 <div class="hd"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><button id="x-tg" title="Arquivos (Ctrl+B)"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button><button class="chip" id="fchip" data-pop="pp-files"><b>Nenhum arquivo</b></button><button id="ed-commit" class="cbtn" title="Commit direto (Ctrl+Enter)"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM3 12h6m6 0h6"/></svg><span class="t">Commit</span><b id="cb"></b></button></div>
 <div class="inf"><span id="crumb"></span><span class="ir"><button id="sb-err" class="sbe" hidden></button><span id="sb-pos"></span><span id="sb-lang"></span><span id="sb-size"></span><span id="sb-dirty"></span><span id="sb-br"></span></span></div>
 <div class="surf"><div class="sc" id="sc"><div class="cv" id="cv"><div id="cl"></div><div id="fm"></div><div class="gut" id="gut"><div id="ge"></div><i id="gm"></i><div id="gn"></div></div><div class="cod" id="cod"><div id="er"></div><pre id="hl"></pre><textarea id="ed-code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div></div></div>
-<div class="wel" id="wel"><div><div class="wi"><svg viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4m8-8l4 4-4 4M14 5l-4 14"/></svg></div><h3>Estúdio</h3><div>Abra um arquivo ou crie um novo</div><div class="btns"><button class="btn sm" id="w-nf">Novo arquivo</button><button class="btn gray sm" id="w-op">Abrir arquivo</button></div></div></div></div>
+<div class="ldg" id="ed-ld" hidden><i></i><span></span></div><div class="wel" id="wel"><div><div class="wi"><svg viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4m8-8l4 4-4 4M14 5l-4 14"/></svg></div><h3>Estúdio</h3><div>Abra um arquivo ou crie um novo</div><div class="btns"><button class="btn sm" id="w-nf">Novo arquivo</button><button class="btn gray sm" id="w-op">Abrir arquivo</button></div></div></div></div>
 <div class="find" id="fb" hidden><div><input id="f-q" placeholder="Buscar" autocapitalize="off"><button id="f-cs" title="Diferenciar maiúsculas">Aa</button><span id="f-c"></span><button id="f-p">↑</button><button id="f-n">↓</button><button id="f-x">✕</button></div><div id="f-rw"><input id="f-r" placeholder="Substituir" autocapitalize="off"><button id="f-r1">Substituir</button><button id="f-ra">Todos</button></div></div>
 <div class="pop" id="pp-files" hidden><div id="ed-tabs"></div></div><div class="pop b" id="pp-hist" hidden></div><div class="pop b" id="pp-err" hidden></div>
 <div class="pop b lk" id="pp-look" hidden><div class="pph">Fundo do editor</div><div class="wps" id="wps"></div><input type="file" id="wp-f" accept="image/*" hidden><label>Desfoque <b id="v-b"></b></label><input class="rg" type="range" id="r-b" min="0" max="40"><label>Escurecer <b id="v-d"></b></label><input class="rg" type="range" id="r-d" min="0" max="90"><label>Tamanho da fonte</label><div class="btns" style="margin:0"><button class="btn gray sm" id="sb-zm">A−</button><button class="btn gray sm" id="sb-zp">A+</button></div></div>
@@ -609,7 +672,8 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
   </div><div class="pane" data-n="Aparência"><div class="sec">Aparência e sessão</div>
   <div class="group">
     <label class="r"><span class="l">Tema claro</span><input class="sw" type="checkbox" data-cfg="light"></label>
-    <label class="r"><span class="l">Lembrar token neste aparelho</span><input class="sw" type="checkbox" data-cfg="remember"></label>
+    <label class="r"><span class="l">Lembrar conta ao conectar<small style="display:block;color:var(--mut);font-weight:500;font-size:12px">Salva no banco local, com o token criptografado</small></span><input class="sw" type="checkbox" data-cfg="remember"></label>
+    <label class="r"><span class="l">Entrar sozinho na última conta</span><input class="sw" type="checkbox" data-cfg="autoacc" data-def="1"></label>
     <label class="r"><span class="l">Blur de vidro<small style="display:block;color:var(--mut);font-weight:500;font-size:12px">Desligue se o app estiver pesado</small></span><input class="sw" type="checkbox" data-cfg="glass" data-def="1"></label>
     <label class="r"><span class="l">Vibração ao tocar</span><input class="sw" type="checkbox" data-cfg="haptic" data-def="1"></label>
   </div>
@@ -630,6 +694,7 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text}
 </section>
 </main>
 
+<div id="op" hidden><div class="opc"><div class="opt"><b id="op-t"></b><button type="button" class="btn gray sm" id="op-x">Parar</button></div><small id="op-s"></small><div class="opbar"><div id="op-b"></div></div></div></div>
 <div id="md" hidden><div id="md-box"></div></div>
 <div id="toasts"></div>
 
@@ -646,22 +711,32 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const fmt=n=>n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(2)+' MB';
 const clean=p=>String(p).replace(/\\/g,'/').replace(/^\/+|\/+$/g,'').replace(/\/{2,}/g,'/');
 const buzz=ms=>{if(cfg('haptic',true)&&navigator.vibrate)try{navigator.vibrate(ms||8)}catch(e){}};
-function toast(m,err){const t=document.createElement('div');t.className='toast'+(err?' err':'');t.textContent=m;$('#toasts').append(t);buzz(err?[20,40,20]:10);setTimeout(()=>t.remove(),4200)}
-const log=(m,b)=>{const t=$('#term');t.innerHTML+='\n'+(b?'<b>'+esc(m)+'</b>':esc(m));t.scrollTop=1e9};
+function toast(m,err,act){const t=document.createElement('div');t.className='toast'+(err?' err':'')+(act?' act':'');const s=document.createElement('span');s.textContent=m;t.append(s);let ms=4200;
+ if(act){const b=document.createElement('button');b.type='button';b.className='tact';b.textContent=act.label;b.onclick=()=>{t.remove();act.fn()};t.append(b);ms=act.ms||9000}
+ $('#toasts').append(t);buzz(err?[20,40,20]:10);setTimeout(()=>t.remove(),ms)}
+const log=(m,b)=>{const t=$('#term'),d=document.createElement(b?'b':'span');d.textContent='\n'+m;t.append(d);if(t.childNodes.length>1500)for(let k=0;k<300;k++)t.firstChild.remove();t.scrollTop=1e9};
 function beep(){try{const a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;g.gain.setValueAtTime(.08,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.5);o.start();o.stop(a.currentTime+.5)}catch(e){}}
 
 /* ---------- API do GitHub ---------- */
 const GH={token:'',
 async req(p,o={}){const r=await fetch('https://api.github.com'+p,Object.assign({cache:'no-store'},o,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+this.token,'Content-Type':'application/json'}}));if(!r.ok){let m=r.statusText;try{m=(await r.json()).message}catch(e){}throw new Error(r.status+' '+m)}return r.status===204?null:r.json()},
 post(p,b){return this.req(p,{method:'POST',body:JSON.stringify(b)})},
-async commit(o,r,b,files,dels,message,prog){const p=`/repos/${o}/${r}/git`;const refA=await this.req(`${p}/ref/heads/${encodeURIComponent(b)}`);const parA=await this.req(`${p}/commits/${refA.object.sha}`);const tree=[];let i=0;
- for(const f of files){const bl=f.sha?{sha:f.sha}:await this.post(`${p}/blobs`,{content:await f.b64(),encoding:'base64'});tree.push({path:f.path,mode:'100644',type:'blob',sha:bl.sha});prog&&prog(++i,files.length,f.path)}
+async commit(o,r,b,files,dels,message,prog,ctl){ctl=ctl||{};const sig=ctl.signal,so=sig?{signal:sig}:{},p=`/repos/${o}/${r}/git`,
+ chk=()=>{if(sig&&sig.aborted)throw Object.assign(new Error('Operação interrompida'),{aborted:true})},slp=ms=>new Promise(k=>setTimeout(k,ms));
+ const refA=await this.req(`${p}/ref/heads/${encodeURIComponent(b)}`,so),parA=await this.req(`${p}/commits/${refA.object.sha}`,so);
+ const tree=new Array(files.length);let nx=0,done=0;
+ const up=async f=>{if(f.sha)return{sha:f.sha};const body=JSON.stringify({content:await f.b64(),encoding:'base64'});
+  for(let n=0;;n++){chk();try{return await this.req(`${p}/blobs`,Object.assign({method:'POST',body},so))}
+   catch(e){if(e.name==='AbortError'||e.aborted)throw e;if(n<3&&/rate limit|abuse|secondary|bad gateway|unavailable|timeout/i.test(e.message)){await slp(1500*(n+1));continue}throw e}}};
+ const work=async()=>{while(nx<files.length){chk();const k=nx++,f=files[k];try{const bl=await up(f);tree[k]={path:f.path,mode:f.mode||'100644',type:'blob',sha:bl.sha};prog&&prog(++done,files.length,f.path)}catch(e){nx=1e9;throw e}}};
+ await Promise.all(Array.from({length:Math.min(3,files.length)},work));
+ chk();ctl.final&&ctl.final();
  for(const d of dels)tree.push({path:d,mode:'100644',type:'blob',sha:null});
  const rf=`${p}/refs/heads/${encodeURIComponent(b)}`;
  for(let n=0;;n++){const ref=n?await this.req(`${p}/ref/heads/${encodeURIComponent(b)}`):refA,par=n?await this.req(`${p}/commits/${ref.object.sha}`):parA;
   const t=await this.post(`${p}/trees`,{base_tree:par.tree.sha,tree});const c=await this.post(`${p}/commits`,{message,tree:t.sha,parents:[ref.object.sha]});
   try{await this.req(rf,{method:'PATCH',body:JSON.stringify({sha:c.sha})});return c}
-  catch(e){if(n<3&&/fast forward/i.test(e.message)){await new Promise(k=>setTimeout(k,600*(n+1)));continue}throw e}}},
+  catch(e){if(n<3&&/fast forward/i.test(e.message)){await slp(600*(n+1));continue}throw e}}},
 /* ---- repos, branches, PRs, issues, pages, actions, busca, restaurar ---- */
 createRepo(name,priv,desc,gitignore,license){return this.post('/user/repos',{name,private:!!priv,description:desc||'',auto_init:true,gitignore_template:gitignore||undefined,license_template:license||undefined})},
 createBranch(o,r,name,from){return this.req(`/repos/${o}/${r}/git/ref/heads/${encodeURIComponent(from)}`).then(ref=>this.post(`/repos/${o}/${r}/git/refs`,{ref:'refs/heads/'+name,sha:ref.object.sha}))},
@@ -683,7 +758,7 @@ async resetTo(o,r,b,sha,message){const t=await this.commitAt(o,r,sha),ref=await 
  const c=await this.post(`/repos/${o}/${r}/git/commits`,{message:message||('revert to '+sha.slice(0,7)),tree:t.tree.sha,parents:[ref.object.sha]});
  await this.req(`/repos/${o}/${r}/git/refs/heads/${encodeURIComponent(b)}`,{method:'PATCH',body:JSON.stringify({sha:c.sha})});return c}};
 /* decodifica um blob base64 do GitHub para texto */
-function b64dec(content){try{return new TextDecoder().decode(Uint8Array.from(atob((content||'').replace(/\n/g,'')),c=>c.charCodeAt(0)))}catch(e){return ''}}
+function b64dec(content){try{const bin=atob((content||'').replace(/\n/g,'')),n=bin.length,u=new Uint8Array(n);for(let i=0;i<n;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u)}catch(e){return ''}}
 async function origText(path){ // conteúdo atual no GitHub para um caminho, usado no diff (com cache simples)
  S.origCache=S.origCache||new Map();if(S.origCache.has(path))return S.origCache.get(path);
  const x=S.tree.find(y=>y.path===path);if(!x)return'';const [o,r]=rv();
@@ -778,34 +853,110 @@ pick('p-sort','Ordenar por',()=>[{v:'path',l:'Caminho'},{v:'size',l:'Tamanho'},{
 async function connect(){
  const tk=$('#token').value.trim();if(!tk)return toast('Informe o token',1);
  GH.token=tk;$('#b-conn').textContent='Conectando...';
- try{const u=await GH.req('/user');(cfg('remember')?localStorage:sessionStorage).pd_token=tk;
+ try{const u=await GH.req('/user');S.me=u;sessionStorage.pd_token=tk;await Acc.onConnect(tk,u);
   $('#dot').classList.add('on');$('#who').textContent=u.login;
   repos=await GH.req('/user/repos?per_page=100&sort=pushed');if(!repos.length)throw new Error('Nenhum repositório encontrado para este token');
   const last=cfg('lastRepo'),rp=repos.find(r=>r.full_name===last)||repos[0];setPick('p-repo',rp.full_name);
   toast('Conectado como '+u.login);$('#b-conn').textContent='Reconectar';await loadBranches();renderAccounts()}
  catch(e){GH.token='';$('#b-conn').textContent='Conectar';toast('Falha: '+e.message,1)}}
-/* ---------- várias contas (tokens salvos neste aparelho) ---------- */
-S.accounts=(()=>{try{return JSON.parse(localStorage.pd_accounts||'[]')}catch(e){return[]}})();
-const saveAccounts=()=>localStorage.pd_accounts=JSON.stringify(S.accounts);
-function renderAccounts(){const b=$('#acc-list');if(!b)return;
- b.innerHTML=S.accounts.length?S.accounts.map((a,i)=>`<div class="acct" data-i="${i}"><span class="badge-dot ${a.token===GH.token?'ok':'mid'}"></span><b>${esc(a.label||('conta '+(i+1)))}</b><button class="btn gray" data-a="use">Usar</button><button class="btn red" data-a="rm">Remover</button></div>`).join(''):'<div class="note" style="margin:14px 18px">Nenhuma conta salva ainda</div>'}
-$('#b-acc-save').onclick=()=>{const tk=$('#token').value.trim();if(!tk)return toast('Informe o token primeiro',1);
- const label=$('#acc-label').value.trim()||'conta '+(S.accounts.length+1);
- if(S.accounts.some(a=>a.token===tk))return toast('Essa conta já está salva',1);
- S.accounts.push({label,token:tk});saveAccounts();renderAccounts();toast('Conta salva: '+label)};
-$('#acc-list').onclick=async e=>{const el=e.target.closest('.acct');if(!el)return;const i=+el.dataset.i,a=S.accounts[i],act=e.target.dataset.a;if(!act)return;
- if(act==='use'){$('#token').value=a.token;$('#acc-label').value=a.label;await connect();renderAccounts()}
- else if(act==='rm'){if(!await dlg({title:'Remover conta?',text:a.label,ok:'Remover',danger:true}))return;S.accounts.splice(i,1);saveAccounts();renderAccounts()}};
-renderAccounts();
+/* ---------- banco de dados local (SQLite no navegador) + contas ---------- */
+/* SQLite roda em WebAssembly (sql.js) e o arquivo do banco fica no IndexedDB. O token é criptografado (AES-GCM) com uma chave que nunca sai do aparelho. */
+const KV={db:null,
+ open(){return this.db||(this.db=new Promise((ok,no)=>{try{const q=indexedDB.open('pushdeck-db',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error||new Error('IndexedDB indisponível'))}catch(e){no(e)}}))},
+ async get(k){const d=await this.open();return new Promise((ok,no)=>{const r=d.transaction('kv').objectStore('kv').get(k);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})},
+ async set(k,v){const d=await this.open();return new Promise((ok,no)=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>ok();t.onerror=t.onabort=()=>no(t.error)})},
+ async wipe(){try{(await this.open()).close()}catch(e){}this.db=null;return new Promise(ok=>{try{const q=indexedDB.deleteDatabase('pushdeck-db');q.onsuccess=q.onerror=q.onblocked=()=>ok()}catch(e){ok()}})}};
+const CR={
+ ok:()=>!!(window.crypto&&crypto.subtle&&window.isSecureContext!==false),
+ b2s(u){let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s)},
+ s2b(s){const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u},
+ async key(){let k=await KV.get('key');if(!k){k=await crypto.subtle.generateKey({name:'AES-GCM',length:256},false,['encrypt','decrypt']);await KV.set('key',k)}return k},
+ async enc(t){if(!this.ok())return{enc:t,iv:''};try{const k=await this.key(),iv=crypto.getRandomValues(new Uint8Array(12)),ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},k,new TextEncoder().encode(t));return{enc:this.b2s(new Uint8Array(ct)),iv:this.b2s(iv)}}catch(e){return{enc:t,iv:''}}},
+ async dec(e,iv){if(!iv)return e;const k=await this.key();return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:this.s2b(iv)},k,this.s2b(e)))},
+ async fp(t){if(this.ok()){try{const h=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)));return[...h.slice(0,12)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){}}let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return 'x'+(h>>>0).toString(16)+t.length}};
+const SQLJS=['https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/','https://cdn.jsdelivr.net/npm/sql.js@1.8.0/dist/'];
+const loadScript=u=>new Promise((ok,no)=>{const s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=()=>{s.remove();no(new Error('não carregou '+u))};document.head.append(s)});
+const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg||'tempo esgotado')),ms))]);
+const SCHEMA=`CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY,v TEXT);
+CREATE TABLE IF NOT EXISTS accounts(id INTEGER PRIMARY KEY AUTOINCREMENT,label TEXT NOT NULL,login TEXT,avatar TEXT,token_enc TEXT NOT NULL,iv TEXT NOT NULL DEFAULT '',fp TEXT NOT NULL UNIQUE,created_at INTEGER NOT NULL,last_used INTEGER,uses INTEGER NOT NULL DEFAULT 0);
+CREATE INDEX IF NOT EXISTS idx_accounts_last ON accounts(last_used);
+PRAGMA user_version=1;`;
+/* armazenamento SQL */
+const SQLB={
+ all(){const r=DBX.db.exec('SELECT id,label,login,avatar,token_enc,iv,fp,created_at,last_used,uses FROM accounts ORDER BY COALESCE(last_used,0) DESC,id DESC');return r.length?r[0].values.map(v=>({id:v[0],label:v[1],login:v[2],avatar:v[3],enc:v[4],iv:v[5],fp:v[6],created:v[7],last:v[8],uses:v[9]})):[]},
+ add(a){DBX.db.run('INSERT INTO accounts(label,login,avatar,token_enc,iv,fp,created_at,last_used,uses) VALUES(?,?,?,?,?,?,?,?,?)',[a.label,a.login||null,a.avatar||null,a.enc,a.iv||'',a.fp,a.created,a.last||null,a.uses||0]);const id=DBX.db.exec('SELECT last_insert_rowid()')[0].values[0][0];DBX.dirty();return id},
+ set(id,p){const M={label:'label',login:'login',avatar:'avatar',last:'last_used',uses:'uses',enc:'token_enc',iv:'iv'},k=Object.keys(p).filter(x=>M[x]);if(!k.length)return;DBX.db.run(`UPDATE accounts SET ${k.map(x=>M[x]+'=?').join(',')} WHERE id=?`,[...k.map(x=>p[x]??null),id]);DBX.dirty()},
+ del(id){DBX.db.run('DELETE FROM accounts WHERE id=?',[id]);DBX.dirty()}};
+/* plano B se o SQLite não carregar (sem internet na primeira vez): mesma interface, guardando em localStorage */
+const LSB={
+ rows(){try{return JSON.parse(localStorage.pd_acc2||'[]')}catch(e){return[]}},save(r){localStorage.pd_acc2=JSON.stringify(r)},
+ all(){return this.rows().sort((a,b)=>(b.last||0)-(a.last||0)||b.id-a.id)},
+ add(a){const r=this.rows(),id=r.reduce((m,x)=>Math.max(m,x.id),0)+1;r.push(Object.assign({},a,{id}));this.save(r);return id},
+ set(id,p){const r=this.rows(),x=r.find(y=>y.id===id);if(x){Object.assign(x,p);this.save(r)}},
+ del(id){this.save(this.rows().filter(x=>x.id!==id))}};
+const DBX={ready:false,mode:'',b:null,db:null,tm:0,
+ async init(){if(this.ready)return;
+  try{this.db=await withTimeout(this.openSql(),12000,'o SQLite demorou demais para carregar');this.db.exec(SCHEMA);this.b=SQLB;this.mode='sql'}
+  catch(e){console.warn('SQLite indisponível, usando o modo simples:',e);this.db=null;this.b=LSB;this.mode='ls'}
+  this.ready=true},
+ async openSql(){let err;for(const base of SQLJS){try{if(!window.initSqlJs)await loadScript(base+'sql-wasm.js');const SQL=await initSqlJs({locateFile:f=>base+f});let buf=null;try{buf=await KV.get('sqlite')}catch(e){}return buf?new SQL.Database(new Uint8Array(buf)):new SQL.Database()}catch(e){err=e;window.initSqlJs=undefined}}throw err},
+ dirty(){clearTimeout(this.tm);this.tm=setTimeout(()=>this.persist(),150)},
+ async persist(){if(this.mode!=='sql'||!this.db)return;clearTimeout(this.tm);try{await KV.set('sqlite',this.db.export())}catch(e){console.warn('não salvou o banco',e)}},
+ async wipe(){try{if(this.db)this.db.close()}catch(e){}await KV.wipe()}};
+addEventListener('pagehide',()=>DBX.persist());document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')DBX.persist()});
+/* regras das contas (iguais nos dois armazenamentos) */
+const Acc={cur:null,
+ async init(){await DBX.init();await this.migrate()},
+ list(){return DBX.ready?DBX.b.all():[]},
+ last(){const a=this.list()[0];return a&&a.last?a:null},
+ async add(tk,o){o=o||{};const fp=await CR.fp(tk),ex=this.list().find(a=>a.fp===fp);
+  if(ex){const p={};if(o.rename&&o.label&&o.label!==ex.label)p.label=o.label;if(o.login)p.login=o.login;if(o.avatar)p.avatar=o.avatar;if(o.touch){p.last=Date.now();p.uses=(ex.uses||0)+1}if(Object.keys(p).length)DBX.b.set(ex.id,p);return{id:ex.id,existed:true}}
+  const e=await CR.enc(tk),id=DBX.b.add({label:o.label||o.login||'conta',login:o.login||null,avatar:o.avatar||null,enc:e.enc,iv:e.iv,fp,created:Date.now(),last:o.touch?Date.now():null,uses:o.touch?1:0});return{id,existed:false}},
+ async token(id){const a=this.list().find(x=>x.id===id);if(!a)return'';try{return await CR.dec(a.enc,a.iv)}catch(e){return''}},
+ async onConnect(tk,u){try{this.cur=await CR.fp(tk);if(!DBX.ready)return;const ex=this.list().find(a=>a.fp===this.cur),av=u.avatar_url||null;
+   if(ex){DBX.b.set(ex.id,{login:u.login,avatar:av,last:Date.now(),uses:(ex.uses||0)+1,label:ex.label==='conta anterior'?u.login:ex.label})}
+   else if(cfg('remember',false))await this.add(tk,{label:($('#acc-label').value||'').trim()||u.login,login:u.login,avatar:av,touch:true});
+   DBX.persist()}catch(e){console.warn('contas:',e)}},
+ async migrate(){try{const old=JSON.parse(localStorage.pd_accounts||'[]');for(const a of old)if(a&&a.token)await this.add(a.token,{label:a.label});
+   if(localStorage.pd_token)await this.add(localStorage.pd_token,{label:'conta anterior',touch:true});
+   if(localStorage.pd_accounts||localStorage.pd_token){localStorage.removeItem('pd_accounts');localStorage.removeItem('pd_token');DBX.persist()}}catch(e){console.warn('migração de contas:',e)}}};
+const ago2=ms=>{if(!ms)return'nunca usada';const m=Math.round((Date.now()-ms)/6e4);return m<1?'usada agora':m<60?'usada há '+m+' min':m<1440?'usada há '+Math.round(m/60)+' h':'usada há '+Math.round(m/1440)+' d'};
+function renderAccounts(){const b=$('#acc-list'),n=$('#acc-db');if(!b)return;
+ if(!DBX.ready){b.innerHTML='<div class="acc-empty">Abrindo o banco de dados...</div>';n.textContent='';return}
+ const L=Acc.list();
+ b.innerHTML=L.length?L.map((a,i)=>{const on=!!Acc.cur&&a.fp===Acc.cur,ini=esc((a.label||a.login||'?').trim().charAt(0));
+  return `<div class="acct${on?' on':''}" data-id="${a.id}" style="animation-delay:${Math.min(i,8)*40}ms"><div class="av"><span>${ini}</span>${a.avatar?`<img alt="" loading="lazy" referrerpolicy="no-referrer" src="${esc(a.avatar)}${a.avatar.includes('?')?'&amp;':'?'}s=84" onerror="this.remove()">`:''}</div><div class="am"><b>${esc(a.label||'conta')}</b><small>${a.login?'@'+esc(a.login)+' · ':''}${ago2(a.last)}${a.uses>1?' · '+a.uses+' usos':''}</small></div><div class="aa">${on?'<span class="tag rep">Conectada</span>':'<button type="button" class="btn sm" data-a="use">Usar</button>'}<button type="button" class="ib" data-a="ren" title="Renomear" aria-label="Renomear"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button><button type="button" class="ib dg" data-a="rm" title="Remover" aria-label="Remover"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M6 6l1 14a1 1 0 001 1h8a1 1 0 001-1l1-14M10 11v6M14 11v6"/></svg></button></div></div>`}).join(''):'<div class="acc-empty">Nenhuma conta salva ainda<small>Cole um token acima e toque em Salvar conta</small></div>';
+ const sql=DBX.mode==='sql';n.className='acc-db'+(sql?'':' ls');
+ n.textContent=(sql?'Banco SQLite local':'Modo simples (o SQLite não carregou)')+' · '+L.length+' conta(s) · '+(CR.ok()?'tokens criptografados (AES-GCM)':'sem criptografia neste contexto')}
+/* token: mostrar/ocultar e copiar */
+const EYE='<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',EYEOFF='<path d="M3 3l18 18M10.6 6.1A9.6 9.6 0 0112 5c6.4 0 10 7 10 7a17 17 0 01-3.2 4.1M6.6 6.7A17 17 0 002 12s3.6 7 10 7a9.8 9.8 0 004.3-1M9.9 9.9a3 3 0 004.2 4.2"/>';
+const tkEl=$('#token');let tkT;
+function tkShow(on){tkEl.type=on?'text':'password';const b=$('#tk-eye');b.querySelector('svg').innerHTML=on?EYEOFF:EYE;b.setAttribute('aria-pressed',on?'true':'false');b.title=on?'Ocultar token':'Mostrar token';b.setAttribute('aria-label',b.title);clearTimeout(tkT);if(on)tkT=setTimeout(()=>tkShow(false),30000)}
+$('#tk-eye').onclick=()=>{buzz(6);tkShow(tkEl.type==='password')};
+async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.cssText='position:fixed;opacity:0;top:0;left:0';document.body.append(a);a.select();a.setSelectionRange(0,t.length);let ok=false;try{ok=document.execCommand('copy')}catch(x){}a.remove();return ok}}
+$('#tk-cp').onclick=async()=>{const t=tkEl.value.trim();if(!t)return toast('Nenhum token para copiar',1);buzz(8);const ok=await copyText(t);toast(ok?'Token copiado':'Não foi possível copiar',!ok)};
+/* salvar / usar / renomear / remover */
+$('#b-acc-save').onclick=async()=>{const tk=tkEl.value.trim();if(!tk)return toast('Informe o token primeiro',1);if(!DBX.ready)return toast('O banco ainda está abrindo, tente de novo em instantes',1);
+ const btn=$('#b-acc-save');btn.disabled=true;
+ try{let u;if(GH.token===tk&&S.me)u=S.me;else{const r=await fetch('https://api.github.com/user',{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+tk},cache:'no-store'});if(!r.ok)throw new Error(r.status===401?'token inválido ou expirado':'o GitHub respondeu '+r.status);u=await r.json()}
+  const label=$('#acc-label').value.trim()||u.login,res=await Acc.add(tk,{label,login:u.login,avatar:u.avatar_url,rename:true});
+  await DBX.persist();renderAccounts();toast(res.existed?'Conta atualizada: '+label:'Conta salva: '+label)}
+ catch(e){toast('Não salvou: '+(e.message||e),1)}
+ btn.disabled=false};
+$('#acc-list').onclick=async e=>{const b=e.target.closest('button[data-a]'),el=e.target.closest('.acct');if(!b||!el)return;const id=+el.dataset.id,a=Acc.list().find(x=>x.id===id);if(!a)return;buzz(6);
+ if(b.dataset.a==='use'){b.disabled=true;const tk=await Acc.token(id);if(!tk){b.disabled=false;return toast('Não consegui ler o token salvo. Remova a conta e salve de novo.',1)}
+  tkEl.value=tk;$('#acc-label').value=a.label;tkShow(false);await connect();renderAccounts()}
+ else if(b.dataset.a==='ren'){const n=await dlg({title:'Renomear conta',input:{value:a.label,placeholder:'apelido'},ok:'Salvar'});if(n==null)return;const v=String(n).trim();if(!v)return toast('O nome não pode ficar vazio',1);DBX.b.set(id,{label:v});DBX.persist();renderAccounts();toast('Conta renomeada')}
+ else if(b.dataset.a==='rm'){if(!await dlg({title:'Remover conta?',text:`${a.label}${a.login?' (@'+a.login+')':''}\nO token salvo será apagado deste aparelho.`,ok:'Remover',danger:true}))return;DBX.b.del(id);DBX.persist();renderAccounts();toast('Conta removida')}};
 async function loadBranches(){
  const [o,r]=rv();if(!r)return;const bs=await GH.req(`/repos/${o}/${r}/branches?per_page=100`);branches=bs.map(b=>b.name);
  const def=(repos.find(x=>x.full_name===o+'/'+r)||{}).default_branch;setPick('p-branch',branches.includes(def)?def:branches[0]);await loadTree()}
 async function loadTree(){
  const [o,r]=rv(),b=P['p-branch'].v;if(!r||!b)return;
  S.origCache=new Map();
- try{const t=await GH.req(`/repos/${o}/${r}/git/trees/${encodeURIComponent(b)}?recursive=1`);S.tree=t.tree;
+ try{const t=await GH.req(`/repos/${o}/${r}/git/trees/${encodeURIComponent(b)}?recursive=1`);S.tree=t.tree;S.treeFor=o+'/'+r+'@'+b;S.trunc=!!t.truncated;
   S.paths=new Set(S.tree.filter(x=>x.type==='blob').map(x=>x.path));dirs=S.tree.filter(x=>x.type==='tree').map(x=>x.path).sort();
-  setPick('p-dest','');renderRepo();render();pv()}
+  const kd=P['p-dest'].v;setPick('p-dest',dirs.includes(kd)?kd:'');renderRepo();render();pv()}
  catch(e){S.tree=[];S.paths=new Set();dirs=[];toast('Árvore: '+e.message,1)}}
 /* ---------- branches e pull requests ---------- */
 pick('p-pr-head','De (head)',()=>branches.map(b=>({v:b,l:b})));pick('p-pr-base','Para (base)',()=>branches.map(b=>({v:b,l:b})));
@@ -865,19 +1016,67 @@ async function newRepoFlow(){if(!GH.token)return toast('Conecte primeiro',1);
  if(!v)return;try{const rp=await GH.createRepo(v.name,v.priv,v.desc,v.gi||undefined,v.lic||undefined);toast('Repositório criado: '+rp.full_name);
   repos=await GH.req('/user/repos?per_page=100&sort=pushed');setPick('p-repo',rp.full_name);await loadBranches()}catch(e){toast(e.message,1)}}
 $('#b-newrepo').onclick=newRepoFlow;
+/* ---------- cartão de operação (progresso + botão Parar) ---------- */
+const OP={ac:null,on:false,
+ start(title,stop){this.ac=new AbortController();this.on=true;$('#op-t').textContent=title;$('#op-s').textContent='';const x=$('#op-x');x.hidden=stop===false;x.disabled=false;x.textContent='Parar';this.set('',0);const e=$('#op');e.hidden=false;requestAnimationFrame(()=>e.classList.add('on'));return this.ac},
+ set(s,pct){if(s!=null)$('#op-s').textContent=s;const b=$('#op-b');if(pct==null)b.classList.add('ind');else{b.classList.remove('ind');b.style.width=Math.max(0,Math.min(100,pct))+'%'}},
+ end(){this.on=false;this.ac=null;const e=$('#op');e.classList.remove('on');setTimeout(()=>{if(!this.on)e.hidden=true},380)}};
+$('#op-x').onclick=()=>{if(OP.ac){buzz(12);OP.ac.abort();$('#op-x').disabled=true;$('#op-x').textContent='Parando...'}};
+const aborted=(e,sig)=>!!((sig&&sig.aborted)||(e&&(e.aborted||e.name==='AbortError')));
+const isNat=()=>{const C=window.Capacitor;return !!(C&&C.isNativePlatform&&C.isNativePlatform())};
+const blobB64=blob=>new Promise((ok,no)=>{const fr=new FileReader();fr.onload=()=>ok(String(fr.result).split(',')[1]||'');fr.onerror=()=>no(fr.error||new Error('falha ao ler o arquivo'));fr.readAsDataURL(blob)});
+function b64u8(s){const bin=atob(s),n=bin.length,u=new Uint8Array(n);for(let i=0;i<n;i++)u[i]=bin.charCodeAt(i);return u}
+async function isZip(blob){if(blob.size<22)return false;const h=new Uint8Array(await blob.slice(0,2).arrayBuffer());return h[0]===0x50&&h[1]===0x4b}
 /* ---------- baixar repo como zip ---------- */
-async function downloadZip(){const [o,r]=rv(),b=P['p-branch'].v;if(!GH.token||!r)return toast('Conecte e escolha um repositório',1);
- toast('Baixando .zip...');const name=`${r}-${b.replace(/[\/\\]/g,'-')}.zip`,url=`https://api.github.com/repos/${o}/${r}/zipball/${encodeURIComponent(b)}`;
- try{const C=window.Capacitor,nat=C&&C.isNativePlatform&&C.isNativePlatform();
-  if(nat){ /* app Android: HTTP nativo (sem CORS) + grava em Documentos/Pushdeck */
-   const res=await C.Plugins.CapacitorHttp.request({url,method:'GET',headers:{Authorization:'Bearer '+GH.token,Accept:'application/vnd.github+json'},responseType:'blob'});
-   if(res.status<200||res.status>=300)throw new Error(res.status+' '+(res.data&&res.data.message||''));
-   await C.Plugins.Filesystem.writeFile({path:'Pushdeck/'+name,data:res.data,directory:'DOCUMENTS',recursive:true});
-   toast('Salvo em Documentos/Pushdeck/'+name);return}
-  const resp=await fetch(url,{headers:{Authorization:'Bearer '+GH.token}});
-  if(!resp.ok)throw new Error(resp.status+' '+resp.statusText);
-  const blob=await resp.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Zip baixado')}
- catch(e){toast('Erro no zip: '+(e.message||e),1)}}
+/* 1) tenta o .zip pronto do GitHub (rápido); 2) se falhar (CORS, redirecionamento, permissão), monta o .zip arquivo por arquivo */
+async function zipFast(o,r,b,sig){const url=`https://api.github.com/repos/${o}/${r}/zipball/${encodeURIComponent(b)}`;
+ if(isNat()){const H=window.Capacitor.Plugins&&window.Capacitor.Plugins.CapacitorHttp;if(!H)throw new Error('HTTP nativo indisponível');
+  const res=await H.request({url,method:'GET',headers:{Authorization:'Bearer '+GH.token,Accept:'application/vnd.github+json'},responseType:'blob',connectTimeout:30000,readTimeout:300000});
+  if(res.status<200||res.status>=300)throw new Error(res.status+' '+((res.data&&res.data.message)||'sem detalhes'));
+  if(typeof res.data!=='string')throw new Error('resposta inesperada do HTTP nativo');
+  const blob=new Blob([b64u8(res.data)],{type:'application/zip'});if(!await isZip(blob))throw new Error('o GitHub não devolveu um .zip válido');return blob}
+ const resp=await fetch(url,{headers:{Authorization:'Bearer '+GH.token,Accept:'application/vnd.github+json'},cache:'no-store',signal:sig});
+ if(!resp.ok){let m=resp.statusText;try{m=(await resp.json()).message||m}catch(e){}throw new Error(resp.status+' '+m)}
+ const len=+resp.headers.get('content-length')||0;let blob;
+ if(resp.body&&resp.body.getReader){const rd=resp.body.getReader(),ch=[];let got=0;for(;;){const{done,value}=await rd.read();if(done)break;ch.push(value);got+=value.length;OP.set(fmt(got)+(len?' de '+fmt(len):''),len?got/len*100:null)}blob=new Blob(ch,{type:'application/zip'})}
+ else blob=await resp.blob();
+ if(!await isZip(blob))throw new Error('o GitHub não devolveu um .zip válido');return blob}
+async function zipBuild(o,r,b,sig){await loadZip();
+ let tr=S.tree,trunc=!!S.trunc;
+ if(!(S.treeFor===o+'/'+r+'@'+b&&tr.length)){OP.set('Lendo a lista de arquivos...',null);const t=await GH.req(`/repos/${o}/${r}/git/trees/${encodeURIComponent(b)}?recursive=1`,{signal:sig});tr=t.tree;trunc=!!t.truncated}
+ const fl=tr.filter(x=>x.type==='blob');if(!fl.length)throw new Error('o repositório não tem arquivos nesta branch');
+ if(trunc)toast('Repositório muito grande: a lista veio incompleta e o .zip pode faltar arquivos',1);
+ const root=`${r}-${b.replace(/[\/\\]/g,'-')}/`,zip=new JSZip();let nx=0,done=0,bytes=0;
+ const stop=()=>Object.assign(new Error('Operação interrompida'),{aborted:true});
+ const get=async x=>{for(let n=0;;n++){if(sig.aborted)throw stop();
+   try{const rs=await fetch(`https://api.github.com/repos/${o}/${r}/git/blobs/${x.sha}`,{headers:{Authorization:'Bearer '+GH.token,Accept:'application/vnd.github.raw+json'},cache:'no-store',signal:sig});
+    if(!rs.ok){let m=rs.statusText;try{m=(await rs.json()).message||m}catch(e){}throw new Error(rs.status+' '+m)}
+    return await rs.arrayBuffer()}
+   catch(e){if(aborted(e,sig))throw e;if(n<2&&/Failed to fetch|network|rate limit|\b(502|503|504)\b/i.test(e.message)){await new Promise(k=>setTimeout(k,800*(n+1)));continue}throw new Error(x.path+': '+e.message)}}};
+ const work=async()=>{while(nx<fl.length){const x=fl[nx++];try{const buf=await get(x);zip.file(root+x.path,buf,{binary:true});bytes+=buf.byteLength;done++;if(done%4===0||done===fl.length)OP.set(`${done} de ${fl.length} arquivos · ${fmt(bytes)}`,done/fl.length*90)}catch(e){nx=1e9;throw e}}};
+ await Promise.all(Array.from({length:Math.min(6,fl.length)},work));
+ if(sig.aborted)throw stop();
+ $('#op-x').hidden=true;OP.set('Compactando...',92);
+ return await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:3},streamFiles:true},m=>OP.set('Compactando '+Math.round(m.percent)+'%',90+m.percent/10))}
+async function saveZip(blob,name){
+ if(isNat()){const F=window.Capacitor.Plugins&&window.Capacitor.Plugins.Filesystem;
+  if(F){const data=await blobB64(blob),w=dir=>F.writeFile({path:'Pushdeck/'+name,data,directory:dir,recursive:true});
+   try{await w('DOCUMENTS');return toast('Salvo em Documentos/Pushdeck/'+name)}
+   catch(e1){try{if(F.requestPermissions)await F.requestPermissions();await w('DOCUMENTS');return toast('Salvo em Documentos/Pushdeck/'+name)}
+    catch(e2){try{await w('EXTERNAL');return toast('Salvo na pasta do app: Pushdeck/'+name)}
+     catch(e3){throw new Error('não consegui gravar no aparelho: '+(e3.message||e2.message||e1.message))}}}}}
+ const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),8000);toast('Zip baixado ('+fmt(blob.size)+')')}
+async function downloadZip(){
+ if(OP.on)return toast('Já existe uma operação em andamento',1);
+ const [o,r]=rv(),b=P['p-branch'].v;if(!GH.token||!r||!b)return toast('Conecte e escolha um repositório',1);
+ const name=`${r}-${b.replace(/[\/\\]/g,'-')}.zip`,ac=OP.start('Baixando '+name),sig=ac.signal;
+ try{let blob;
+  try{OP.set('Pedindo o .zip ao GitHub...',null);blob=await zipFast(o,r,b,sig)}
+  catch(e){if(aborted(e,sig))throw e;console.warn('zip direto falhou:',e);OP.set('Método direto falhou ('+(e.message||e)+'). Baixando arquivo por arquivo...',null);blob=await zipBuild(o,r,b,sig)}
+  if(sig.aborted)throw Object.assign(new Error('Operação interrompida'),{aborted:true});
+  $('#op-x').hidden=true;OP.set('Salvando '+fmt(blob.size)+'...',99);await saveZip(blob,name)}
+ catch(e){if(aborted(e,sig))toast('Download cancelado');else{console.error(e);toast('Erro no zip: '+(e.message||e),1)}}
+ OP.end()}
 $('#b-zip').onclick=downloadZip;$('#b-zip2').onclick=downloadZip;
 /* ---------- busca no código ---------- */
 async function codeSearch(){const [o,r]=rv(),q=$('#codesearch').value.trim();if(!GH.token||!r)return toast('Conecte e escolha um repositório',1);if(!q)return toast('Digite algo para buscar',1);
@@ -922,7 +1121,8 @@ const drop=$('#drop');
 drop.addEventListener('drop',async e=>{const its=[...e.dataTransfer.items].map(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()).filter(Boolean);addFiles((await Promise.all(its.map(x=>walk(x)))).flat())});
 $('#b-files').onclick=()=>$('#f-files').click();$('#b-folder').onclick=()=>$('#f-folder').click();$('#b-paste').onclick=()=>{tab('editor');newFile('')};
 $('#f-files').onchange=e=>{addFiles([...e.target.files]);e.target.value=''};$('#f-folder').onchange=e=>{addFiles([...e.target.files]);e.target.value=''};
-function render(){
+let rq=0;function render(){if(rq)return;rq=requestAnimationFrame(()=>{rq=0;renderNow()})}
+function renderNow(){
  const q=$('#filter').value.toLowerCase(),st=f=>S.paths.has(full(f))?'rep':'new';
  let l=S.files.filter(f=>full(f).toLowerCase().includes(q));
  l.sort((a,b)=>S.sort==='size'?b.size-a.size:S.sort==='status'?st(a).localeCompare(st(b)):a.rel.localeCompare(b.rel));
@@ -957,13 +1157,15 @@ async function send(dry){
  if(hits.length){const list=hits.slice(0,12).map(h=>`• ${h.path} — ${h.label}`).join('\n')+(hits.length>12?`\n...e mais ${hits.length-12}`:'');
   if(!await dlg({title:'Possíveis segredos detectados',text:'Encontramos sinais de token, senha ou chave nestes arquivos:\n\n'+list,ok:'Enviar mesmo assim',cancel:'Cancelar',danger:true}))return log('envio cancelado (segredo detectado)',1)}
  if(!navigator.onLine){await queueOffline(o,r,b,files,[],msg);if(!cfg('keep',false))S.files=[];render();return}
- S.busy=true;$('#b-go').disabled=true;
- try{const c=await GH.commit(o,r,b,files,[],msg,(i,n,p)=>{$('#bar').style.width=(i/n*100)+'%';log(`[${i}/${n}] ${p}`)});
+ S.busy=true;S.fin=false;const ac=new AbortController();S.ac=ac;sendUI(true);
+ try{const c=await GH.commit(o,r,b,files,[],msg,(i,n,p)=>{$('#bar').style.width=(i/n*100)+'%';log(`[${i}/${n}] ${p}`)},{signal:ac.signal,final:()=>{S.fin=true;const s=$('#b-stop');s.disabled=true;s.textContent='Finalizando...';log('gravando o commit (esta etapa não pode ser parada)',1)}});
   log('commit '+c.sha.slice(0,7)+' criado',1);
   S.hist.unshift({url:`https://github.com/${o}/${r}/commit/${c.sha}`,sha:c.sha,repo:o+'/'+r,branch:b,msg,n:files.length,t:Date.now()});localStorage.pd_hist=JSON.stringify(S.hist.slice(0,200));
   if(!cfg('keep',false))S.files=[];toast('Enviado: '+c.sha.slice(0,7));buzz([30,50,30]);if(cfg('sound',false))beep();await loadTree();renderHist()}
- catch(e){if(/Failed to fetch|NetworkError|network/i.test(e.message)){log('sem conexão — guardando na fila offline',1);await queueOffline(o,r,b,files,[],msg);if(!cfg('keep',false))S.files=[];render()}else{log('ERRO: '+e.message,1);toast(e.message,1)}}
- S.busy=false;$('#b-go').disabled=false;setTimeout(()=>$('#bar').style.width=0,1600)}
+ catch(e){if(aborted(e,ac.signal)){log('Envio interrompido. Nenhum commit foi criado, o repositório não mudou.',1);toast('Envio interrompido')}else if(/Failed to fetch|NetworkError|network/i.test(e.message)){log('sem conexão — guardando na fila offline',1);await queueOffline(o,r,b,files,[],msg);if(!cfg('keep',false))S.files=[];render()}else{log('ERRO: '+e.message,1);toast(e.message,1)}}
+ S.busy=false;S.ac=null;sendUI(false);setTimeout(()=>$('#bar').style.width=0,1600)}
+function sendUI(on){const g=$('#b-go'),s=$('#b-stop');g.disabled=on;g.textContent=on?'Enviando...':'Enviar para o GitHub';s.hidden=!on;s.disabled=false;s.textContent='Parar'}
+$('#b-stop').onclick=()=>{if(!S.ac||S.fin)return;buzz(12);S.ac.abort();const s=$('#b-stop');s.disabled=true;s.textContent='Parando...';log('parando o envio...')};
 $('#b-go').onclick=()=>send(false);$('#b-dry').onclick=()=>send(true);
 
 /* ---------- repositorio: navegar, marcar, excluir ---------- */
@@ -974,9 +1176,7 @@ function renderRepo(){
 $('#rfilter').oninput=renderRepo;
 $('#rtree').onclick=e=>{const n=e.target.closest('.node');if(!n)return;const p=n.dataset.p;buzz(6);
  if(n.dataset.t==='tree'){setPick('p-dest',p);pv();render();tab('enviar');toast('Destino: /'+p)}else{S.sel.has(p)?S.sel.delete(p):S.sel.add(p);n.classList.toggle('sel')}};
-$('#b-del').onclick=async()=>{const [o,r]=rv(),b=P['p-branch'].v,ps=[...S.sel].filter(p=>S.paths.has(p));
- if(!ps.length)return toast('Marque arquivos primeiro',1);if(!await dlg({title:`Excluir ${ps.length} arquivo(s)?`,text:`Serão apagados de ${o}/${r}@${b} num commit agora.`,ok:'Excluir',danger:true}))return;
- try{const c=await GH.commit(o,r,b,[],ps,'delete via pushdeck');toast('Excluído: '+c.sha.slice(0,7));S.sel.clear();await loadTree()}catch(e){toast(e.message,1)}};
+$('#b-del').onclick=()=>{const ps=[...S.sel].filter(p=>S.paths.has(p));if(!ps.length)return toast('Marque arquivos primeiro',1);delPaths(ps,()=>{S.sel.clear();renderRepo()})};
 
 /* ---------- editor (estilo VS Code) ---------- */
 const ED={tabs:[],cur:null,open:new Set(),sel:new Set(),fs:+cfg('fs',13),ex:innerWidth>820,n:0,fm:null,cw:0};
@@ -1040,12 +1240,26 @@ function hl(t,l){const L=LX[l];if(!L||t.length>2e5)return esc(t)+'\n';let o='',i
 /* desenho: texto, gutter, linha atual, status */
 const PT=12,PL=10,G=46;
 function stash(){const t=cur();if(t){t.text=ta.value;t.st=sc.scrollTop;t.sl=sc.scrollLeft;t.ss=ta.selectionStart;t.se=ta.selectionEnd}}
-function paint(){const v=ta.value,L=v.split('\n'),n=L.length,w=cw();let m=0;for(let i=0;i<n;i++)if(L[i].length>m)m=L[i].length;
- cv.style.setProperty('--w',(G+PL+12+(m+4)*w)+'px');cv.style.setProperty('--h',(PT+n*LH()+140)+'px');
+const HBIG=40000,HBUF=60;
+function paint(){const v=ta.value,L=v.split('\n'),n=L.length,w=cw(),ls=new Array(n);let m=0,o=0;
+ for(let i=0;i<n;i++){const l=L[i].length;ls[i]=o;o+=l+1;if(l>m)m=l}
+ ED.L=L;ED.ls=ls;ED.lsl=v.length;
+ const wv=Math.round(G+PL+12+(m+4)*w),hv=PT+n*LH()+140;
+ if(wv!==ED.wv){ED.wv=wv;cv.style.setProperty('--w',wv+'px')}if(hv!==ED.hv){ED.hv=hv;cv.style.setProperty('--h',hv+'px')}
  if(ED.n!==n){ED.n=n;$('#gn').textContent=Array.from({length:n},(_,i)=>i+1).join('\n')}
- clearTimeout(ED.hp);const go=()=>{hle.innerHTML=hl(v,lang(ED.cur||''))};v.length>6e4?ED.hp=setTimeout(go,120):go();ED.L=L;marks();status();lintHook()}
+ if(!(ED.hd>10))hlRender();else if(!ED.hq){ED.hq=1;clearTimeout(ED.hp);ED.hp=setTimeout(hlRender,Math.min(220,ED.hd*2))}
+ marks();status();lintHook()}
+/* realce: arquivo pequeno = inteiro; arquivo grande = só as linhas visíveis (+ folga), então o custo não cresce com o arquivo */
+function hlRender(){clearTimeout(ED.hp);ED.hq=0;const t0=performance.now(),v=ta.value,L=ED.L||[],n=L.length,lg=lang(ED.cur||'');
+ if(v.length<=HBIG||n<150||!ED.ls||ED.lsl!==v.length){hle.style.paddingTop='';hle.innerHTML=hl(v,lg);ED.hw=null}
+ else{const lh=LH(),H=sc.clientHeight||700,st=sc.scrollTop,a=Math.max(0,Math.floor((st-PT)/lh)-HBUF),b=Math.min(n-1,Math.ceil((st+H-PT)/lh)+HBUF),s=ED.ls[a],e=b+1<n?ED.ls[b+1]-1:v.length;
+  hle.style.paddingTop=(PT+a*lh)+'px';hle.innerHTML=hl(v.slice(s,e),lg);ED.hw={a,b}}
+ ED.hd=performance.now()-t0}
 function scr(){marks()}
-function pos(){const a=ta.value.slice(0,ta.selectionStart).split('\n');return{ln:a.length,col:a[a.length-1].length+1}}
+sc.addEventListener('scroll',()=>{if(!ED.hw||ED.sq)return;ED.sq=requestAnimationFrame(()=>{ED.sq=0;const w=ED.hw;if(!w)return;const lh=LH(),top=Math.floor((sc.scrollTop-PT)/lh),bot=Math.ceil((sc.scrollTop+sc.clientHeight-PT)/lh),n=(ED.L||[]).length;if((top<w.a+12&&w.a>0)||(bot>w.b-12&&w.b<n-1))hlRender()})},{passive:true});
+function lineAt(s){const a=ED.ls;let lo=0,hi=a.length-1;while(lo<hi){const mid=(lo+hi+1)>>1;if(a[mid]<=s)lo=mid;else hi=mid-1}return lo}
+function pos(){const s=ta.selectionStart;if(!ED.ls||ED.lsl!==ta.value.length){const a=ta.value.slice(0,s).split('\n');return{ln:a.length,col:a[a.length-1].length+1}}const i=lineAt(s);return{ln:i+1,col:s-ED.ls[i]+1}}
+function posStatus(){const t=cur();if(!t){$('#sb-pos').textContent='';return}const p=pos();$('#sb-pos').textContent=`${p.ln}:${p.col}`}
 function cw(){if(!ED.cw){const s=document.createElement('span');s.style.cssText='position:absolute;visibility:hidden;white-space:pre';s.textContent='0'.repeat(50);$('#cod').append(s);ED.cw=s.getBoundingClientRect().width/50;s.remove()}return ED.cw}
 function marks(){const lh=LH(),p=pos(),c=$('#cl'),f=$('#fm'),m=ED.fm,y=PT+(p.ln-1)*lh;
  c.style.cssText=cur()?`display:block;height:${lh}px;transform:translateY(${y}px)`:'display:none';const g=$('#gm');g.style.cssText=`height:${lh*.7}px;transform:translateY(${y+lh*.15-PT}px)`;
@@ -1057,7 +1271,7 @@ function status(){const t=cur(),p=pos(),d=ED.tabs.filter(dirty).length;$('#sb-po
 function layout(){ide.classList.toggle('nex',!ED.ex)}
 function zoom(d){ED.fs=Math.max(10,Math.min(24,ED.fs+d));setCfg('fs',ED.fs);ide.style.setProperty('--fs',ED.fs+'px');ide.style.setProperty('--lh',LH()+'px');ED.cw=0;ED.n=0;paint()}
 /* desfazer / refazer, pontos de restauração */
-function snap(t){if(!t)return;if(t.u[t.ui].x===t.text)return;t.u=t.u.slice(0,t.ui+1);t.u.push({x:t.text,a:t===cur()?ta.selectionStart:t.ss,b:t===cur()?ta.selectionEnd:t.se});if(t.u.length>150)t.u.shift();t.ui=t.u.length-1;btns()}
+function snap(t){if(!t)return;if(t.u[t.ui].x===t.text)return;t.u=t.u.slice(0,t.ui+1);t.u.push({x:t.text,a:t===cur()?ta.selectionStart:t.ss,b:t===cur()?ta.selectionEnd:t.se});{const cap=t.text.length>1e5?25:t.text.length>2e4?60:150;while(t.u.length>cap)t.u.shift()}t.ui=t.u.length-1;btns()}
 function ver(t,l){if(!t||(t.v[0]&&t.v[0].x===t.text))return;t.v.unshift({x:t.text,t:Date.now(),l});t.v.length=Math.min(t.v.length,40)}
 function put(x,a,b){const t=cur();ta.value=x;t.text=x;t.d=dirty(t);ED.fm=null;if(a!==undefined)ta.setSelectionRange(a,b);paint();renderTabs();reveal()}
 function undo(){const t=cur();if(!t)return;clearTimeout(ED.sn);snap(t);if(t.ui<1)return;const s=t.u[--t.ui];put(s.x,s.a,s.b)}
@@ -1157,8 +1371,9 @@ function lintFor(t,p){const e=(p.split('.').pop()||'').toLowerCase();let E=null;
  return E&&E.sort((a,b)=>a.ln-b.ln||a.col-b.col).slice(0,60)}
 let lintT;
 function lintHook(){const t=cur();if(!t){ED.er=null;renderErr();return}
- if(ED.lc!==ED.cur){ED.lc=ED.cur;ED.er=null;runLint()}else{clearTimeout(lintT);lintT=setTimeout(runLint,260)}renderErr()}
-function runLint(){const t=cur();if(!t){ED.er=null;return}try{ED.er=lintFor(ta.value,t.p)}catch(e){ED.er=null}renderErr();status()}
+ const sw=ED.lc!==ED.cur;ED.lc=ED.cur;if(sw)ED.er=null;clearTimeout(lintT);
+ lintT=setTimeout(()=>{window.requestIdleCallback?requestIdleCallback(runLint,{timeout:900}):runLint()},sw?90:Math.min(900,Math.max(260,ta.value.length/120)));renderErr()}
+function runLint(){const t=cur();if(!t){ED.er=null;return}if(ta.value.length>15e4){ED.er=null;renderErr();status();return}try{ED.er=lintFor(ta.value,t.p)}catch(e){ED.er=null}renderErr();status()}
 function renderErr(){const lh=LH(),E=ED.er||[],g=$('#ge'),w=$('#er'),L=ED.L||[],c=cw(),seen=new Set();let a='',b='';
  E.forEach(e=>{const y=PT+(e.ln-1)*lh,len=(L[e.ln-1]||'').length,col=Math.min(e.col,Math.max(1,len)),wd=Math.max(1,Math.min(e.len||1,Math.max(1,len-col+1)));
   if(!seen.has(e.ln)){seen.add(e.ln);b+=`<i class="eb${e.w?' w':''}" style="top:${y}px;height:${lh}px"></i>`;a+=`<i class="ge${e.w?' w':''}" style="transform:translateY(${y}px);height:${lh}px"></i>`}
@@ -1176,25 +1391,34 @@ $('#gut').addEventListener('click',e=>{const r=$('#gut').getBoundingClientRect()
 
 /* abas */
 const BIN=/\.(png|jpe?g|gif|webp|ico|bmp|zip|gz|pdf|mp[34]|mov|woff2?|ttf|otf|exe)$/i;
+const edLoad=(on,name)=>{const l=$('#ed-ld');l.hidden=!on;if(on)l.querySelector('span').textContent='Abrindo '+name+'...'};
 async function openFile(p,txt){p=clean(p);if(!p)return;let t=ED.tabs.find(x=>x.p===p);
- if(!t){let text='',orig=null;
+ if(!t){let text='',orig=null;const tok=ED.ot=(ED.ot|0)+1;
   if(txt!==undefined)text=txt;
-  else try{if(BIN.test(p))throw new Error('Arquivo binário não abre no editor');const q=S.files.find(f=>full(f)===p);
+  else try{if(BIN.test(p))throw new Error('Arquivo binário não abre no editor');
+   const q=S.files.find(f=>full(f)===p),x=!q&&S.paths.has(p)?S.tree.find(y=>y.path===p):null,sz=q?q.size:x?(x.size||0):0;
+   if(sz>8*1048576)throw new Error('Arquivo grande demais para o editor ('+fmt(sz)+')');
+   if(sz>1.5*1048576&&!await dlg({title:'Arquivo grande',text:`${nm(p)} tem ${fmt(sz)}. O editor pode ficar lento com ele.`,ok:'Abrir mesmo assim',cancel:'Voltar'}))return;
+   edLoad(true,nm(p));await new Promise(r=>requestAnimationFrame(()=>r()));
    if(q){text=await q.blob.text();orig=text}
-   else if(S.paths.has(p)){const [o,r]=rv(),x=S.tree.find(y=>y.path===p),f=await GH.req(`/repos/${o}/${r}/git/blobs/${x.sha}`);text=new TextDecoder().decode(Uint8Array.from(atob(f.content.replace(/\n/g,'')),c=>c.charCodeAt(0)));orig=text}}
-  catch(e){return toast(e.message,1)}
+   else if(x){const [o,r]=rv();S.bc=S.bc||new Map();
+    if(S.bc.has(x.sha))text=S.bc.get(x.sha);else{const f=await GH.req(`/repos/${o}/${r}/git/blobs/${x.sha}`);text=b64dec(f.content);S.bc.set(x.sha,text);if(S.bc.size>40)S.bc.delete(S.bc.keys().next().value)}
+    orig=text}
+   if(tok!==ED.ot)return}
+  catch(e){edLoad(false);return toast(e.message,1)}
+  edLoad(false);
   t={p,text,orig,st:0,sl:0,ss:0,se:0,u:[{x:text,a:0,b:0}],ui:0,v:[{x:text,t:Date.now(),l:'ao abrir'}]};t.d=dirty(t);ED.tabs.push(t)}
  show(p)}
-function show(p){stash();ED.cur=p;const t=cur();ta.value=t.text;ED.n=0;paint();sc.scrollTop=t.st;sc.scrollLeft=t.sl;ta.setSelectionRange(t.ss,t.se);scr();$('#wel').hidden=true;flash();
- let a=p.split('/');a.pop();while(a.length){ED.open.add(a.join('/'));a.pop()}
- if(innerWidth<=820){ED.ex=false;layout()}else ta.focus();renderTabs();crumb();exTree()}
+function show(p){stash();ED.cur=p;const t=cur();ta.value=t.text;ED.n=0;ED.hd=0;paint();sc.scrollTop=t.st;sc.scrollLeft=t.sl;ta.setSelectionRange(t.ss,t.se);if(ED.hw)hlRender();marks();$('#wel').hidden=true;flash();
+ let a=p.split('/'),ch=false;a.pop();while(a.length){const d=a.join('/');if(!ED.open.has(d)){ED.open.add(d);ch=true}a.pop()}
+ if(innerWidth<=820){ED.ex=false;layout()}else ta.focus();renderTabs();crumb();ch?exTree():exMark()}
 async function closeTab(p,f){const t=ED.tabs.find(x=>x.p===p);if(!t)return;if(p===ED.cur)stash();
  if(!f&&dirty(t)&&!await dlg({title:'Fechar sem salvar?',text:`"${nm(p)}" tem alterações não salvas.`,ok:'Fechar mesmo assim',cancel:'Voltar',danger:true}))return;
  const i=ED.tabs.findIndex(x=>x.p===p);if(i<0)return;ED.ts&&ED.ts.delete(p);ED.tabs.splice(i,1);if(ED.cur===p){const n=ED.tabs[Math.min(i,ED.tabs.length-1)];if(n)show(n.p);else{ED.cur=null;ta.value='';ED.n=0;paint();$('#wel').hidden=false;renderTabs();crumb();exTree()}}else{renderTabs();exTree()}}
 function renderTabs(){const b=$('#ed-tabs');b.innerHTML=ED.tabs.map(t=>`<div class="tb${t.p===ED.cur?' on':''}" data-p="${esc(t.p)}" title="${esc(t.p)}">${fi(t.p)}<span>${esc(nm(t.p))}</span><em class="cx${t.d?' d':''}" data-x></em></div>`).join('')||'<div class="qe">Nenhum arquivo aberto</div>';
  const t=cur(),c=$('#fchip');c.firstChild.textContent=t?nm(t.p):'Nenhum arquivo';c.classList.toggle('d',!!t&&!!t.d);$('#cv').style.visibility=t?'':'hidden';btns()}
 function moveInd(){}
-function flash(){const e=$('.surf');e.classList.remove('swp');void e.offsetWidth;e.classList.add('swp')}
+function flash(){const e=$('.surf');e.classList.remove('swp');requestAnimationFrame(()=>e.classList.add('swp'))}
 function crumb(){$('#crumb').innerHTML=ED.cur?ED.cur.split('/').map(esc).join(' <i>›</i> '):''}
 $('#ed-tabs').addEventListener('click',e=>{if(e.target.dataset.x===undefined)closePop()});
 $('#ed-tabs').onclick=e=>{const t=e.target.closest('.tb');if(!t)return;if(e.target.dataset.x!==undefined)closeTab(t.dataset.p);else if(t.dataset.p!==ED.cur)show(t.dataset.p)};
@@ -1236,16 +1460,23 @@ function exData(){const m=new Map(),add=(p,e)=>{if(!m.has(p)||e.q)m.set(p,Object
  S.files.forEach(f=>{const p=full(f);add(p,{t:'f',size:f.size,q:S.paths.has(p)?'M':'U'})});
  ED.tabs.forEach(t=>{if(!m.has(t.p))add(t.p,{t:'f',q:'U'})});return m}
 function row(e,d,flat,nw,i){const dir=e.t==='d';return `<div class="row${nw?' n':''}${dir&&ED.open.has(e.p)?' o':''}${ED.sel.has(e.p)?' sel':''}${e.p===ED.cur?' on':''}" data-p="${esc(e.p)}" data-t="${e.t}" style="--i:${Math.min(i||0,14)};padding-left:${8+d*12}px">${dir?I.c+I.d:'<span class="sp"></span>'+fi(e.p)}<span class="nm">${esc(flat?e.p:nm(e.p))}</span><span class="ra"><button data-a="r" title="Renomear / mover">${I.e}</button><button data-a="d" title="Excluir">${I.x}</button></span>${e.q?`<span class="bg ${e.q}">${e.q}</span>`:''}</div>`}
-function exTree(){if(!ide.offsetParent)return;const q=$('#x-q').value.toLowerCase(),m=exData(),kids=new Map(),out=[],prev=ED.rp||new Set(),now=new Set(),R=(e,d,f)=>{now.add(e.p);return row(e,d,f,!prev.has(e.p),out.length)};
+function exTree(){if(ED.xq)return;ED.xq=requestAnimationFrame(()=>{ED.xq=0;exTreeNow()})}
+function exSel(){for(const r of $('#x-tree').children)if(r.dataset&&r.dataset.p!==undefined)r.classList.toggle('sel',ED.sel.has(r.dataset.p))}
+function exMark(){for(const r of $('#x-tree').children)if(r.dataset&&r.dataset.p!==undefined)r.classList.toggle('on',r.dataset.p===ED.cur)}
+function multiUI(){const b=$('#x-bar');b.hidden=!ED.multi;$('#x-cnt').textContent=ED.sel.size+' selecionado(s)';$('#x-del').disabled=!ED.sel.size;$('#x-ms').classList.toggle('on',!!ED.multi)}
+function multiOn(p){ED.multi=true;if(p)ED.sel=new Set([p]);exSel();multiUI()}
+function multiOff(){ED.multi=false;ED.sel.clear();exSel();multiUI()}
+function exTreeNow(){if(!ide.offsetParent)return;const q=$('#x-q').value.toLowerCase(),m=exData(),kids=new Map(),out=[],prev=ED.rp||new Set(),now=new Set(),R=(e,d,f)=>{now.add(e.p);return row(e,d,f,!prev.has(e.p),out.length)};
  if(q)[...m.values()].filter(e=>e.t==='f'&&e.p.toLowerCase().includes(q)).sort((a,b)=>a.p.localeCompare(b.p)).slice(0,500).forEach(e=>out.push(R(e,0,1)));
  else{m.forEach(e=>{const k=par(e.p);(kids.get(k)||kids.set(k,[]).get(k)).push(e)});
   const walk=(k,d)=>(kids.get(k)||[]).sort((a,b)=>(a.t===b.t?0:a.t==='d'?-1:1)||nm(a.p).localeCompare(nm(b.p))).forEach(e=>{out.push(R(e,d));if(e.t==='d'&&ED.open.has(e.p))walk(e.p,d+1)});walk('',0)}ED.rp=now;
  $('#x-tree').innerHTML=out.join('')||'<div class="qe">Conecte e escolha um repositório, ou crie um arquivo novo</div>'}
 $('#x-q').oninput=exTree;
-$('#x-tree').onclick=e=>{const r=e.target.closest('.row');if(!r){ED.sel.clear();return exTree()}const p=r.dataset.p,a=e.target.closest('button');
+$('#x-tree').onclick=e=>{const r=e.target.closest('.row');if(!r){if(!ED.multi){ED.sel.clear();exSel()}return}const p=r.dataset.p,a=e.target.closest('button');
  if(a)return a.dataset.a==='d'?del([p]):ren(p);
- if(e.ctrlKey||e.metaKey){ED.sel.has(p)?ED.sel.delete(p):ED.sel.add(p);return exTree()}
- ED.sel=new Set([p]);if(r.dataset.t==='d'){ED.open.has(p)?ED.open.delete(p):ED.open.add(p);exTree()}else openFile(p)};
+ if(ED.multi||e.ctrlKey||e.metaKey){ED.sel.has(p)?ED.sel.delete(p):ED.sel.add(p);buzz(6);exSel();return multiUI()}
+ ED.sel=new Set([p]);exSel();if(r.dataset.t==='d'){ED.open.has(p)?ED.open.delete(p):ED.open.add(p);exTree()}else openFile(p)};
+$('#x-ms').onclick=()=>{buzz(8);ED.multi?multiOff():multiOn()};$('#x-cx').onclick=multiOff;$('#x-del').onclick=()=>{if(ED.sel.size)del([...ED.sel])};
 $('#x-tree').onkeydown=e=>{if(e.key==='Delete'&&ED.sel.size)del([...ED.sel]);if(e.key==='F2'&&ED.sel.size)ren([...ED.sel][0])};
 const selDir=()=>{const p=[...ED.sel][0],e=p&&exData().get(p);return e?e.t==='d'?p:par(p):''};
 $('#x-nf').onclick=()=>newFile(selDir());$('#x-nd').onclick=()=>newDir(selDir());$('#x-rl').onclick=()=>loadTree();$('#x-cl').onclick=()=>{ED.open.clear();exTree()};
@@ -1254,8 +1485,8 @@ $('#ed-find').onclick=()=>fOpen(0);$('#ed-save').onclick=saveQ;$('#ed-commit').o
 
 /* menu de contexto (botão direito / segurar no toque) */
 function menu(it,x,y){const c=$('#cm');c.innerHTML=it.map((m,i)=>`<button data-i="${i}" class="${m[2]?'dg':''}">${m[0]}</button>`).join('');c.hidden=false;c.style.left=Math.max(4,Math.min(x,innerWidth-200))+'px';c.style.top=Math.max(4,Math.min(y,innerHeight-it.length*34-10))+'px';c.onclick=e=>{const b=e.target.closest('button');if(b){c.hidden=true;it[b.dataset.i][1]()}}}
-function ctx(e,r){e.preventDefault();const p=r?r.dataset.p:'',dir=!r||r.dataset.t==='d',d=!r?'':dir?p:par(p);if(r&&!ED.sel.has(p)){ED.sel=new Set([p]);exTree()}
- const it=[];if(r&&!dir)it.push(['Abrir',()=>openFile(p)]);it.push(['Novo arquivo aqui',()=>newFile(d)],['Nova pasta aqui',()=>newDir(d)]);
+function ctx(e,r){e.preventDefault();const p=r?r.dataset.p:'',dir=!r||r.dataset.t==='d',d=!r?'':dir?p:par(p);if(r&&!ED.sel.has(p)){if(ED.multi)ED.sel.add(p);else ED.sel=new Set([p]);exSel();multiUI()}
+ const it=[];if(r&&!dir)it.push(['Abrir',()=>openFile(p)]);if(r)it.push([ED.multi?'Sair da seleção':'Selecionar vários',()=>ED.multi?multiOff():multiOn(p)]);it.push(['Novo arquivo aqui',()=>newFile(d)],['Nova pasta aqui',()=>newDir(d)]);
  if(r){if(dir)it.push(['Usar como destino do envio',()=>{setPick('p-dest',p);pv();render();toast('Destino: /'+p)}]);
   it.push(['Renomear / mover',()=>ren(p)],['Copiar caminho',()=>navigator.clipboard&&navigator.clipboard.writeText(p).then(()=>toast('Caminho copiado'))],[ED.sel.size>1?`Excluir ${ED.sel.size} itens`:'Excluir',()=>del([...ED.sel]),1])}
  menu(it,e.clientX,e.clientY)}
@@ -1267,11 +1498,39 @@ addEventListener('click',e=>{if(!e.target.closest('#cm'))$('#cm').hidden=true});
 /* criar, renomear, excluir */
 async function newFile(d){const n=clean(await dlg({title:'Novo arquivo',text:'Pode incluir pastas, ex: src/index.js',input:{value:d?d+'/':'',placeholder:'pasta/arquivo.js'},ok:'Criar'})||'');if(!n)return;openFile(n,exData().has(n)?undefined:'')}
 async function newDir(d){const n=clean(await dlg({title:'Nova pasta',text:'Vai com um .gitkeep para o GitHub aceitar a pasta vazia.',input:{value:d?d+'/':'',placeholder:'nome-da-pasta'},ok:'Criar'})||'');if(!n)return;push(n+'/.gitkeep',new Blob(['']),true);ED.open.add(n);render();toast('Pasta na fila: '+n+' (com .gitkeep)')}
-async function del(ps){const m=exData(),fs=new Set();ps.forEach(p=>{const e=m.get(p);if(!e)return;if(e.t==='f')fs.add(p);else m.forEach((x,k)=>{if(x.t==='f'&&k.startsWith(p+'/'))fs.add(k)})});
- const all=[...fs],rp=all.filter(p=>S.paths.has(p)),[o,r]=rv(),b=P['p-branch'].v;if(!all.length)return toast('Nada para excluir',1);
- if(!await dlg({title:`Excluir ${all.length} arquivo(s)?`,text:rp.length?`${rp.length} já estão no GitHub (${o}/${r}@${b}) e serão apagados num commit agora.`:'Eles só existem na fila/editor.',ok:'Excluir',danger:true}))return;
- try{if(rp.length){const c=await GH.commit(o,r,b,[],rp,'delete '+(rp.length>1?rp.length+' files':nm(rp[0]))+' via pushdeck');toast('Excluído no GitHub: '+c.sha.slice(0,7))}
-  S.files=S.files.filter(f=>!fs.has(full(f)));ED.tabs.filter(t=>fs.has(t.p)).forEach(t=>closeTab(t.p,true));ED.sel.clear();if(rp.length)await loadTree();else{render();exTree()}}catch(e){toast(e.message,1)}}
+function del(ps){return delPaths(ps,()=>{ED.multi=false;ED.sel.clear();exSel();multiUI()})}
+function dropFromTree(rp){const gone=new Set(rp);S.tree=S.tree.filter(x=>!(x.type==='blob'&&gone.has(x.path)));
+ const live=new Set();S.tree.forEach(x=>{if(x.type==='blob'){const a=x.path.split('/');a.pop();while(a.length){const d=a.join('/');if(live.has(d))break;live.add(d);a.pop()}}});
+ S.tree=S.tree.filter(x=>x.type!=='tree'||live.has(x.path));
+ S.paths=new Set(S.tree.filter(x=>x.type==='blob').map(x=>x.path));dirs=S.tree.filter(x=>x.type==='tree').map(x=>x.path).sort();
+ const kd=P['p-dest'].v;if(kd&&!dirs.includes(kd))setPick('p-dest','');
+ S.sel=new Set([...S.sel].filter(p=>S.paths.has(p)))}
+async function undoDel(o,r,b,sh){if(OP.on)return toast('Aguarde a operação em andamento',1);OP.start('Restaurando '+sh.length+' arquivo(s)',false);OP.set('Criando commit...',null);
+ try{await GH.commit(o,r,b,sh,[],'restore '+(sh.length>1?sh.length+' files':nm(sh[0].path))+' via pushdeck');toast('Arquivos restaurados');if(rv().join('/')===o+'/'+r&&P['p-branch'].v===b)await loadTree()}
+ catch(e){toast('Não restaurou: '+e.message,1)}OP.end()}
+async function delPaths(ps,after){
+ if(S.delBusy||OP.on)return toast('Aguarde a operação em andamento',1);
+ const m=exData(),fs=new Set();
+ ps.forEach(p=>{const e=m.get(p);if(!e)return;if(e.t==='f')fs.add(p);else m.forEach((x,k)=>{if(x.t==='f'&&k.startsWith(p+'/'))fs.add(k)})});
+ const all=[...fs].sort(),rp=all.filter(p=>S.paths.has(p)),[o,r]=rv(),b=P['p-branch'].v;
+ if(!all.length)return toast('Nada para excluir',1);
+ if(rp.length&&(!GH.token||!r))return toast('Conecte primeiro para excluir do GitHub',1);
+ const nd=ps.filter(p=>{const e=m.get(p);return e&&e.t==='d'}).length;
+ const shown=all.slice(0,8).map(p=>`<div class="dx"><span>${esc(p)}</span><em>${S.paths.has(p)?'github':'fila'}</em></div>`).join('')+(all.length>8?`<div class="dx more">e mais ${all.length-8} arquivo(s)</div>`:'');
+ const txt=(rp.length?`${rp.length} arquivo(s) serão apagados de ${o}/${r}@${b} num commit agora. Logo depois você poderá desfazer.`:'Eles só existem na fila ou no editor, nada muda no GitHub.')+(nd?`\nInclui ${nd} pasta(s).`:'');
+ if(!await dlg({title:all.length===1?'Excluir arquivo?':`Excluir ${all.length} arquivos?`,text:txt,html:`<div class="dxl">${shown}</div>`,ok:'Excluir',danger:true}))return;
+ S.delBusy=true;OP.start('Excluindo '+all.length+' arquivo(s)',false);OP.set(rp.length?'Criando o commit...':'Removendo da fila...',null);
+ try{const shas=new Map(S.tree.filter(x=>x.type==='blob').map(x=>[x.path,{sha:x.sha,mode:x.mode}]));
+  if(rp.length)await GH.commit(o,r,b,[],rp,'delete '+(rp.length>1?rp.length+' files':nm(rp[0]))+' via pushdeck');
+  S.files=S.files.filter(f=>!fs.has(full(f)));
+  ED.tabs.filter(t=>fs.has(t.p)).forEach(t=>closeTab(t.p,true));
+  if(rp.length)dropFromTree(rp);
+  renderRepo();render();exTree();if(after)after();
+  if(rp.length){const sh=rp.map(p=>({path:p,sha:(shas.get(p)||{}).sha,mode:(shas.get(p)||{}).mode})).filter(x=>x.sha);
+   toast(rp.length+' arquivo(s) excluído(s)',0,sh.length?{label:'Desfazer',ms:10000,fn:()=>undoDel(o,r,b,sh)}:null)}
+  else toast('Removido da fila/editor')}
+ catch(e){toast('Não excluiu: '+(e.message||e),1)}
+ S.delBusy=false;OP.end()}
 async function ren(p){const m=exData(),np=clean(await dlg({title:'Renomear / mover',text:'Para mover, mude a pasta no caminho.',input:{value:p,placeholder:'pasta/arquivo.js'},ok:'Salvar'})||'');if(!np||np===p)return;
  const mv=[];m.forEach((x,k)=>{if(x.t==='f'&&(k===p||k.startsWith(p+'/')))mv.push([k,np+k.slice(p.length),x])});if(!mv.length)return;
  if(mv.some(x=>m.has(x[1])))return toast('Já existe algo em '+np,1);const rp=mv.filter(x=>S.paths.has(x[0])),[o,r]=rv(),b=P['p-branch'].v;
@@ -1329,7 +1588,7 @@ ta.addEventListener('keydown',e=>{const v=ta.value,s=ta.selectionStart,en=ta.sel
   if(le>=v.length)return;let ne=v.indexOf('\n',le+1);if(ne<0)ne=v.length;const nx=v.slice(le+1,ne);rep(ls,ne,nx+'\n'+blk);return ta.setSelectionRange(ls+nx.length+1,ls+nx.length+1+blk.length)}
  if(C&&e.shiftKey&&k.toLowerCase()==='k'){e.preventDefault();return le>=v.length&&ls>0?rep(ls-1,le,''):rep(ls,Math.min(le+1,v.length),'')}});
 ta.addEventListener('input',()=>{const t=cur();if(!t)return;t.text=ta.value;ED.fm=null;const d=dirty(t);paint();reveal();if(d!==t.d){t.d=d;renderTabs()}btns();clearTimeout(ED.sn);ED.sn=setTimeout(()=>snap(t),500);clearTimeout(ED.av);ED.av=setTimeout(()=>{if(!t.la||Date.now()-t.la>15000){ver(t,'automático');t.la=Date.now()}},4000)});
-document.addEventListener('selectionchange',()=>{if(document.activeElement===ta){status();marks()}});
+document.addEventListener('selectionchange',()=>{if(document.activeElement===ta&&!ED.sx)ED.sx=requestAnimationFrame(()=>{ED.sx=0;posStatus();marks()})});
 addEventListener('keydown',e=>{if(!document.body.classList.contains('ed-on')||!$('#md').hidden)return;const C=e.ctrlKey||e.metaKey,k=e.key.toLowerCase();
  if(C&&k==='s'){e.preventDefault();saveQ()}else if(C&&k==='p'){e.preventDefault();qOpen()}else if(C&&k==='g'){e.preventDefault();qOpen(':')}
  else if(C&&k==='b'){e.preventDefault();ED.ex=!ED.ex;layout()}else if(C&&(k==='f'||k==='h')){e.preventDefault();fOpen(k==='h')}else if(C&&k==='enter'){e.preventDefault();commitPanel()}else if(k==='escape'){$('#cm').hidden=true;qp.hidden=true}});
@@ -1405,12 +1664,12 @@ $('#b-hclear').onclick=()=>{S.hist=[];localStorage.pd_hist='[]';renderHist()};
 /* ---------- ajustes ---------- */
 const theme=()=>document.documentElement.dataset.theme=cfg('light',false)?'light':'dark';
 const glass=()=>document.documentElement.classList.toggle('noglass',!cfg('glass',true));
-const APPV='2026-11-07 · subabas v4';$('#ver').textContent='Versão do app: '+APPV;
+const APPV='2026-11-08 · banco SQL v5';$('#ver').textContent='Versão do app: '+APPV;
 $('#b-refresh').onclick=async()=>{toast('Atualizando...');try{const rs=navigator.serviceWorker?await navigator.serviceWorker.getRegistrations():[];for(const r of rs)await r.unregister();for(const k of await caches.keys())await caches.delete(k)}catch(e){}location.replace(location.pathname+'?v='+Date.now())};
 $$('[data-cfg]').forEach(el=>{const k=el.dataset.cfg;el.checked=cfg(k,el.dataset.def==='1');el.onchange=()=>{setCfg(k,el.checked);buzz(8);if(k==='light')theme();if(k==='glass')glass();render()}});
 $('#o-ignore').value=cfg('ignore','.DS_Store,node_modules,.git,Thumbs.db');$('#o-ignore').oninput=e=>setCfg('ignore',e.target.value);
 $('#o-prefix').value=cfg('prefix','');$('#o-prefix').oninput=e=>setCfg('prefix',e.target.value);
-$('#b-wipe').onclick=async()=>{if(await dlg({title:'Apagar tudo?',text:'Remove token, histórico e ajustes deste aparelho.',ok:'Apagar',danger:true})){localStorage.clear();sessionStorage.clear();location.reload()}};
+$('#b-wipe').onclick=async()=>{if(await dlg({title:'Apagar tudo?',text:'Remove contas salvas, banco de dados, histórico e ajustes deste aparelho.',ok:'Apagar',danger:true})){try{await DBX.wipe()}catch(e){}localStorage.clear();sessionStorage.clear();location.reload()}};
 addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'&&!document.body.classList.contains('ed-on'))send(false);if(e.key==='Escape'){closeDD();closePop()}});
 
 /* ---------- app instalavel (PWA) ---------- */
@@ -1422,7 +1681,10 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventLis
 
 /* ---------- init ---------- */
 theme();glass();setPick('p-sort','path');setPick('p-dest','');tab('enviar');render();renderHist();pv();renderOffBox();
-const saved=localStorage.pd_token||sessionStorage.pd_token;if(saved){$('#token').value=saved;connect()}
+(async()=>{try{await Acc.init()}catch(e){}renderAccounts();
+ let tk=sessionStorage.pd_token||'',lb='';
+ if(!tk&&cfg('autoacc',true)){const a=Acc.last();if(a){tk=await Acc.token(a.id);lb=a.label}}
+ if(tk){tkEl.value=tk;if(lb)$('#acc-label').value=lb;connect()}})();
 })();
 </script>
 </body>
