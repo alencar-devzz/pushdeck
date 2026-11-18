@@ -1017,6 +1017,41 @@ function closeRail(){document.body.classList.remove('rail-on')}
 document.addEventListener('click',e=>{if(document.body.classList.contains('rail-on')&&matchMedia('(max-width:820px)').matches&&!e.target.closest('#rail')&&!e.target.closest('[data-rail]')){e.preventDefault();e.stopPropagation();closeRail()}},true);
 document.addEventListener('click',e=>{if(e.target.closest('[data-rail]')){buzz(8);document.body.classList.toggle('rail-on')}else if(e.target.id==='rail-scrim')closeRail()});
 
+/* ---------- swipe para abrir/fechar o menu lateral ---------- */
+(function(){
+  const THRESHOLD = 60;   // px mínimos para considerar swipe
+  const EDGE      = 30;   // px da borda esquerda para detectar "swipe para abrir"
+  let sx = null, sy = null, tracking = false;
+
+  document.addEventListener('touchstart', e => {
+    if(matchMedia('(min-width:821px)').matches) return;
+    const t = e.touches[0];
+    sx = t.clientX; sy = t.clientY; tracking = false;
+    // swipe para abrir: só rastreia se tocar na borda esquerda
+    if(!document.body.classList.contains('rail-on') && sx > EDGE) { sx = null; return; }
+    tracking = true;
+  }, {passive: true});
+
+  document.addEventListener('touchmove', e => {
+    if(!tracking || sx === null) return;
+    const dx = e.touches[0].clientX - sx;
+    const dy = e.touches[0].clientY - sy;
+    // cancela se for scroll vertical
+    if(Math.abs(dy) > Math.abs(dx) + 10) { tracking = false; sx = null; }
+  }, {passive: true});
+
+  document.addEventListener('touchend', e => {
+    if(!tracking || sx === null) return;
+    const dx = e.changedTouches[0].clientX - sx;
+    sx = null; tracking = false;
+    if(dx > THRESHOLD && !document.body.classList.contains('rail-on')) {
+      buzz(8); document.body.classList.add('rail-on');           // swipe direita → abre
+    } else if(dx < -THRESHOLD && document.body.classList.contains('rail-on')) {
+      closeRail();                                                 // swipe esquerda → fecha
+    }
+  }, {passive: true});
+})();
+
 /* ---------- caixas de diálogo (vidro) ---------- */
 let dId=0;
 function dlg(o){return new Promise(res=>{
