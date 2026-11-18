@@ -747,6 +747,26 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 #imgv .ibar{position:absolute;left:0;right:0;bottom:0;height:54px;display:flex;align-items:center;gap:6px;padding:0 10px;border-top:1px solid var(--line);background:var(--eb);overflow-x:auto;scrollbar-width:none}
 #imgv .ibar span{flex:1;min-width:90px;font:12px var(--mono);color:var(--el);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #imgv .ibar button{flex:none;min-width:40px;height:36px;padding:0 12px;border-radius:11px;background:var(--eac);color:var(--ef);font-weight:700;font-size:13px}
+
+/* ===== visual VS Code (Dark+ / Light+) ===== */
+.ide{--mono:Menlo,'SF Mono',Consolas,'Cascadia Code','JetBrains Mono',ui-monospace,monospace;--eb:#1e1e1e;--ef:#d4d4d4;--el:#858585;--esel:#264f78;--esel2:rgba(121,121,121,.32);--eln:rgba(255,255,255,.04);--elb:rgba(255,255,255,.07);--ehv:rgba(255,255,255,.07);--eac:rgba(255,255,255,.1);--ec:#6a9955;--es2:#ce9178;--ek:#569cd6;--en:#b5cea8;--ef2:#9cdcfe;--ek2:#c586c0;--et:#4ec9b0;--efn:#dcdcaa;--eig:rgba(255,255,255,.13);--ecr:#aeafad;--eck:#2a2a2a}
+[data-theme=light] .ide{--eb:#fff;--ef:#000;--el:#237893;--esel:#add6ff;--esel2:rgba(100,100,100,.25);--eln:rgba(0,0,0,.03);--elb:rgba(0,0,0,.08);--ehv:rgba(0,0,0,.05);--eac:rgba(0,0,0,.08);--ec:#008000;--es2:#a31515;--ek:#00f;--en:#098658;--ef2:#001080;--ek2:#af00db;--et:#267f99;--efn:#795e26;--eig:rgba(0,0,0,.13);--ecr:#000;--eck:#ebebeb}
+#hl .c{font-style:normal}#hl .k{font-weight:400}#hl .k2{color:var(--ek2)}#hl .t{color:var(--et)}
+#hl[data-l=js] .f,#hl[data-l=py] .f,#hl[data-l=c] .f{color:var(--efn)}#hl[data-l=css] .k{color:var(--ek2)}#hl[data-l=md] .k{font-weight:700}
+#hl .ig{box-shadow:inset 1px 0 0 var(--eig)}
+.ide .cod #ed-code,.stu .cod #ed-code{caret-color:var(--ecr)!important}.ide .cod #ed-code::selection{background:var(--esel)}
+.ide #cl{left:0;right:0;border-radius:0;background:var(--eln);box-shadow:inset 0 0 0 1px var(--elb)}
+.gut,.stu .gut{color:var(--el);font-size:var(--fs)!important;box-shadow:none!important}
+#gm{background:var(--el)!important;box-shadow:none!important;opacity:.45}
+/* minimapa: o quadrado agora e translucido e o codigo fica POR CIMA dele */
+#mm{background:var(--eb);border-left:0}#mm canvas{z-index:1}
+#mm i{z-index:0;background:var(--esel2);border:0;transition:none}#mm:hover i,#mm.dr i{filter:brightness(1.3)}
+/* visualizador de imagens (estilo VS Code) */
+#imgv .ist{inset:0 0 46px 0;padding:20px;background-color:var(--eb)}
+#imgv .ist.b0{background-image:conic-gradient(var(--eck) 25%,transparent 0 50%,var(--eck) 0 75%,transparent 0);background-size:20px 20px}
+#imgv img{box-shadow:0 0 0 1px rgba(127,127,127,.35);border-radius:0}
+#imgv .ibar{height:46px;gap:2px;background:var(--eb)}#imgv .ibar button{height:32px;min-width:36px;padding:0 10px;border-radius:6px;background:transparent}
+#imgv .ibar button:active{background:var(--eac)}#imgv .ibar #i-z{flex:none;min-width:48px;text-align:center;color:var(--ef)}
 </style>
 </head>
 <body>
@@ -1521,15 +1541,16 @@ const cur=()=>ED.tabs.find(t=>t.p===ED.cur),dirty=t=>t.text!==t.orig,nm=p=>p.spl
 /* realce de sintaxe */
 const mk=a=>({r:new RegExp(a.map(x=>'('+x[0].source+')').join('|'),'gm'),c:a.map(x=>x[1])});
 const sS=/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`/,sN=/\b\d[\d._]*\b/,sF=/\b[A-Za-z_$][\w$]*(?=\()/;
+const sT=/\b[A-Z][A-Za-z0-9_]*\b/;
 const KJ='as|async|await|break|case|catch|class|const|continue|default|delete|do|else|export|extends|finally|for|from|function|if|import|in|instanceof|let|new|of|return|static|super|switch|this|throw|try|typeof|var|void|while|yield|true|false|null|undefined|interface|type|enum';
 const KP='and|as|assert|async|await|break|class|continue|def|del|elif|else|except|False|finally|for|from|global|if|import|in|is|lambda|None|not|or|pass|raise|return|self|True|try|while|with|yield';
 const KC='abstract|auto|bool|boolean|break|byte|case|catch|char|class|const|continue|default|defer|do|double|else|enum|extends|extern|false|final|finally|float|fn|for|func|go|goto|if|impl|implements|import|in|int|interface|let|long|match|mod|mut|namespace|new|null|nil|package|private|protected|pub|public|return|short|signed|sizeof|static|string|struct|super|switch|this|throw|throws|trait|true|try|type|typedef|union|unsigned|use|using|var|virtual|void|volatile|while|fun|val|when|object|echo|function|foreach|as|abstract|lateinit|override';
 const KQ='select|from|where|insert|into|values|update|set|delete|create|table|alter|drop|index|join|left|right|inner|outer|on|group|by|order|having|limit|offset|and|or|not|null|is|in|as|distinct|union|primary|key|foreign|references|default|count|sum|avg|min|max|like|between|case|when|then|else|end';
 const LX={
-c:mk([[/\/\/.*|\/\*[\s\S]*?\*\/|^\s*#.*/,'c'],[sS,'s'],[new RegExp('\\b(?:'+KC+')\\b'),'k'],[sN,'n'],[sF,'f']]),
+c:mk([[/\/\/.*|\/\*[\s\S]*?\*\/|^\s*#.*/,'c'],[sS,'s'],[/\b(?:if|else|for|while|do|return|break|continue|switch|case|default|try|catch|finally|throw|goto|import)\b/,'k2'],[new RegExp('\\b(?:'+KC+')\\b'),'k'],[sN,'n'],[sF,'f'],[sT,'t']]),
 sql:mk([[/--.*|\/\*[\s\S]*?\*\//,'c'],[sS,'s'],[new RegExp('\\b(?:'+KQ+')\\b','i'),'k'],[sN,'n'],[sF,'f']]),
-js:mk([[/\/\/.*|\/\*[\s\S]*?\*\//,'c'],[sS,'s'],[new RegExp('\\b(?:'+KJ+')\\b'),'k'],[sN,'n'],[sF,'f']]),
-py:mk([[/#.*/,'c'],[sS,'s'],[new RegExp('\\b(?:'+KP+')\\b'),'k'],[sN,'n'],[sF,'f']]),
+js:mk([[/\/\/.*|\/\*[\s\S]*?\*\//,'c'],[sS,'s'],[/\b(?:if|else|for|while|do|return|break|continue|switch|case|default|try|catch|finally|throw|import|export|from|await|yield|of|in)\b/,'k2'],[new RegExp('\\b(?:'+KJ+')\\b'),'k'],[sN,'n'],[sF,'f'],[sT,'t']]),
+py:mk([[/#.*/,'c'],[sS,'s'],[/\b(?:if|elif|else|for|while|return|break|continue|try|except|finally|raise|import|from|with|yield|pass|await|in|is|not|and|or)\b/,'k2'],[new RegExp('\\b(?:'+KP+')\\b'),'k'],[sN,'n'],[sF,'f'],[sT,'t']]),
 json:mk([[/"(?:\\.|[^"\\\n])*"(?=\s*:)/,'f'],[sS,'s'],[/\b(?:true|false|null)\b/,'k'],[/-?\b\d[\d.eE+-]*\b/,'n']]),
 css:mk([[/\/\*[\s\S]*?\*\//,'c'],[sS,'s'],[/@[\w-]+|!important/,'k'],[/#[0-9a-fA-F]{3,8}\b|\b\d[\d.]*(?:px|r?em|%|vh|vw|ms|s|deg)?/,'n'],[/[\w-]+(?=\s*:)/,'f']]),
 html:mk([[/<!-{2}[\s\S]*?-{2}>/,'c'],[/"[^"\n]*"|'[^'\n]*'/,'s'],[/<\/?[a-zA-Z][\w-]*|\/?>/,'k'],[/[\w:@-]+(?==)/,'f']]),
@@ -2084,7 +2105,7 @@ function mmDraw(){mmT=0;const t=cur(),on=!!(mmOn()&&t&&!t.img);surf.classList.to
  const cvs=mm.firstChild,W=mm.clientWidth,H=mm.clientHeight;if(!W||!H)return;const d=Math.min(2,devicePixelRatio||1);if(cvs.width!==W*d||cvs.height!==H*d){cvs.width=W*d;cvs.height=H*d}
  const g=cvs.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,W,H);
  const v=ta.value,Ls=(v.length>5e5?v.slice(0,5e5):v).split('\n'),n=Ls.length,lh=Math.min(3,H/n),hh=Math.max(1,Math.min(2,lh*.7)),cs=getComputedStyle(ide),C=k=>cs.getPropertyValue(k).trim()||'#999';
- const col={t:C('--ef'),c:C('--ec'),s:C('--es2'),n:C('--en'),k:C('--ek')},coarse=n>2500;mmCH=lh*n;let last=-1;g.globalAlpha=.7;
+ const col={t:C('--ef'),c:C('--ec'),s:C('--es2'),n:C('--en'),k:C('--ek')},coarse=n>2500;mmCH=lh*n;let last=-1;g.globalAlpha=.85;
  for(let i=0;i<n;i++){const y=i*lh,yi=Math.floor(y);if(lh<1&&yi===last)continue;last=yi;const L=Ls[i].slice(0,110);if(!L.trim())continue;
   if(coarse){const a=L.search(/\S/);g.fillStyle=col.t;g.fillRect(3+a,y,Math.max(1,Math.min(W-6-a,L.length-a)),hh);continue}
   TK.lastIndex=0;let m;while((m=TK.exec(L))){if(m.index>W-6)break;g.fillStyle=m[1]?col.s:m[2]?col.c:m[3]?col.n:m[4]?col.k:col.t;g.fillRect(3+m.index,y,Math.min(m[0].length,W-6-m.index),hh)}}
@@ -2099,12 +2120,19 @@ mm.addEventListener('pointermove',e=>{if(mm.classList.contains('dr'))mmJump(e)})
 ACT.push(['Mostrar/ocultar minimapa',()=>{setCfg('mm',mmOn()?0:1);mmDraw()}]);
 /* ---------- imagens no editor ---------- */
 const IMG=/\.(png|jpe?g|gif|webp|bmp|ico|avif)$/i,MIME={jpg:'jpeg',jpeg:'jpeg',png:'png',gif:'gif',webp:'webp',bmp:'bmp',ico:'x-icon',avif:'avif'},IC=new Map();
-const iv=document.createElement('div');iv.id='imgv';iv.hidden=true;iv.innerHTML='<div class="ist b0"><img alt="" draggable="false"></div><div class="ibar"><span id="i-info"></span><button type="button" data-i="-">−</button><button type="button" data-i="f">100%</button><button type="button" data-i="+">+</button><button type="button" data-i="b" title="Fundo">◐</button><button type="button" data-i="p" title="Pixelado">▦</button></div>';surf.append(iv);
+const iv=document.createElement('div');iv.id='imgv';iv.hidden=true;iv.innerHTML='<div class="ist b0"><img alt="" draggable="false"></div><div class="ibar"><span id="i-info"></span><button type="button" data-i="-" title="Diminuir">−</button><span id="i-z">100%</span><button type="button" data-i="+" title="Aumentar">+</button><button type="button" data-i="f">1:1</button><button type="button" data-i="b" title="Fundo">Fundo</button><button type="button" data-i="p" title="Pixelado">▦</button></div>';surf.append(iv);
 const im=iv.querySelector('img'),ist=iv.firstChild,ifb=iv.querySelector('[data-i=f]');let IZ='fit',IB=0,IP=0;
-function iz(){im.style.cssText=IZ==='fit'?'max-width:100%;max-height:100%;width:auto;height:auto':'max-width:none;max-height:none;height:auto;width:'+(im.naturalWidth*IZ)+'px';im.style.imageRendering=IP?'pixelated':'auto';ifb.textContent=IZ==='fit'?'100%':'Ajustar';ist.className='ist b'+IB}
-iv.querySelector('.ibar').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;buzz(6);const k=b.dataset.i,cur1=IZ==='fit'?(im.clientWidth/(im.naturalWidth||1)):IZ;
- if(k==='f')IZ=IZ==='fit'?1:'fit';else if(k==='+')IZ=Math.min(16,cur1*1.25);else if(k==='-')IZ=Math.max(.05,cur1/1.25);else if(k==='b')IB=(IB+1)%3;else if(k==='p')IP^=1;iz()});
+const zcur=()=>IZ==='fit'?(im.clientWidth/(im.naturalWidth||1)):IZ;
+function iz(){im.style.cssText=IZ==='fit'?'max-width:100%;max-height:100%;width:auto;height:auto':'max-width:none;max-height:none;height:auto;width:'+(im.naturalWidth*IZ)+'px';im.style.imageRendering=IP?'pixelated':'auto';ifb.textContent=IZ==='fit'?'1:1':'Ajustar';ist.className='ist b'+IB;requestAnimationFrame(()=>{$('#i-z').textContent=Math.round(zcur()*100)+'%'})}
+const zset=z=>{IZ=Math.max(.05,Math.min(16,z));iz()};
+iv.querySelector('.ibar').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;buzz(6);const k=b.dataset.i;
+ if(k==='f'){IZ=IZ==='fit'?1:'fit';iz()}else if(k==='+')zset(zcur()*1.25);else if(k==='-')zset(zcur()/1.25);else if(k==='b'){IB=(IB+1)%3;iz()}else if(k==='p'){IP^=1;iz()}});
 im.addEventListener('click',()=>{IZ=IZ==='fit'?1:'fit';iz()});
+ist.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();zset(zcur()*(e.deltaY<0?1.1:1/1.1))},{passive:false});
+{let pd=0,pz=1;const ds=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+ ist.addEventListener('touchstart',e=>{if(e.touches.length===2){pd=ds(e.touches);pz=zcur()}},{passive:true});
+ ist.addEventListener('touchmove',e=>{if(e.touches.length===2&&pd){e.preventDefault();zset(pz*ds(e.touches)/pd)}},{passive:false});
+ ist.addEventListener('touchend',e=>{if(e.touches.length<2)pd=0})}
 async function openImg(p){let t=ED.tabs.find(x=>x.p===p);
  if(!t){const tok=ED.ot=(ED.ot|0)+1;let src,size=0;
   try{edLoad(true,nm(p));const q=S.files.find(f=>full(f)===p),x=!q&&S.paths.has(p)?S.tree.find(y=>y.path===p):null;
@@ -2122,6 +2150,11 @@ function imgUI(){const t=cur(),on=!!(t&&t.img);iv.hidden=!on;ta.readOnly=on;if(o
  closeTab=async function(p,f){await _ct(p,f);imgUI()};
  saveQ=function(){const t=cur();if(t&&t.img)return toast('Imagens não são editáveis aqui');return _sq()};}
 $('#ed-save').addEventListener('click',e=>{const t=cur();if(t&&t.img){e.stopImmediatePropagation();toast('Imagens não são editáveis aqui')}},true);
+/* ---------- visual VS Code: guias de indentacao e cor por linguagem ---------- */
+{const _hl=hl,_hr=hlRender;
+ const unit=t=>{let m=99,c=0;for(const l of t.split('\n',400)){const x=/^( +)\S/.exec(l);if(x&&x[1].length<m){m=x[1].length;if(m<=2)break}if(++c>400)break}return m===99?2:Math.max(2,Math.min(8,m))};
+ hl=function(t,l){const o=_hl(t,l);if(!LX[l])return o;const u=unit(t);return o.replace(/^( +)/gm,s=>{let r='',i=0;for(;i+u<=s.length;i+=u)r+='<i class="ig">'+s.slice(i,i+u)+'</i>';return r+s.slice(i)})};
+ hlRender=function(){hle.dataset.l=lang(ED.cur||'');_hr()}}
 })();
 })();
 </script>
