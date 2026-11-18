@@ -759,6 +759,8 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 #imgv .ibar{height:46px;gap:2px;background:var(--eb)}#imgv .ibar button{height:32px;min-width:36px;padding:0 10px;border-radius:6px;background:transparent}
 #imgv .ibar button:active{background:var(--eac)}#imgv .ibar #i-z{flex:none;min-width:48px;text-align:center;color:var(--ef)}
 </style>
+<link rel="stylesheet" href="logger/logger.css">
+<script src="logger/logger.js"></script>
 </head>
 <body>
 <div id="err"></div>
@@ -888,6 +890,13 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
   <div class="pane" data-n="Actions"><div id="m-act"></div><div class="btns"><button class="btn gray sm" data-mref>Atualizar</button></div></div>
 </section>
 
+<section class="tab" id="t-logger">
+  <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Logger</div><div class="sub">Envio ao vivo, erros no código e registro</div></div></div>
+  <div class="pane" data-n="Ao vivo"><div id="lg-live"></div></div>
+  <div class="pane" data-n="Erros do código"><div id="lg-err"></div></div>
+  <div class="pane" data-n="Registro"><div id="lg-log"></div></div>
+</section>
+
 <section class="tab" id="t-historico">
   <div class="head"><button class="hbg" data-rail title="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div><div class="large">Histórico</div><div class="sub">Envios feitos por este aparelho</div></div></div>
   <div class="pane" data-n="Envios"><div class="list" id="hlist" style="margin-top:0"></div></div>
@@ -937,8 +946,9 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 <script>
 (function(){
 'use strict';
+const LGR=window.PDLog||(()=>{const n=()=>n;const o={stage:n,file:n,retry:n,end:n,fail:n,abort:n};return{begin:()=>o,add:n,net:n,mount:n,show:n,guard:async()=>[],host:{},badge:n}})();
 const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
-function showErr(m){const b=$('#err');b.style.display='block';b.textContent=m}
+function showErr(m){LGR.add('err','janela',m);const b=$('#err');b.style.display='block';b.textContent=m}
 window.addEventListener('error',e=>showErr('Erro: '+e.message+' (linha '+e.lineno+')'));
 window.addEventListener('unhandledrejection',e=>showErr('Erro: '+(e.reason&&e.reason.message||e.reason)));
 const S={files:[],paths:new Set(),tree:[],id:0,busy:false,sel:new Set(),sort:'path',cfg:JSON.parse(localStorage.pd_cfg||'{}'),hist:JSON.parse(localStorage.pd_hist||'[]')};
@@ -948,6 +958,7 @@ const fmt=n=>n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFix
 const clean=p=>String(p).replace(/\\/g,'/').replace(/^\/+|\/+$/g,'').replace(/\/{2,}/g,'/');
 const buzz=ms=>{if(cfg('haptic',true)&&navigator.vibrate)try{navigator.vibrate(ms||8)}catch(e){}};
 function toast(m,err,act){
+ if(err)LGR.add('err','aviso',m);
  const t=document.createElement('div');t.className='toast'+(err?' err':'')+(act?' act':'');
  t.innerHTML='<i class="ti"></i>';const s=document.createElement('span');s.style.flex='1';s.style.minWidth='0';s.textContent=m;t.append(s);let ms=4200;
  const p=document.createElement('u');p.className='tp';
@@ -965,29 +976,33 @@ function toast(m,err,act){
   else{t.style.transition='transform .25s cubic-bezier(.2,.8,.2,1),opacity .2s';t.style.transform='';t.style.opacity='';x=y=0;resume()}};
  t.addEventListener('pointerup',up);t.addEventListener('pointercancel',up);
  $('#toasts').append(t);buzz(err?[20,40,20]:10);arm()}
-const log=(m,b)=>{const t=$('#term'),d=document.createElement(b?'b':'span');d.textContent='\n'+m;t.append(d);if(t.childNodes.length>1500)for(let k=0;k<300;k++)t.firstChild.remove();t.scrollTop=1e9};
+const log=(m,b)=>{LGR.add(/^ERRO|falha|Falha/.test(m)?'err':'info','terminal',m);const t=$('#term'),d=document.createElement(b?'b':'span');d.textContent='\n'+m;t.append(d);if(t.childNodes.length>1500)for(let k=0;k<300;k++)t.firstChild.remove();t.scrollTop=1e9};
 function beep(){try{const a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;g.gain.setValueAtTime(.08,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.5);o.start();o.stop(a.currentTime+.5)}catch(e){}}
 
 /* ---------- API do GitHub ---------- */
 const GH={token:'',
-async req(p,o={}){const r=await fetch('https://api.github.com'+p,Object.assign({cache:'no-store'},o,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+this.token,'Content-Type':'application/json'}}));if(!r.ok){let m=r.statusText;try{m=(await r.json()).message}catch(e){}throw new Error(r.status+' '+m)}return r.status===204?null:r.json()},
+async req(p,o={}){const t0=performance.now();try{const x=await this._req(p,o);LGR.net(o.method||'GET',p,200,performance.now()-t0);return x}catch(e){LGR.net(o.method||'GET',p,parseInt(e.message)||0,performance.now()-t0,e.message);throw e}},
+async _req(p,o={}){const r=await fetch('https://api.github.com'+p,Object.assign({cache:'no-store'},o,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+this.token,'Content-Type':'application/json'}}));if(!r.ok){let m=r.statusText;try{m=(await r.json()).message}catch(e){}throw new Error(r.status+' '+m)}return r.status===204?null:r.json()},
 post(p,b){return this.req(p,{method:'POST',body:JSON.stringify(b)})},
 async commit(o,r,b,files,dels,message,prog,ctl){ctl=ctl||{};const sig=ctl.signal,so=sig?{signal:sig}:{},p=`/repos/${o}/${r}/git`,
  chk=()=>{if(sig&&sig.aborted)throw Object.assign(new Error('Operação interrompida'),{aborted:true})},slp=ms=>new Promise(k=>setTimeout(k,ms));
- const refA=await this.req(`${p}/ref/heads/${encodeURIComponent(b)}`,so),parA=await this.req(`${p}/commits/${refA.object.sha}`,so);
- const tree=new Array(files.length);let nx=0,done=0;
- const up=async f=>{if(f.sha)return{sha:f.sha};const body=JSON.stringify({content:await f.b64(),encoding:'base64'});
-  for(let n=0;;n++){chk();try{return await this.req(`${p}/blobs`,Object.assign({method:'POST',body},so))}
-   catch(e){if(e.name==='AbortError'||e.aborted)throw e;if(n<3&&/rate limit|abuse|secondary|bad gateway|unavailable|timeout/i.test(e.message)){await slp(1500*(n+1));continue}throw e}}};
+ const op=LGR.begin({kind:ctl.kind||'envio',repo:o+'/'+r,branch:b,msg:message,dels:dels.length,files:files.map(f=>({path:f.path,size:f.size||0}))});
+ try{
+ op.stage('ref');const refA=await this.req(`${p}/ref/heads/${encodeURIComponent(b)}`,so);op.stage('parent');const parA=await this.req(`${p}/commits/${refA.object.sha}`,so);
+ const tree=new Array(files.length);let nx=0,done=0;op.stage('blobs');
+ const up=async f=>{if(f.sha){op.file(f.path,'skip');return{sha:f.sha}}op.file(f.path,'run');const body=JSON.stringify({content:await f.b64(),encoding:'base64'});
+  for(let n=0;;n++){chk();try{const x=await this.req(`${p}/blobs`,Object.assign({method:'POST',body},so));op.file(f.path,'ok',body.length);return x}
+   catch(e){if(e.name==='AbortError'||e.aborted)throw e;if(n<3&&/rate limit|abuse|secondary|bad gateway|unavailable|timeout/i.test(e.message)){op.retry(f.path,n+1,1500*(n+1),e.message);await slp(1500*(n+1));continue}op.file(f.path,'err',0,e.message);throw e}}};
  const work=async()=>{while(nx<files.length){chk();const k=nx++,f=files[k];try{const bl=await up(f);tree[k]={path:f.path,mode:f.mode||'100644',type:'blob',sha:bl.sha};prog&&prog(++done,files.length,f.path)}catch(e){nx=1e9;throw e}}};
  await Promise.all(Array.from({length:Math.min(3,files.length)},work));
  chk();ctl.final&&ctl.final();
  for(const d of dels)tree.push({path:d,mode:'100644',type:'blob',sha:null});
  const rf=`${p}/refs/heads/${encodeURIComponent(b)}`;
  for(let n=0;;n++){const ref=n?await this.req(`${p}/ref/heads/${encodeURIComponent(b)}`):refA,par=n?await this.req(`${p}/commits/${ref.object.sha}`):parA;
-  const t=await this.post(`${p}/trees`,{base_tree:par.tree.sha,tree});const c=await this.post(`${p}/commits`,{message,tree:t.sha,parents:[ref.object.sha]});
-  try{await this.req(rf,{method:'PATCH',body:JSON.stringify({sha:c.sha})});return c}
-  catch(e){if(n<3&&/fast forward/i.test(e.message)){await slp(600*(n+1));continue}throw e}}},
+  op.stage('tree');const t=await this.post(`${p}/trees`,{base_tree:par.tree.sha,tree});op.stage('commit');const c=await this.post(`${p}/commits`,{message,tree:t.sha,parents:[ref.object.sha]});
+  op.stage('push');try{await this.req(rf,{method:'PATCH',body:JSON.stringify({sha:c.sha})});op.end(c.sha);return c}
+  catch(e){if(n<3&&/fast forward/i.test(e.message)){op.retry('(ramo)',n+1,600*(n+1),'o ramo mudou, refazendo o commit');await slp(600*(n+1));continue}throw e}}
+ }catch(e){if(e&&(e.aborted||e.name==='AbortError'))op.abort();else op.fail(e);throw e}},
 /* ---- repos, branches, PRs, issues, pages, actions, busca, restaurar ---- */
 createRepo(name,priv,desc,gitignore,license){return this.post('/user/repos',{name,private:!!priv,description:desc||'',auto_init:true,gitignore_template:gitignore||undefined,license_template:license||undefined})},
 createBranch(o,r,name,from){return this.req(`/repos/${o}/${r}/git/ref/heads/${encodeURIComponent(from)}`).then(ref=>this.post(`/repos/${o}/${r}/git/refs`,{ref:'refs/heads/'+name,sha:ref.object.sha}))},
@@ -1046,8 +1061,8 @@ async function computeDiff(path,after,isNew){if(BINQ.test(path))return'<div clas
  const before=isNew?'':await origText(path);return diffHtml(diffLines(before,after))}
 
 /* ---------- navegacao (barra lateral esquerda) ---------- */
-const ICONS={enviar:'M12 16V5m0 0l-4 4m4-4l4 4M5 15v3a2 2 0 002 2h10a2 2 0 002-2v-3',repo:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z',editor:'M8 8l-4 4 4 4m8-8l4 4-4 4M14 5l-4 14',commits:'M12 15a3 3 0 100-6 3 3 0 000 6zM3 12h6m6 0h6',branches:'M6 3v12M6 3a3 3 0 110 0zM6 21a3 3 0 110-6 3 3 0 010 6zM18 9a3 3 0 110-6 3 3 0 010 6zM6 9c0 6 6 6 12 6M18 9v3',issues:'M12 8v5m0 3h.01M12 21a9 9 0 100-18 9 9 0 000 18z',deploy:'M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 3v18M4 7.5l8 4.5 8-4.5',historico:'M12 7v5l3 2M21 12a9 9 0 11-3-6.7M21 4v4h-4',ajustes:'M4 7h10m4 0h2M4 17h2m4 0h10M16 4v6M8 14v6',ajuda:'M12 17h.01M9.5 9a2.5 2.5 0 114 2c-.8.6-1.5 1-1.5 2M12 21a9 9 0 100-18 9 9 0 000 18z'};
-const NAMES={enviar:'Enviar',repo:'Repos',branches:'Ramos',editor:'Editor',commits:'Commits',issues:'Issues',deploy:'Deploy',metricas:'Métricas',historico:'Histórico',ajustes:'Ajustes',ajuda:'Ajuda'};
+const ICONS={logger:'M4 6h16M4 11h10M4 16h16M4 21h7',enviar:'M12 16V5m0 0l-4 4m4-4l4 4M5 15v3a2 2 0 002 2h10a2 2 0 002-2v-3',repo:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z',editor:'M8 8l-4 4 4 4m8-8l4 4-4 4M14 5l-4 14',commits:'M12 15a3 3 0 100-6 3 3 0 000 6zM3 12h6m6 0h6',branches:'M6 3v12M6 3a3 3 0 110 0zM6 21a3 3 0 110-6 3 3 0 010 6zM18 9a3 3 0 110-6 3 3 0 010 6zM6 9c0 6 6 6 12 6M18 9v3',issues:'M12 8v5m0 3h.01M12 21a9 9 0 100-18 9 9 0 000 18z',deploy:'M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 3v18M4 7.5l8 4.5 8-4.5',historico:'M12 7v5l3 2M21 12a9 9 0 11-3-6.7M21 4v4h-4',ajustes:'M4 7h10m4 0h2M4 17h2m4 0h10M16 4v6M8 14v6',ajuda:'M12 17h.01M9.5 9a2.5 2.5 0 114 2c-.8.6-1.5 1-1.5 2M12 21a9 9 0 100-18 9 9 0 000 18z'};
+const NAMES={logger:'Logger',enviar:'Enviar',repo:'Repos',branches:'Ramos',editor:'Editor',commits:'Commits',issues:'Issues',deploy:'Deploy',metricas:'Métricas',historico:'Histórico',ajustes:'Ajustes',ajuda:'Ajuda'};
 ICONS.metricas='M5 20V11M12 20V4M19 20v-6';
 const TABS=Object.keys(NAMES);
 /* o menu (abas principais + subabas) e montado mais abaixo, junto com os paineis */
@@ -1057,7 +1072,7 @@ function tab(n,i){
  const t=$('#t-'+n);$$('.tab').forEach(x=>x.classList.toggle('on',x===t));
  if(i!=null&&t.go)t.go(i);
  syncRail(n);
- if(n==='commits')loadCommits();if(n==='branches'){loadBranchList();loadPRs()}if(n==='issues')loadIssues();if(n==='deploy'){loadPages();loadRuns()}if(n==='metricas')loadMetrics();
+ if(n==='commits')loadCommits();if(n==='branches'){loadBranchList();loadPRs()}if(n==='issues')loadIssues();if(n==='deploy'){loadPages();loadRuns()}if(n==='metricas')loadMetrics();if(n==='logger')LGR.show();
  document.body.classList.toggle('ed-on',n==='editor');if(n==='editor'){exTree();status();requestAnimationFrame(moveInd)}window.scrollTo({top:0,behavior:n==='editor'?'auto':'smooth'});fitVV();closeRail()}
 document.addEventListener('contextmenu',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()});
 ['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
@@ -1462,12 +1477,15 @@ async function send(dry){
  if(S.busy)return;const [o,r]=rv(),b=P['p-branch'].v;
  if(!GH.token||!r)return toast('Conecte e escolha um repositório',1);
  const sel=S.files.filter(f=>f.sel);if(!sel.length)return toast('Nenhum arquivo marcado',1);
- const files=sel.map(f=>({path:full(f),b64:b64(f.blob)})),msg=(cfg('prefix','')?cfg('prefix','')+' ':'')+($('#msg').value.trim()||'update via pushdeck');
+ const files=sel.map(f=>({path:full(f),size:f.blob.size,b64:b64(f.blob)})),msg=(cfg('prefix','')?cfg('prefix','')+' ':'')+($('#msg').value.trim()||'update via pushdeck');
  $('#term').textContent='';log((dry?'SIMULAÇÃO':'ENVIO')+` :: ${o}/${r}@${b} :: ${files.length} arquivo(s)`,1);
  files.forEach(f=>log((S.paths.has(f.path)?'~ ':'+ ')+f.path));if(dry)return log('nada foi enviado.');
  const hits=await scanItems(sel.map(f=>({path:full(f),text:()=>f.blob.text()})));
  if(hits.length){const list=hits.slice(0,12).map(h=>`• ${h.path} — ${h.label}`).join('\n')+(hits.length>12?`\n...e mais ${hits.length-12}`:'');
   if(!await dlg({title:'Possíveis segredos detectados',text:'Encontramos sinais de token, senha ou chave nestes arquivos:\n\n'+list,ok:'Enviar mesmo assim',cancel:'Cancelar',danger:true}))return log('envio cancelado (segredo detectado)',1)}
+ const ge=await LGR.guard(sel.map(f=>({path:full(f),origin:'fila',size:f.blob.size,text:()=>f.blob.text()})));
+ if(ge.length){const list=ge.slice(0,8).map(h=>`• ${h.path}${h.l?' (linha '+h.l+')':''} — ${h.m}`).join('\n')+(ge.length>8?`\n...e mais ${ge.length-8}`:'');
+  if(!await dlg({title:'Erros encontrados no código',text:'O Logger achou problemas que podem quebrar o projeto:\n\n'+list,ok:'Enviar mesmo assim',cancel:'Voltar e corrigir',danger:true})){tab('logger',1);return log('envio cancelado (erros no código)',1)}}
  if(!navigator.onLine){await queueOffline(o,r,b,files,[],msg);if(!cfg('keep',false))S.files=[];render();return}
  S.busy=true;S.fin=false;const ac=new AbortController();S.ac=ac;sendUI(true);
  try{const c=await GH.commit(o,r,b,files,[],msg,(i,n,p)=>{$('#bar').style.width=(i/n*100)+'%';log(`[${i}/${n}] ${p}`)},{signal:ac.signal,final:()=>{S.fin=true;const s=$('#b-stop');s.disabled=true;s.textContent='Finalizando...';log('gravando o commit (esta etapa não pode ser parada)',1)}});
@@ -1760,7 +1778,7 @@ async function commitPanel(){
  if(hits.length){const list=hits.slice(0,12).map(h=>`• ${h.path} — ${h.label}`).join('\n')+(hits.length>12?`\n...e mais ${hits.length-12}`:'');
   if(!await dlg({title:'Possíveis segredos detectados',text:'Encontramos sinais de token, senha ou chave nestes arquivos:\n\n'+list,ok:'Commitar mesmo assim',cancel:'Cancelar',danger:true}))return}
  const btn=$('#ed-commit');btn.classList.add('busy');
- try{const c=await GH.commit(o,r,b,sel.map(x=>({path:x.p,b64:b64(x.t?new Blob([x.t.text]):x.f.blob)})),[],msg);
+ try{const c=await GH.commit(o,r,b,sel.map(x=>{const bl=x.t?new Blob([x.t.text]):x.f.blob;return{path:x.p,size:bl.size,b64:b64(bl)}}),[],msg);
   sel.forEach(x=>{if(x.t){ver(x.t,'commit');x.t.orig=x.t.text;x.t.d=false}});S.files=S.files.filter(f=>!pk.has(full(f)));
   S.hist.unshift({url:`https://github.com/${o}/${r}/commit/${c.sha}`,sha:c.sha,repo:o+'/'+r,branch:b,msg,n:sel.length,t:Date.now()});localStorage.pd_hist=JSON.stringify(S.hist.slice(0,200));
   toast('Commit '+c.sha.slice(0,7)+' enviado');buzz([30,50,30]);if(cfg('sound',false))beep();await loadTree();renderHist();renderTabs();status()}
@@ -1912,7 +1930,7 @@ zoom(0);layout();
 $$('.tab').forEach(t=>{const ps=$$(':scope>.pane',t);t.cur=0;if(!ps.length)return;t.ps=ps;
  const cr=document.createElement('div');cr.className='crumb';ps[0].before(cr);
  t.go=i=>{t.cur=i;ps.forEach((p,j)=>p.classList.toggle('on',i===j));cr.textContent=ps[i].dataset.n};t.go(0)});
-const SECS=[['Código',['enviar','repo','editor']],['Versionamento',['branches','commits','issues','deploy']],['Painel',['metricas','historico']],['App',['ajustes','ajuda']]];
+const SECS=[['Código',['enviar','repo','editor']],['Versionamento',['branches','commits','issues','deploy']],['Painel',['metricas','historico','logger']],['App',['ajustes','ajuda']]];
 SECS.forEach(([lab,ks])=>{const h=document.createElement('div');h.className='nsec';h.textContent=lab;$('#nav').append(h);ks.forEach(k=>{const t=$('#t-'+k),g=document.createElement('div'),ps=t.ps||[];g.className='grp';g.dataset.g=k;
  g.innerHTML=`<button class="mn" data-tab="${k}"><svg viewBox="0 0 24 24"><path d="${ICONS[k]}"/></svg><span>${NAMES[k]}</span>${ps.length?'<i class="chev"></i>':''}</button>`+(ps.length?`<div class="subs"><div class="subi">${ps.map((p,i)=>`<button class="sb" data-i="${i}">${esc(p.dataset.n)}</button>`).join('')}</div></div>`:'');
  $('.mn',g).onclick=()=>{buzz(6);if(!ps.length){tab(k);return}const open=!g.classList.contains('open');$$('#nav .grp').forEach(x=>x.classList.remove('open'));g.classList.toggle('open',open)};
@@ -2125,6 +2143,17 @@ $('#ed-save').addEventListener('click',e=>{const t=cur();if(t&&t.img){e.stopImme
  const unit=t=>{let m=99,c=0;for(const l of t.split('\n',400)){const x=/^( +)\S/.exec(l);if(x&&x[1].length<m){m=x[1].length;if(m<=2)break}if(++c>400)break}return m===99?2:Math.max(2,Math.min(8,m))};
  hl=function(t,l){const o=_hl(t,l);if(!LX[l])return o;const u=unit(t);return o.replace(/^( +)/gm,s=>{let r='',i=0;for(;i+u<=s.length;i+=u)r+='<i class="ig">'+s.slice(i,i+u)+'</i>';return r+s.slice(i)})};
  hlRender=function(){hle.dataset.l=lang(ED.cur||'');_hr()}}
+
+/* ---------- Logger: ligacao com o app ---------- */
+LGR.host={
+ sources:()=>{const m=new Map();ED.tabs.forEach(t=>{if(t.img)return;m.set(t.p,{path:t.p,origin:'editor',size:new Blob([t.text]).size,text:()=>t.text})});
+  S.files.forEach(f=>{const p=full(f);if(m.has(p)){m.get(p).origin='editor + fila';return}m.set(p,{path:p,origin:'fila',size:f.blob.size,text:()=>f.blob.text()})});return[...m.values()]},
+ secrets:items=>scanItems(items),
+ open:(p,l)=>{tab('editor');Promise.resolve(openFile(p)).then(()=>setTimeout(()=>goLine(l),120))},
+ url:o=>`https://github.com/${o.repo}/commit/${o.sha}`};
+LGR.mount();
+(function(){const b=$('#nav [data-tab="logger"]');if(!b)return;let d=document.createElement('i');d.className='lgb';d.hidden=true;b.append(d);
+ LGR.badge=(n,run)=>{d.hidden=!n&&!run;d.className='lgb'+(run?' run':'');d.textContent=run?'…':n}})();
 })();
 })();
 </script>
