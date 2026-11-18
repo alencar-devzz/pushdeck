@@ -689,7 +689,12 @@ body.rail-on .topbar .hbg{background:var(--fill)}
 .hbg .pn{opacity:0;transition:opacity .15s}.hbg .pd{opacity:.9;transition:opacity .15s}
 body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 @media(max-width:820px){
- #app{transition:transform .36s cubic-bezier(.22,1,.36,1),opacity .36s ease}
+ html,body{overscroll-behavior-x:none}
+ body{touch-action:pan-y}
+ #app{transition:transform .34s cubic-bezier(.22,1,.36,1),opacity .34s ease}
+ #rail{transition:transform .34s cubic-bezier(.22,1,.36,1)}
+ body.rail-drag #app,body.rail-drag #rail{will-change:transform,opacity}
+ body.rail-drag #app *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
  body.rail-on #app{transform:translateX(min(264px,82vw));opacity:.55}
 }
 /* avisos */
@@ -1020,15 +1025,16 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-rail]')){buzz(8
 /* ---------- swipe para abrir/fechar o menu lateral (acompanha o dedo) ---------- */
 (function(){
   const mq=matchMedia('(max-width:820px)'),B=document.body,rail=$('#rail'),app=$('#app');
-  const EDGE=28,SLOP=8,FLICK=.0015;
-  let st=null;
+  const SLOP=8,FLICK=.0012;
+  let st=null,raf=0,tmr=0;
   const clamp=v=>Math.max(0,Math.min(1,v));
   const hscroll=el=>{for(let n=el;n&&n!==document.body;n=n.parentElement){if(n.scrollWidth>n.clientWidth+2){const o=getComputedStyle(n).overflowX;if(o==='auto'||o==='scroll')return true}}return false};
-  const blocked=el=>!el.closest||!!el.closest('input,textarea,select,[contenteditable],#sc,#toasts,#md:not([hidden])')||(!$('#md').hidden)||hscroll(el);
-  function paint(p){
-    const W=st.W;
-    rail.style.transform='translateX('+(-1.25*W*(1-p))+'px)';
-    app.style.transform='translateX('+(W*p)+'px)';
+  const blocked=el=>!el.closest||!!el.closest('input,textarea,select,[contenteditable],#sc,#toasts')||!$('#md').hidden||hscroll(el);
+  function paint(){
+    raf=0;if(!st)return;
+    const p=st.p,W=st.W;
+    rail.style.transform='translate3d('+(-1.25*W*(1-p))+'px,0,0)';
+    app.style.transform='translate3d('+(W*p)+'px,0,0)';
     app.style.opacity=String(1-.45*p);
   }
   function settle(open){
@@ -1037,12 +1043,13 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-rail]')){buzz(8
     B.classList.toggle('rail-on',open);
     rail.style.transform=app.style.transform='';app.style.opacity='';
     if(open!==was)buzz(8);
+    clearTimeout(tmr);tmr=setTimeout(()=>B.classList.remove('rail-drag'),420);
   }
   document.addEventListener('touchstart',e=>{
     st=null;
-    if(!mq.matches||e.touches.length!==1||blocked(e.target))return;
+    if(!mq.matches||e.touches.length!==1)return;
     const t=e.touches[0];
-    st={x:t.clientX,y:t.clientY,open:B.classList.contains('rail-on'),W:rail.offsetWidth||264,mode:null,p:0,lp:0,lt:0,v:0};
+    st={x:t.clientX,y:t.clientY,tg:e.target,open:B.classList.contains('rail-on'),W:rail.offsetWidth||264,mode:null,p:0,lp:0,lt:0,v:0,x0:0};
   },{passive:true});
   document.addEventListener('touchmove',e=>{
     if(!st)return;
@@ -1050,22 +1057,24 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-rail]')){buzz(8
     if(!st.mode){
       if(Math.abs(dx)<SLOP&&Math.abs(dy)<SLOP)return;
       if(Math.abs(dy)>Math.abs(dx)*.9){st=null;return}
-      if(st.open)st.mode='close';
-      else if(dx<0||st.x<=EDGE)st.mode='open';
-      else{st=null;return}
+      if(st.open?dx>0:dx<0){st=null;return}
+      if(blocked(st.tg)){st=null;return}
+      st.mode=st.open?'close':'open';
+      st.x0=t.clientX;st.lt=e.timeStamp;st.lp=st.open?1:0;st.p=st.lp;
+      clearTimeout(tmr);B.classList.add('rail-drag');
       rail.style.transition=app.style.transition='none';
-      st.lt=e.timeStamp;st.lp=st.open?1:0;
     }
-    if(e.cancelable)e.preventDefault();
-    const d=Math.abs(dx)/st.W;
-    const p=clamp(st.mode==='open'?d:1-d);
+    const d=(t.clientX-st.x0)/st.W;
+    const p=clamp(st.mode==='open'?d:1+d);
     const dt=e.timeStamp-st.lt;
     if(dt>0){st.v=st.v*.6+((p-st.lp)/dt)*.4;st.lp=p;st.lt=e.timeStamp}
-    st.p=p;paint(p);
-  },{passive:false});
+    st.p=p;
+    if(!raf)raf=requestAnimationFrame(paint);
+  },{passive:true});
   const end=()=>{
     if(!st)return;
     const s=st;st=null;
+    if(raf){cancelAnimationFrame(raf);raf=0}
     if(!s.mode)return;
     settle(s.v>FLICK?true:s.v<-FLICK?false:s.p>.5);
   };
