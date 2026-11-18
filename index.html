@@ -712,6 +712,18 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 .toast.err .tp{background:#ff6b62;opacity:.5}
 @keyframes tpb{to{transform:scaleX(0)}}
 :root{--xx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E")}
+/* campos de escrita: rótulo em cima, campo cheio embaixo, texto alinhado à esquerda */
+.r:has(>input[type=text]),.r:has(>input[type=password]),.r:has(>.tkw){flex-direction:column;align-items:stretch;justify-content:flex-start;gap:8px;padding:13px 14px 14px}
+.r:has(>input[type=text])>.l,.r:has(>input[type=password])>.l,.r:has(>.tkw)>.l{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
+.r>input[type=text],.r>input[type=password],.tkw{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;text-align:left;transition:border-color .2s,box-shadow .2s,background .2s}
+.r>input[type=text]:hover,.r>input[type=password]:hover,.tkw:hover{border-color:var(--mut)}
+.r>input[type=text]:focus,.r>input[type=password]:focus,.tkw:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,132,255,.28);background:var(--bg)}
+.tkw{padding:0 6px 0 0;gap:2px}
+.r .tkw input[type=password],.r .tkw input[type=text]{background:none!important;border:0!important;box-shadow:none!important;padding:12px 0 12px 14px;text-align:left}
+.md-i{text-align:left;background:var(--card2);border:1px solid var(--line);border-radius:12px;font-size:14px;padding:12px 14px;transition:border-color .2s,box-shadow .2s}
+.md-i:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,132,255,.28)}
+#is-body{background:var(--card2)!important;border:1px solid var(--line)!important;border-radius:12px!important;text-align:left;outline:0;transition:border-color .2s,box-shadow .2s}
+#is-body:focus{border-color:var(--blue)!important;box-shadow:0 0 0 3px rgba(10,132,255,.28)}
 </style>
 </head>
 <body>
