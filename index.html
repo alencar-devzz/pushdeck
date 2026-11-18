@@ -1280,7 +1280,7 @@ async function loadBranches(){
  const def=(repos.find(x=>x.full_name===o+'/'+r)||{}).default_branch;setPick('p-branch',branches.includes(def)?def:branches[0]);await loadTree()}
 async function loadTree(){
  const [o,r]=rv(),b=P['p-branch'].v;if(!r||!b)return;
- S.origCache=new Map();
+ S.origCache=new Map();wsSwitch(o+'/'+r);
  try{const t=await GH.req(`/repos/${o}/${r}/git/trees/${encodeURIComponent(b)}?recursive=1`);S.tree=t.tree;S.treeFor=o+'/'+r+'@'+b;S.trunc=!!t.truncated;
   S.paths=new Set(S.tree.filter(x=>x.type==='blob').map(x=>x.path));dirs=S.tree.filter(x=>x.type==='tree').map(x=>x.path).sort();
   const kd=P['p-dest'].v;setPick('p-dest',dirs.includes(kd)?kd:'');renderRepo();render();pv()}
@@ -1791,6 +1791,14 @@ function exData(){const m=new Map(),add=(p,e)=>{if(!m.has(p)||e.q)m.set(p,Object
  S.files.forEach(f=>{const p=full(f);add(p,{t:'f',size:f.size,q:S.paths.has(p)?'M':'U'})});
  ED.tabs.forEach(t=>{if(!m.has(t.p))add(t.p,{t:'f',q:'U'})});return m}
 function row(e,d,flat,nw,i){const dir=e.t==='d';return `<div class="row${nw?' n':''}${dir&&ED.open.has(e.p)?' o':''}${ED.sel.has(e.p)?' sel':''}${e.p===ED.cur?' on':''}" data-p="${esc(e.p)}" data-t="${e.t}" style="--i:${Math.min(i||0,14)};padding-left:${8+d*12}px">${dir?I.c+I.d:'<span class="sp"></span>'+fi(e.p)}<span class="nm">${esc(flat?e.p:nm(e.p))}</span><span class="ra"><button data-a="r" title="Renomear / mover">${I.e}</button><button data-a="d" title="Excluir">${I.x}</button></span>${e.q?`<span class="bg ${e.q}">${e.q}</span>`:''}</div>`}
+/* editor: cada repositorio tem sua propria area (abas e pastas abertas), nada se mistura */
+function wsSwitch(key){if(ED.ws===undefined){ED.ws=key;return}if(ED.ws===key)return;
+ stash();(ED.wsm=ED.wsm||{})[ED.ws]={tabs:ED.tabs,cur:ED.cur,open:ED.open};
+ const w=ED.wsm[key]||{tabs:[],cur:null,open:new Set()},ex=ED.ex;delete ED.wsm[key];
+ ED.ws=key;ED.tabs=w.tabs;ED.open=w.open;ED.sel=new Set();ED.cur=null;ED.rp=null;ED.er=null;multiOff();
+ const n=w.cur&&ED.tabs.find(x=>x.p===w.cur)?w.cur:ED.tabs[0]&&ED.tabs[0].p;
+ if(n)show(n);else{ta.value='';ED.n=0;paint();$('#wel').hidden=false;renderTabs();crumb()}
+ ED.ex=ex;layout();exTree();LGR.add('info','editor','Área do editor trocada para '+key)}
 function exTree(){if(ED.xq)return;ED.xq=requestAnimationFrame(()=>{ED.xq=0;exTreeNow()})}
 function exSel(){for(const r of $('#x-tree').children)if(r.dataset&&r.dataset.p!==undefined)r.classList.toggle('sel',ED.sel.has(r.dataset.p))}
 function exMark(){for(const r of $('#x-tree').children)if(r.dataset&&r.dataset.p!==undefined)r.classList.toggle('on',r.dataset.p===ED.cur)}
