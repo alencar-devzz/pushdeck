@@ -801,6 +801,8 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
     <div class="list" id="difflist"><div class="empty">Fila vazia</div></div>
   </div>
   <div class="pane" data-n="Publicar">
+    <div class="sec">Repositório</div>
+    <div class="ddg"><div class="dd" id="p-repo2"><span class="dl">Repositório</span><button class="dt" type="button"><span class="pv">Conecte primeiro</span></button><div class="dp"><div class="dpi"></div></div></div></div>
     <div class="sec">Arquivos</div>
     <div class="drop" id="drop"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V5m0 0l-4 4m4-4l4 4M5 15v3a2 2 0 002 2h10a2 2 0 002-2v-3"/></svg></div><p>Arraste arquivos, pastas ou .zip</p><div class="btns"><button class="btn gray sm" id="b-files">Arquivos</button><button class="btn gray sm" id="b-folder">Pasta</button><button class="btn gray sm" id="b-paste">Colar código</button></div><input type="file" id="f-files" multiple hidden><input type="file" id="f-folder" webkitdirectory hidden></div>
     <div class="group" style="margin-top:12px"><div class="r"><span class="l">Filtrar</span><input type="text" id="filter" placeholder="digite para filtrar"></div></div><div class="ddg" style="margin-top:12px"><div class="dd" id="p-sort"><span class="dl">Ordenar por</span><button class="dt" type="button"><span class="pv">Caminho</span></button><div class="dp"><div class="dpi"></div></div></div></div>
@@ -1173,7 +1175,11 @@ document.addEventListener('pointerdown',e=>{if(!e.target.closest('.dd'))closeDD(
 /* ---------- repositorio ---------- */
 let repos=[],branches=[],dirs=[];
 const rv=()=>(P['p-repo'].v||'').split('/');
-pick('p-repo','Repositório',()=>repos.map(r=>({v:r.full_name,l:r.full_name+(r.private?'  (privado)':'')})),async v=>{setCfg('lastRepo',v);await loadBranches()},true);
+const repoOpts=()=>repos.map(r=>({v:r.full_name,l:r.full_name+(r.private?'  (privado)':'')}));
+function setRepo(v){setPick('p-repo',v);setPick('p-repo2',v)}
+const repoChange=async v=>{setRepo(v);setCfg('lastRepo',v);await loadBranches()};
+pick('p-repo','Repositório',repoOpts,repoChange,true);
+pick('p-repo2','Repositório',repoOpts,repoChange,true);
 pick('p-branch','Branch',()=>branches.map(b=>({v:b,l:b})),()=>loadTree());
 pick('p-dest','Pasta de destino',()=>[{v:'',l:'/ (raiz)'}].concat(dirs.map(d=>({v:d,l:d}))),()=>{pv();render()},true);
 pick('p-sort','Ordenar por',()=>[{v:'path',l:'Caminho',i:'path'},{v:'size',l:'Tamanho',i:'size'},{v:'status',l:'Status',i:'status'}],v=>{S.sort=v;render()});
@@ -1183,7 +1189,7 @@ async function connect(){
  try{const u=await GH.req('/user');S.me=u;sessionStorage.pd_token=tk;await Acc.onConnect(tk,u);
   $('#dot').classList.add('on');$('#who').textContent=u.login;
   repos=await GH.req('/user/repos?per_page=100&sort=pushed');if(!repos.length)throw new Error('Nenhum repositório encontrado para este token');
-  const last=cfg('lastRepo'),rp=repos.find(r=>r.full_name===last)||repos[0];setPick('p-repo',rp.full_name);
+  const last=cfg('lastRepo'),rp=repos.find(r=>r.full_name===last)||repos[0];setRepo(rp.full_name);
   toast('Conectado como '+u.login);$('#b-conn').textContent='Reconectar';await loadBranches();renderAccounts()}
  catch(e){GH.token='';$('#b-conn').textContent='Conectar';toast('Falha: '+e.message,1)}}
 /* ---------- banco de dados local (SQLite no navegador) + contas ---------- */
@@ -1334,14 +1340,14 @@ $('#ac-list').onclick=async e=>{const b=e.target.closest('[data-rerun]');if(!b)r
  try{await GH.rerun(o,r,id);toast('Reexecutando...');setTimeout(loadRuns,1500)}catch(e){toast(e.message,1)}};
 const base=()=>clean([P['p-dest'].v,$('#sub').value].filter(Boolean).join('/'));
 const full=f=>f.abs?clean(f.rel):clean((base()?base()+'/':'')+f.rel);
-function pv(){$('#pv').textContent='destino: /'+base()+'  @  '+(P['p-branch'].v||'-')}
+function pv(){$('#pv').textContent=(P['p-repo'].v||'-')+'  ·  destino: /'+base()+'  @  '+(P['p-branch'].v||'-')}
 $('#sub').oninput=()=>{pv();render()};$('#b-conn').onclick=connect;$('#b-reload').onclick=loadTree;
 /* ---------- criar repositório ---------- */
 async function newRepoFlow(){if(!GH.token)return toast('Conecte primeiro',1);
  const v=await dlg({title:'Criar repositório',ok:'Criar',collect:bx=>{const name=$('#nr-name',bx).value.trim();if(!name){toast('Informe um nome',1);return}return{name,priv:$('#nr-priv',bx).checked,desc:$('#nr-desc',bx).value.trim(),gi:$('#nr-gi',bx).value.trim(),lic:$('#nr-lic',bx).value.trim()}},
   html:`<input class="md-i" id="nr-name" placeholder="nome-do-repositorio" autocapitalize="off" autocomplete="off"><input class="md-i" id="nr-desc" placeholder="Descrição (opcional)" style="margin-top:8px" autocapitalize="off"><input class="md-i" id="nr-gi" placeholder=".gitignore template (ex: Node), opcional" style="margin-top:8px" autocapitalize="off"><input class="md-i" id="nr-lic" placeholder="licença (ex: mit), opcional" style="margin-top:8px" autocapitalize="off"><label class="r" style="margin-top:8px"><span class="l">Privado</span><input class="sw" type="checkbox" id="nr-priv" checked></label>`});
  if(!v)return;try{const rp=await GH.createRepo(v.name,v.priv,v.desc,v.gi||undefined,v.lic||undefined);toast('Repositório criado: '+rp.full_name);
-  repos=await GH.req('/user/repos?per_page=100&sort=pushed');setPick('p-repo',rp.full_name);await loadBranches()}catch(e){toast(e.message,1)}}
+  repos=await GH.req('/user/repos?per_page=100&sort=pushed');setRepo(rp.full_name);await loadBranches()}catch(e){toast(e.message,1)}}
 $('#b-newrepo').onclick=newRepoFlow;
 /* ---------- cartão de operação (progresso + botão Parar) ---------- */
 const OP={ac:null,on:false,
