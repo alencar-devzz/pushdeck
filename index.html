@@ -732,6 +732,21 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 .df{max-height:55vh;overflow:auto;font:12px/1.55 'JetBrains Mono',ui-monospace,Menlo,monospace;border-radius:12px;background:rgba(127,127,127,.12);margin:10px 0;text-align:left}
 .df div{display:flex;gap:8px;padding:0 10px;white-space:pre-wrap;word-break:break-all}.df b{flex:none;width:34px;text-align:right;opacity:.4;font-weight:400}
 .df .a{background:rgba(48,209,88,.18)}.df .r{background:rgba(255,69,58,.18)}.df .s{opacity:.4;justify-content:center}.df-s{font-size:12px;opacity:.6}
+
+.surf{--mmw:64px}.surf.mm .sc{right:var(--mmw)}
+#mm{position:absolute;top:0;right:0;bottom:0;width:var(--mmw);z-index:4;border-left:1px solid var(--line);background:var(--eb);touch-action:none;cursor:pointer;overflow:hidden}
+#mm canvas{position:absolute;left:0;top:0;width:100%;height:100%}
+#mm i{position:absolute;left:0;right:0;top:0;height:30px;background:var(--esel2);border-top:1px solid var(--eac);border-bottom:1px solid var(--eac);pointer-events:none;transition:background .15s}
+#mm:hover i,#mm.dr i{background:var(--esel)}
+@media(max-width:560px){.surf{--mmw:52px}}
+#imgv{position:absolute;inset:0;z-index:6;background:var(--eb)}
+#imgv .ist{position:absolute;inset:0 0 54px 0;overflow:auto;display:flex;padding:14px;-webkit-overflow-scrolling:touch;background-color:var(--eb)}
+#imgv .ist.b0{background-image:conic-gradient(rgba(127,127,127,.2) 25%,transparent 0 50%,rgba(127,127,127,.2) 0 75%,transparent 0);background-size:16px 16px}
+#imgv .ist.b1{background:#000}#imgv .ist.b2{background:#fff}
+#imgv img{margin:auto;display:block;flex:none;border-radius:2px;box-shadow:0 6px 30px rgba(0,0,0,.35)}
+#imgv .ibar{position:absolute;left:0;right:0;bottom:0;height:54px;display:flex;align-items:center;gap:6px;padding:0 10px;border-top:1px solid var(--line);background:var(--eb);overflow-x:auto;scrollbar-width:none}
+#imgv .ibar span{flex:1;min-width:90px;font:12px var(--mono);color:var(--el);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#imgv .ibar button{flex:none;min-width:40px;height:36px;padding:0 12px;border-radius:11px;background:var(--eac);color:var(--ef);font-weight:700;font-size:13px}
 </style>
 </head>
 <body>
@@ -1978,7 +1993,6 @@ theme();glass();setPick('p-sort','path');setPick('p-dest','');tab('enviar');rend
  let tk=sessionStorage.pd_token||'',lb='';
  if(!tk&&cfg('autoacc',true)){const a=Acc.last();if(a){tk=await Acc.token(a.id);lb=a.label}}
  if(tk){tkEl.value=tk;if(lb)$('#acc-label').value=lb;connect()}})();
-})();
 
 /* ---------- editor+: paleta de comandos, teclas extras, snippets/emmet, diff, acoes de texto ---------- */
 (()=>{
@@ -2060,6 +2074,55 @@ xk.addEventListener('mousedown',e=>e.preventDefault());['pointerup','pointercanc
 xk.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(held){held=0;return}buzz(5);kdown(b.dataset.k)});
 let focused=0;const xkOn=()=>cfg('xk',matchMedia('(pointer:coarse)').matches?1:0),xkUI=()=>{xk.hidden=!(xkOn()&&focused&&document.body.classList.contains('ed-on')&&cur())};
 ta.addEventListener('focus',()=>{focused=1;xkUI()});ta.addEventListener('blur',()=>setTimeout(()=>{focused=document.activeElement===ta?1:0;xkUI()},150));
+
+/* ---------- minimapa (estilo VS Code) ---------- */
+const surf=$('.surf'),mm=document.createElement('div');mm.id='mm';mm.innerHTML='<canvas></canvas><i></i>';mm.hidden=true;sc.after(mm);
+const mmOn=()=>cfg('mm',1),TK=/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`[^`]*`)|(\/\/.*|^\s*#.*|<!--.*)|(\b\d[\w.]*)|(\b(?:function|const|let|var|return|if|else|for|while|class|import|export|from|def|async|await|new|try|catch|switch|case|break|throw|true|false|null|None|True|False|select|where)\b)|\w+|\S/g;
+let mmT=0,mmCH=0;
+function mmSl(){const s=mm.lastChild,sh=sc.scrollHeight||1;s.style.top=(sc.scrollTop/sh*mmCH)+'px';s.style.height=Math.max(12,sc.clientHeight/sh*mmCH)+'px'}
+function mmDraw(){mmT=0;const t=cur(),on=!!(mmOn()&&t&&!t.img);surf.classList.toggle('mm',on);mm.hidden=!on;if(!on)return;
+ const cvs=mm.firstChild,W=mm.clientWidth,H=mm.clientHeight;if(!W||!H)return;const d=Math.min(2,devicePixelRatio||1);if(cvs.width!==W*d||cvs.height!==H*d){cvs.width=W*d;cvs.height=H*d}
+ const g=cvs.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,W,H);
+ const v=ta.value,Ls=(v.length>5e5?v.slice(0,5e5):v).split('\n'),n=Ls.length,lh=Math.min(3,H/n),hh=Math.max(1,Math.min(2,lh*.7)),cs=getComputedStyle(ide),C=k=>cs.getPropertyValue(k).trim()||'#999';
+ const col={t:C('--ef'),c:C('--ec'),s:C('--es2'),n:C('--en'),k:C('--ek')},coarse=n>2500;mmCH=lh*n;let last=-1;g.globalAlpha=.7;
+ for(let i=0;i<n;i++){const y=i*lh,yi=Math.floor(y);if(lh<1&&yi===last)continue;last=yi;const L=Ls[i].slice(0,110);if(!L.trim())continue;
+  if(coarse){const a=L.search(/\S/);g.fillStyle=col.t;g.fillRect(3+a,y,Math.max(1,Math.min(W-6-a,L.length-a)),hh);continue}
+  TK.lastIndex=0;let m;while((m=TK.exec(L))){if(m.index>W-6)break;g.fillStyle=m[1]?col.s:m[2]?col.c:m[3]?col.n:m[4]?col.k:col.t;g.fillRect(3+m.index,y,Math.min(m[0].length,W-6-m.index),hh)}}
+ g.globalAlpha=1;g.fillStyle='#ff453a';(ED.er||[]).forEach(e=>g.fillRect(W-3,(e.ln-1)*lh,3,Math.max(2,lh)));mmSl()}
+const mmQ=()=>{if(!mmT)mmT=setTimeout(mmDraw,ED.hd>10?250:60)};
+{const _p=paint;paint=function(){_p.apply(this,arguments);mmQ()}}
+sc.addEventListener('scroll',mmSl,{passive:true});addEventListener('resize',mmQ);new ResizeObserver(mmQ).observe(mm);
+const mmJump=e=>{const r=mm.getBoundingClientRect();sc.scrollTop=(e.clientY-r.top)/Math.max(1,mmCH)*sc.scrollHeight-sc.clientHeight/2};
+mm.addEventListener('pointerdown',e=>{e.preventDefault();mm.setPointerCapture(e.pointerId);mm.classList.add('dr');mmJump(e)});
+mm.addEventListener('pointermove',e=>{if(mm.classList.contains('dr'))mmJump(e)});
+['pointerup','pointercancel'].forEach(n=>mm.addEventListener(n,()=>mm.classList.remove('dr')));
+ACT.push(['Mostrar/ocultar minimapa',()=>{setCfg('mm',mmOn()?0:1);mmDraw()}]);
+/* ---------- imagens no editor ---------- */
+const IMG=/\.(png|jpe?g|gif|webp|bmp|ico|avif)$/i,MIME={jpg:'jpeg',jpeg:'jpeg',png:'png',gif:'gif',webp:'webp',bmp:'bmp',ico:'x-icon',avif:'avif'},IC=new Map();
+const iv=document.createElement('div');iv.id='imgv';iv.hidden=true;iv.innerHTML='<div class="ist b0"><img alt="" draggable="false"></div><div class="ibar"><span id="i-info"></span><button type="button" data-i="-">−</button><button type="button" data-i="f">100%</button><button type="button" data-i="+">+</button><button type="button" data-i="b" title="Fundo">◐</button><button type="button" data-i="p" title="Pixelado">▦</button></div>';surf.append(iv);
+const im=iv.querySelector('img'),ist=iv.firstChild,ifb=iv.querySelector('[data-i=f]');let IZ='fit',IB=0,IP=0;
+function iz(){im.style.cssText=IZ==='fit'?'max-width:100%;max-height:100%;width:auto;height:auto':'max-width:none;max-height:none;height:auto;width:'+(im.naturalWidth*IZ)+'px';im.style.imageRendering=IP?'pixelated':'auto';ifb.textContent=IZ==='fit'?'100%':'Ajustar';ist.className='ist b'+IB}
+iv.querySelector('.ibar').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;buzz(6);const k=b.dataset.i,cur1=IZ==='fit'?(im.clientWidth/(im.naturalWidth||1)):IZ;
+ if(k==='f')IZ=IZ==='fit'?1:'fit';else if(k==='+')IZ=Math.min(16,cur1*1.25);else if(k==='-')IZ=Math.max(.05,cur1/1.25);else if(k==='b')IB=(IB+1)%3;else if(k==='p')IP^=1;iz()});
+im.addEventListener('click',()=>{IZ=IZ==='fit'?1:'fit';iz()});
+async function openImg(p){let t=ED.tabs.find(x=>x.p===p);
+ if(!t){const tok=ED.ot=(ED.ot|0)+1;let src,size=0;
+  try{edLoad(true,nm(p));const q=S.files.find(f=>full(f)===p),x=!q&&S.paths.has(p)?S.tree.find(y=>y.path===p):null;
+   if(q){src=URL.createObjectURL(q.blob);size=q.size||q.blob.size}
+   else if(x){if((x.size||0)>8*1048576)throw new Error('Imagem grande demais ('+fmt(x.size)+')');
+    if(IC.has(x.sha)){({src,size}=IC.get(x.sha))}else{const [o,r]=rv(),f=await GH.req(`/repos/${o}/${r}/git/blobs/${x.sha}`),ext=p.split('.').pop().toLowerCase();src=`data:image/${MIME[ext]||'png'};base64,${f.content.replace(/\s/g,'')}`;size=f.size||x.size||0;IC.set(x.sha,{src,size});if(IC.size>12)IC.delete(IC.keys().next().value)}}
+   else throw new Error('Arquivo não encontrado');
+   if(tok!==ED.ot){edLoad(false);return}}catch(e){edLoad(false);return toast(e.message,1)}
+  edLoad(false);t={p,text:'',orig:'',st:0,sl:0,ss:0,se:0,u:[{x:'',a:0,b:0}],ui:0,v:[{x:'',t:Date.now(),l:'ao abrir'}],d:false,img:{src,size}};ED.tabs.push(t)}
+ show(p)}
+function imgUI(){const t=cur(),on=!!(t&&t.img);iv.hidden=!on;ta.readOnly=on;if(on){ta.blur();IZ='fit';IP=0;const inf=$('#i-info');inf.textContent='carregando…';im.onload=()=>{inf.textContent=im.naturalWidth+'×'+im.naturalHeight+' · '+fmt(t.img.size)+' · '+nm(t.p).split('.').pop().toUpperCase();iz()};im.onerror=()=>{inf.textContent='Não foi possível exibir a imagem'};if(im.getAttribute('src')!==t.img.src)im.src=t.img.src;else if(im.complete)im.onload();iz()}mmDraw()}
+{const _of=openFile,_sh=show,_ct=closeTab,_sq=saveQ;
+ openFile=function(p,txt){const c=clean(p||'');return txt===undefined&&c&&IMG.test(c)?openImg(c):_of(p,txt)};
+ show=function(p){_sh(p);imgUI()};
+ closeTab=async function(p,f){await _ct(p,f);imgUI()};
+ saveQ=function(){const t=cur();if(t&&t.img)return toast('Imagens não são editáveis aqui');return _sq()};}
+$('#ed-save').addEventListener('click',e=>{const t=cur();if(t&&t.img){e.stopImmediatePropagation();toast('Imagens não são editáveis aqui')}},true);
+})();
 })();
 </script>
 </body>
