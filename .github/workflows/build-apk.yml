@@ -26,7 +26,7 @@ jobs:
       - name: Assinatura fixa (permite atualizar sem desinstalar)
         run: |
           mkdir -p ~/.android
-          cp debug.keystore ~/.android/debug.keystore
+          cp config/debug.keystore ~/.android/debug.keystore
       - name: Compilar
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - name: Publicar APK na aba Releases
