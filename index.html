@@ -724,6 +724,14 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 .md-i:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,132,255,.28)}
 #is-body{background:var(--card2)!important;border:1px solid var(--line)!important;border-radius:12px!important;text-align:left;outline:0;transition:border-color .2s,box-shadow .2s}
 #is-body:focus{border-color:var(--blue)!important;box-shadow:0 0 0 3px rgba(10,132,255,.28)}
+
+#xk{display:flex;gap:4px;overflow-x:auto;padding:6px 8px;flex:none;scrollbar-width:none;border-top:1px solid var(--line);background:color-mix(in srgb,var(--eb) 94%,var(--fg) 4%);-webkit-overflow-scrolling:touch}
+#xk::-webkit-scrollbar{display:none}
+#xk button{flex:none;min-width:38px;height:36px;padding:0 9px;border-radius:11px;background:var(--eac);color:var(--ef);font:600 15px var(--mono);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+#xk button:active{transform:scale(.9);background:var(--ehv)}#xk i{flex:none;width:1px;background:var(--line);margin:4px 3px}
+.df{max-height:55vh;overflow:auto;font:12px/1.55 'JetBrains Mono',ui-monospace,Menlo,monospace;border-radius:12px;background:rgba(127,127,127,.12);margin:10px 0;text-align:left}
+.df div{display:flex;gap:8px;padding:0 10px;white-space:pre-wrap;word-break:break-all}.df b{flex:none;width:34px;text-align:right;opacity:.4;font-weight:400}
+.df .a{background:rgba(48,209,88,.18)}.df .r{background:rgba(255,69,58,.18)}.df .s{opacity:.4;justify-content:center}.df-s{font-size:12px;opacity:.6}
 </style>
 </head>
 <body>
@@ -803,7 +811,8 @@ body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 <div class="find" id="fb" hidden><div><input id="f-q" placeholder="Buscar" autocapitalize="off"><button id="f-cs" title="Diferenciar maiúsculas">Aa</button><span id="f-c"></span><button id="f-p">↑</button><button id="f-n">↓</button><button id="f-x">✕</button></div><div id="f-rw"><input id="f-r" placeholder="Substituir" autocapitalize="off"><button id="f-r1">Substituir</button><button id="f-ra">Todos</button></div></div>
 <div class="pop" id="pp-files" hidden><div id="ed-tabs"></div></div><div class="pop b" id="pp-hist" hidden></div><div class="pop b" id="pp-err" hidden></div>
 <div class="pop b lk" id="pp-look" hidden><div class="pph">Fundo do editor</div><div class="wps" id="wps"></div><input type="file" id="wp-f" accept="image/*" hidden><label>Desfoque <b id="v-b"></b></label><input class="rg" type="range" id="r-b" min="0" max="40"><label>Escurecer <b id="v-d"></b></label><input class="rg" type="range" id="r-d" min="0" max="90"><label>Tamanho da fonte</label><div class="btns" style="margin:0"><button class="btn gray sm" id="sb-zm">A−</button><button class="btn gray sm" id="sb-zp">A+</button></div></div>
-<div class="dk"><div><button id="u-un" title="Desfazer"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-4"/></svg></button><button id="u-re" title="Refazer"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 000 12h4"/></svg></button><button data-pop="pp-hist" title="Voltar no tempo"><svg viewBox="0 0 24 24"><path d="M12 7v5l3 2M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><i></i><button id="ed-find" title="Buscar (Ctrl+F)"><svg viewBox="0 0 24 24"><path d="M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5"/></svg></button><button data-pop="pp-look" title="Aparência"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M9 9h.01"/></svg></button><button id="ed-save" title="Salvar na fila (Ctrl+S)"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg></button></div></div>
+<div id="xk" hidden></div>
+<div class="dk"><div><button id="u-un" title="Desfazer"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-4"/></svg></button><button id="u-re" title="Refazer"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 000 12h4"/></svg></button><button data-pop="pp-hist" title="Voltar no tempo"><svg viewBox="0 0 24 24"><path d="M12 7v5l3 2M21 12a9 9 0 11-3-6.7M21 4v4h-4"/></svg></button><i></i><button id="ed-find" title="Buscar (Ctrl+F)"><svg viewBox="0 0 24 24"><path d="M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5"/></svg></button><button data-pop="pp-look" title="Aparência"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 15l4-4 4 4 3-3 5 5M9 9h.01"/></svg></button><button id="ed-pal" title="Comandos (Ctrl+Shift+P)"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></button><button id="ed-save" title="Salvar na fila (Ctrl+S)"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg></button></div></div>
 </div>
 <div id="qp" hidden><div><input id="qp-i" placeholder="Abrir arquivo (digite :número para ir à linha)" autocapitalize="off" autocomplete="off"><div id="qp-l"></div></div></div>
 <div id="cm" hidden></div>
@@ -1969,6 +1978,88 @@ theme();glass();setPick('p-sort','path');setPick('p-dest','');tab('enviar');rend
  let tk=sessionStorage.pd_token||'',lb='';
  if(!tk&&cfg('autoacc',true)){const a=Acc.last();if(a){tk=await Acc.token(a.id);lb=a.label}}
  if(tk){tkEl.value=tk;if(lb)$('#acc-label').value=lb;connect()}})();
+})();
+
+/* ---------- editor+: paleta de comandos, teclas extras, snippets/emmet, diff, acoes de texto ---------- */
+(()=>{
+const xk=$('#xk'),bad=m=>toast(m,1);
+const eachSel=(f,need)=>{if(!cur())return bad('Abra um arquivo');let[s,e]=[ta.selectionStart,ta.selectionEnd];const all=s===e;if(all&&need)return bad('Selecione um trecho primeiro');if(all){s=0;e=ta.value.length}const x=ta.value.slice(s,e),r=f(x);if(r==null||r===x)return;rep(s,e,r);ta.setSelectionRange(s,s+r.length)};
+const lines=f=>eachSel(x=>f(x.split('\n')).join('\n'));
+const tryJ=(x,m)=>{try{return JSON.stringify(JSON.parse(x),null,m?0:2)}catch(e){bad('JSON inválido: '+e.message)}};
+const W=x=>x.replace(/([a-z0-9])([A-Z])/g,'$1 $2').split(/[^A-Za-z0-9]+/).filter(Boolean),cap=s=>s[0].toUpperCase()+s.slice(1).toLowerCase();
+const b64e=x=>btoa([...new TextEncoder().encode(x)].map(c=>String.fromCharCode(c)).join('')),b64d=x=>{try{return new TextDecoder().decode(Uint8Array.from(atob(x.trim()),c=>c.charCodeAt(0)))}catch{bad('Base64 inválido')}};
+/* diff */
+function diff(){const t=cur();if(!t)return bad('Abra um arquivo');if(t.orig==null)return toast('Arquivo novo: não há versão anterior');
+ const a=t.orig.split('\n'),b=ta.value.split('\n');let p=0;while(p<a.length&&p<b.length&&a[p]===b[p])p++;let qa=a.length,qb=b.length;while(qa>p&&qb>p&&a[qa-1]===b[qb-1]){qa--;qb--}
+ const A=a.slice(p,qa),B=b.slice(p,qb),ops=[];
+ if(!A.length&&!B.length)return toast('Sem alterações');
+ if(A.length*B.length>4e6){A.forEach(l=>ops.push(['-',l]));B.forEach(l=>ops.push(['+',l]))}
+ else{const n=A.length,m=B.length,D=Array.from({length:n+1},()=>new Uint16Array(m+1));for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)D[i][j]=A[i]===B[j]?D[i+1][j+1]+1:Math.max(D[i+1][j],D[i][j+1]);
+  let i=0,j=0;while(i<n&&j<m){if(A[i]===B[j]){ops.push([' ',A[i]]);i++;j++}else if(D[i+1][j]>=D[i][j+1])ops.push(['-',A[i++]]);else ops.push(['+',B[j++]])}while(i<n)ops.push(['-',A[i++]]);while(j<m)ops.push(['+',B[j++]])}
+ const pre=b.slice(Math.max(0,p-2),p).map(l=>[' ',l]),suf=b.slice(qb,qb+2).map(l=>[' ',l]);let ad=0,rm=0;ops.forEach(o=>o[0]==='+'?ad++:o[0]==='-'&&rm++);
+ const all=[...pre,...ops,...suf],keep=all.map((o,i)=>o[0]!==' '||all.slice(Math.max(0,i-2),i+3).some(x=>x[0]!==' ')||i<pre.length||i>=all.length-suf.length);
+ let ln=Math.max(0,p-pre.length)+1,out='',gap=0;all.forEach((o,i)=>{const num=o[0]==='-'?'':ln;if(o[0]!=='-')ln++;if(!keep[i]){if(!gap){out+='<div class="s">⋯</div>';gap=1}return}gap=0;out+=`<div class="${o[0]==='+'?'a':o[0]==='-'?'r':''}"><b>${num}</b><span>${o[0]===' '?' ':o[0]} ${esc(o[1])}</span></div>`});
+ dlg({title:'Alterações · '+nm(t.p),html:`<div class="df-s">+${ad} adicionadas · −${rm} removidas</div><div class="df">${out}</div>`,ok:'Fechar',cancel:'Voltar'})}
+/* comandos */
+const ACT=[
+['Ver alterações (diff)',diff],['Ir para linha…',()=>qOpen(':')],
+['Formatar JSON',()=>eachSel(x=>tryJ(x,0))],['Minificar JSON',()=>eachSel(x=>tryJ(x,1))],
+['Ordenar linhas A→Z',()=>lines(a=>a.sort((p,q)=>p.localeCompare(q)))],['Ordenar linhas Z→A',()=>lines(a=>a.sort((p,q)=>q.localeCompare(p)))],['Inverter ordem das linhas',()=>lines(a=>a.reverse())],
+['Remover linhas duplicadas',()=>lines(a=>[...new Set(a)])],['Remover linhas vazias',()=>lines(a=>a.filter(l=>l.trim()))],['Remover espaços no fim das linhas',()=>lines(a=>a.map(l=>l.replace(/\s+$/,'')))],
+['Juntar linhas',()=>eachSel(x=>x.split('\n').map(s=>s.trim()).join(' '),1)],
+['MAIÚSCULAS',()=>eachSel(x=>x.toUpperCase(),1)],['minúsculas',()=>eachSel(x=>x.toLowerCase(),1)],['Capitalizar Palavras',()=>eachSel(x=>x.replace(/\b\p{L}/gu,c=>c.toUpperCase()),1)],
+['camelCase',()=>eachSel(x=>W(x).map((s,i)=>i?cap(s):s.toLowerCase()).join(''),1)],['snake_case',()=>eachSel(x=>W(x).map(s=>s.toLowerCase()).join('_'),1)],['kebab-case',()=>eachSel(x=>W(x).map(s=>s.toLowerCase()).join('-'),1)],
+['Base64: codificar',()=>eachSel(b64e,1)],['Base64: decodificar',()=>eachSel(b64d,1)],['URL: codificar',()=>eachSel(encodeURIComponent,1)],['URL: decodificar',()=>eachSel(x=>{try{return decodeURIComponent(x)}catch{bad('URL inválida')}},1)],
+['Indentação: 2 → 4 espaços',()=>eachSel(x=>x.replace(/^ +/gm,m=>m+m))],['Indentação: 4 → 2 espaços',()=>eachSel(x=>x.replace(/^ +/gm,m=>' '.repeat(Math.floor(m.length/2))))],['Tabs → espaços',()=>eachSel(x=>x.replace(/\t/g,'  '))],
+['Inserir data e hora (ISO)',()=>ins(new Date().toISOString())],['Inserir UUID',()=>ins(crypto.randomUUID())],
+['Contar linhas, palavras e caracteres',()=>{const v=ta.value;toast(v.split('\n').length+' linhas · '+(v.trim()?v.trim().split(/\s+/).length:0)+' palavras · '+v.length+' caracteres')}],
+['Copiar arquivo inteiro',()=>navigator.clipboard.writeText(ta.value).then(()=>toast('Copiado'),()=>bad('Sem permissão para copiar'))],['Copiar caminho do arquivo',()=>cur()&&navigator.clipboard.writeText(cur().p).then(()=>toast('Caminho copiado'))],
+['Selecionar tudo',()=>{ta.focus();ta.select()}],['Aumentar fonte',()=>zoom(1)],['Diminuir fonte',()=>zoom(-1)],
+['Mostrar/ocultar teclas extras',()=>{setCfg('xk',xkOn()?0:1);focused=1;xkUI()}]];
+let CL=[];const QD=qDraw;
+function cd(){const s=qi.value.slice(1).trim().toLowerCase();CL=ACT.filter(a=>a[0].toLowerCase().includes(s));qs=[];qk=0;ql.innerHTML=CL.map((a,i)=>`<div class="qi${i?'':' on'}" data-c="${ACT.indexOf(a)}"><span>${esc(a[0])}</span></div>`).join('')||'<div class="qe">Nenhum comando</div>'}
+const pal=()=>{qOpen('>');cd()},run=a=>{if(!a)return;buzz(8);a[1]()};
+qi.placeholder='Abrir arquivo · “>” comandos · “:” linha';
+qi.oninput=()=>qi.value[0]==='>'?cd():QD();
+qi.addEventListener('keydown',e=>{if(e.key==='Enter'&&qi.value[0]==='>'){e.preventDefault();qp.hidden=true;run(CL[qk])}},true);
+ql.addEventListener('click',e=>{const i=e.target.closest('.qi[data-c]');if(i){e.stopPropagation();qp.hidden=true;run(ACT[+i.dataset.c])}},true);
+$('#ed-pal').onclick=()=>{buzz(6);pal()};
+addEventListener('keydown',e=>{if(!document.body.classList.contains('ed-on'))return;if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==='p'){e.preventDefault();e.stopImmediatePropagation();pal()}},true);
+/* snippets + emmet-lite + autoclose de tag + ctrl+D / ctrl+L */
+const VOID=/^(img|br|hr|input|meta|link)$/,TAGS=/^(div|span|p|a|ul|ol|li|h[1-6]|section|article|header|footer|nav|main|aside|button|form|label|select|option|table|tr|td|th|thead|tbody|textarea|pre|code|img|br|hr|input|meta|link|script|style|title|strong|em|small|video|audio|canvas|svg|iframe)$/;
+const SN={_:{log:'console.log($0)'},
+js:{fn:'function $0() {\n  \n}',af:'const $0 = () => {\n  \n}',for:'for (let i = 0; i < $0; i++) {\n  \n}',forof:'for (const x of $0) {\n  \n}',if:'if ($0) {\n  \n}',ife:'if ($0) {\n  \n} else {\n  \n}',try:'try {\n  $0\n} catch (e) {\n  console.error(e)\n}',imp:"import $0 from ''",fetch:'const r = await fetch($0)\nconst d = await r.json()',qs:"document.querySelector('$0')",ael:"$0.addEventListener('click', e => {\n  \n})",tout:'setTimeout(() => {\n  $0\n}, 300)'},
+py:{def:'def $0():\n  ',cls:'class $0:\n  def __init__(self):\n    ',main:"if __name__ == '__main__':\n  $0",for:'for i in range($0):\n  ',try:'try:\n  $0\nexcept Exception as e:\n  print(e)',with:"with open('$0') as f:\n  ",log:'print($0)'},
+css:{flex:'display: flex;\nalign-items: center;\njustify-content: center;$0',grid:'display: grid;\ngrid-template-columns: repeat(auto-fit, minmax(160px, 1fr));\ngap: 12px;$0',abs:'position: absolute;\ninset: 0;$0',media:'@media (max-width: 600px) {\n  $0\n}',tr:'transition: all .2s ease;$0'},
+html:{'!':'<!doctype html>\n<html lang="pt-BR">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width,initial-scale=1">\n  <title>$0</title>\n  <link rel="stylesheet" href="css/style.css">\n</head>\n<body>\n  \n  <script src="js/app.js"><\/script>\n</body>\n</html>',css:'<link rel="stylesheet" href="$0">',js:'<script src="$0"><\/script>'},
+md:{table:'| $0 | |\n| --- | --- |\n|  |  |',code:'```\n$0\n```',task:'- [ ] $0'},
+sql:{sel:'SELECT $0\nFROM '}};
+ta.addEventListener('keydown',e=>{const v=ta.value,s=ta.selectionStart,en=ta.selectionEnd,k=e.key,C=e.ctrlKey||e.metaKey,L=lang(ED.cur||'');
+ if(k==='Tab'&&!e.shiftKey&&!C&&s===en){const ls=v.lastIndexOf('\n',s-1)+1,m=v.slice(ls,s).match(/(^|[^\w!.#-])([\w!.#-]+)$/);
+  if(m){const w=m[2],a=s-w.length;let sn=(SN[L]||{})[w]||SN._[w];
+   if(!sn&&L==='html'){const em=w.match(/^([a-z][a-z0-9]*)?((?:[.#][\w-]+)+)?$/);if(em&&(em[2]||TAGS.test(em[1]||''))){const tg=em[1]||'div';let id='',cl=[];(em[2]||'').replace(/([.#])([\w-]+)/g,(_,t,n)=>{t==='#'?id=n:cl.push(n)});sn='<'+tg+(id?` id="${id}"`:'')+(cl.length?` class="${cl.join(' ')}"`:'')+'>'+(VOID.test(tg)?'':'$0</'+tg+'>')}}
+   if(sn){e.preventDefault();e.stopImmediatePropagation();const ind=v.slice(ls,s).match(/^\s*/)[0];sn=sn.replace(/\n/g,'\n'+ind);const c=sn.indexOf('$0');rep(a,s,sn.replace('$0',''));const q=a+(c<0?sn.length:c);return ta.setSelectionRange(q,q)}}}
+ if(k==='>'&&!C&&s===en&&(L==='html'||/[jt]sx$/i.test(ED.cur||''))){const ls=v.lastIndexOf('\n',s-1)+1,m=v.slice(ls,s).match(/(?:^|[^\w$.>)\]])<([A-Za-z][\w.-]*)(?:\s[^<>]*)?$/);
+  if(m&&!VOID.test(m[1])&&v[s-1]!=='/'&&v[s-1]!=='='&&!v.slice(s).startsWith('</'+m[1])){e.preventDefault();ins('></'+m[1]+'>');return ta.setSelectionRange(s+1,s+1)}}
+ if(C&&!e.shiftKey&&!e.altKey&&k.toLowerCase()==='d'){e.preventDefault();if(s===en){let a=s,b=s;while(a>0&&/\w/.test(v[a-1]))a--;while(b<v.length&&/\w/.test(v[b]))b++;return ta.setSelectionRange(a,b)}
+  const q=v.slice(s,en);let i=v.indexOf(q,en);if(i<0)i=v.indexOf(q);if(i>=0){ta.setSelectionRange(i,i+q.length);reveal()}return}
+ if(C&&!e.shiftKey&&k.toLowerCase()==='l'){e.preventDefault();const ls=v.lastIndexOf('\n',s-1)+1;let le=v.indexOf('\n',en);le=le<0?v.length:le+1;ta.setSelectionRange(ls,le)}},true);
+/* barra de teclas extras (celular) */
+const KEYS=['⇥','⇤','//','←','→','↑','↓','S','{','}','(',')','[',']','<','>','/','\\',';',':','=','"',"'",'`','$','&','|','!','?','_','-','+','*','#','%','~','@','.',','];
+xk.innerHTML=KEYS.map(k=>k==='S'?'<i></i>':`<button type="button" data-k="${esc(k)}">${esc(k)}</button>`).join('');
+function kdown(k){ta.focus();const v=ta.value,s=ta.selectionStart,en=ta.selectionEnd,ev=o=>ta.dispatchEvent(new KeyboardEvent('keydown',{bubbles:true,cancelable:true,...o}));
+ if(k==='⇥'||k==='⇤')return ev({key:'Tab',shiftKey:k==='⇤'});if(k==='//')return ev({key:'/',ctrlKey:true});
+ if(k==='←'||k==='→'){const d=k==='←'?-1:1,p=s!==en?(d<0?s:en):Math.max(0,Math.min(v.length,s+d));ta.setSelectionRange(p,p);return reveal()}
+ if(k==='↑'||k==='↓'){const ls=v.lastIndexOf('\n',s-1)+1,col=s-ls;let t;if(k==='↑'){if(!ls)return;const ps=v.lastIndexOf('\n',ls-2)+1;t=ps+Math.min(col,ls-1-ps)}else{const le=v.indexOf('\n',s);if(le<0)return;let ne=v.indexOf('\n',le+1);if(ne<0)ne=v.length;t=le+1+Math.min(col,ne-le-1)}ta.setSelectionRange(t,t);return reveal()}
+ if(')]}'.includes(k)&&s===en&&v[s]===k)return ta.setSelectionRange(s+1,s+1);
+ const c=PR[k];if(c&&s!==en){ins(k+v.slice(s,en)+c);return ta.setSelectionRange(s+1,en+1)}
+ if(c&&!/\w/.test(v[s]||' ')){ins(k+c);return ta.setSelectionRange(s+1,s+1)}ins(k)}
+let rt,ri,held=0;const stop=()=>{clearTimeout(rt);clearInterval(ri)};
+xk.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();const k=b.dataset.k;held=0;if('←→↑↓'.includes(k))rt=setTimeout(()=>{held=1;buzz(4);ri=setInterval(()=>kdown(k),55)},380)});
+xk.addEventListener('mousedown',e=>e.preventDefault());['pointerup','pointercancel','pointerleave'].forEach(n=>xk.addEventListener(n,stop));
+xk.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(held){held=0;return}buzz(5);kdown(b.dataset.k)});
+let focused=0;const xkOn=()=>cfg('xk',matchMedia('(pointer:coarse)').matches?1:0),xkUI=()=>{xk.hidden=!(xkOn()&&focused&&document.body.classList.contains('ed-on')&&cur())};
+ta.addEventListener('focus',()=>{focused=1;xkUI()});ta.addEventListener('blur',()=>setTimeout(()=>{focused=document.activeElement===ta?1:0;xkUI()},150));
 })();
 </script>
 </body>
