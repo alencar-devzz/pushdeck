@@ -686,6 +686,8 @@ body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;letter-sp
 .topbar .hbg{transition:background .15s}
 .hbg:active,.ide .hbg:active{transform:none}
 body.rail-on .topbar .hbg{background:var(--fill)}
+.hbg .pn{opacity:0;transition:opacity .15s}.hbg .pd{opacity:.9;transition:opacity .15s}
+body.rail-on .hbg .pn{opacity:1}body.rail-on .hbg .pd{opacity:0}
 @media(max-width:820px){
  #app{transition:transform .2s ease,opacity .2s ease}
  body.rail-on #app{transform:translateX(min(264px,82vw));opacity:.55}
@@ -1012,7 +1014,7 @@ document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault()},{passive:
 
 /* ---------- menu hamburguer (abre a barra principal) ---------- */
 function closeRail(){document.body.classList.remove('rail-on')}
-document.addEventListener('click',e=>{if(document.body.classList.contains('rail-on')&&matchMedia('(max-width:820px)').matches&&e.target.closest('#app')&&!e.target.closest('[data-rail]')){e.preventDefault();e.stopPropagation();closeRail()}},true);
+document.addEventListener('click',e=>{if(document.body.classList.contains('rail-on')&&matchMedia('(max-width:820px)').matches&&!e.target.closest('#rail')&&!e.target.closest('[data-rail]')){e.preventDefault();e.stopPropagation();closeRail()}},true);
 document.addEventListener('click',e=>{if(e.target.closest('[data-rail]')){buzz(8);document.body.classList.toggle('rail-on')}else if(e.target.id==='rail-scrim')closeRail()});
 
 /* ---------- caixas de diálogo (vidro) ---------- */
@@ -1805,7 +1807,7 @@ SECS.forEach(([lab,ks])=>{const h=document.createElement('div');h.className='nse
  $('#nav').append(g)})});
 $('#ind').remove?.();
 /* topo com botão da barra e breadcrumb (aba > subaba) */
-$$('.hbg svg').forEach(v=>v.innerHTML='<rect x="4" y="4" width="16" height="16" rx="3.5"/><rect x="6.6" y="6.6" width="3.2" height="10.8" rx="1.1" fill="currentColor" stroke="none"/>');
+$$('.hbg svg').forEach(v=>v.innerHTML='<rect x="4" y="4" width="16" height="16" rx="3.5"/><path class="pd" d="M9.8 4v16"/><rect class="pn" x="6.6" y="6.6" width="3.2" height="10.8" rx="1.1" fill="currentColor" stroke="none"/>');
 $$('.tab').forEach(t=>{if(t.id==='t-editor')return;const k=t.id.slice(2),h=$(':scope>.head',t),b=h&&$('.hbg',h);if(!h||!b)return;
  const bar=document.createElement('div');bar.className='topbar';bar.append(b);
  bar.insertAdjacentHTML('beforeend','<i class="vs"></i><span class="bc">'+esc(NAMES[k])+'</span>'+(t.ps?'<i class="sp">›</i><b class="bc2"></b>':''));
